@@ -10,6 +10,8 @@
 #include "Engine/StaticMesh.h"
 
 
+
+
 // Sets default values
 ABullet::ABullet()
 {
@@ -21,7 +23,7 @@ ABullet::ABullet()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BulletMeshAsset(TEXT("/Game/Mesh/BulletMesh.BulletMesh"));
 
 	// Create mesh component for the projectile sphere
-	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh0"));
+	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	BulletMesh->SetStaticMesh(BulletMeshAsset.Object);
 	BulletMesh->SetupAttachment(RootComponent);
 	BulletMesh->SetGenerateOverlapEvents(false);
@@ -30,7 +32,7 @@ ABullet::ABullet()
 	RootComponent = BulletMesh;
 
 	// Use a ProjectileMovementComponent to govern this projectile's movement
-	BulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement0"));
+	BulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	BulletMovement->UpdatedComponent = BulletMesh;
 	BulletMovement->InitialSpeed = 3000.f;
 	BulletMovement->MaxSpeed = 3000.f;
@@ -42,6 +44,7 @@ ABullet::ABullet()
 	InitialLifeSpan = 3.0f;
 
 }
+
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
@@ -59,9 +62,41 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		UGameplayStatics::ApplyDamage(OtherActor, BulletDamage,nullptr, nullptr, nullptr);
 	}
 
-	
-	Destroy();
+
+	// 재사용
+	Deactivate();
 }
+
+// 생명 주기 외부에서 설정가능하게 제작
+void ABullet::SetLifeSpan(float InLifespan)
+{
+	Lifespan = InLifespan;
+	GetWorldTimerManager().SetTimer(LifespanTimer,this
+		,&ABullet::Deactivate,Lifespan,false);
+	
+
+}
+void ABullet::SetActive(bool InActive)
+{
+	Active =InActive;
+	SetActorEnableCollision(InActive);
+	SetActorHiddenInGame(!InActive);
+	BulletMesh->SetActive(InActive);
+	
+
+}
+
+
+void ABullet::Deactivate()
+{
+	SetActive(false);
+}
+
+bool ABullet::IsActive()
+{
+	return Active;
+}
+
 // Called when the game starts or when spawned
 //void ABullet::BeginPlay()
 //{

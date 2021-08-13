@@ -11,7 +11,7 @@ UObjectPoolComponent::UObjectPoolComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 	
 }
 
@@ -41,7 +41,7 @@ void UObjectPoolComponent::BeginPlay()
 				AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(PooledObjectSubclass,FVector().ZeroVector,FRotator().ZeroRotator);
 				PoolableActor->SetActive(false);
 				Pool.Add(PoolableActor);
-				UE_LOG(LogTemp,Warning,TEXT("add object"));
+				//UE_LOG(LogTemp,Warning,TEXT("add object"));
 			}
 		}
 	}

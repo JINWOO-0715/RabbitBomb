@@ -32,24 +32,48 @@ AMonsterActor::AMonsterActor()
 	//MonseterMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	MonseterMeshComponent->SetStaticMesh(MeshAsset.Object);
 
+	MonseterMeshComponent->SetGenerateOverlapEvents(false);
     Tags.Add("Monster");
 
 
     //OnTakeAnyDamage.AddDynamic(this, &AMonsterActor::TakeDamage);
 }
 
+// 생명 주기 외부에서 설정가능하게 제작
 void AMonsterActor::SetLifeSpan(float InLifespan)
 {
 	Lifespan = InLifespan;
 	GetWorldTimerManager().SetTimer(LifespanTimer,this
 		,&AMonsterActor::Deactivate,Lifespan,false);
+	
+
 }
 
-
+// 활성화시  
 void AMonsterActor::SetActive(bool InActive)
 {
+	
 		Active =InActive;
+		SetActorEnableCollision(InActive);
 		SetActorHiddenInGame(!InActive);
+		MonseterMeshComponent->SetActive(InActive);
+
+		// 여기에 새로운 타이머를 넣는다?  0.3변수로 쓰세요
+		GetWorldTimerManager().SetTimer(MovespanTimer,this
+			,&AMonsterActor::MoveToTarget,MovetoTagetUpdateDuration,InActive);
+}
+
+// 테스트 꼭 고치거나 지울것. -> 이걸 최적화 할 방법은 없는건가!? 
+void AMonsterActor::MoveToTarget()
+{
+	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
+	FVector Dir = player->GetActorLocation() - this->GetActorLocation();
+	Dir.Normalize();
+	const FVector Movement = Dir * MoveSpeed * MovetoTagetUpdateDuration;
+	FRotator NewRotation = Movement.Rotation();
+	RootComponent->MoveComponent(Movement, NewRotation, true);
+
+	
 }
 
 bool AMonsterActor::IsActive()
@@ -58,7 +82,10 @@ bool AMonsterActor::IsActive()
 }
 void AMonsterActor::Deactivate()
 {
+	// 여기에 타이머 종료를 넣는다. 
 	SetActive(false);
+	MonseterMeshComponent->Deactivate();
+	
 }
 
 
@@ -71,7 +98,7 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	MonsterHP-=Damage;
 	if (MonsterHP<0.f)
 	{
-		Destroy();
+		Deactivate();
 	}
 
 	return Damage;

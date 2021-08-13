@@ -4,22 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ObjectPoolComponent.h"
-#include "MonsterActor.h" // Áö¿öµµ?
+#include "BulletPoolComopnent.h"
 
-#include "MonsterManager.generated.h"
+#include "BulletManager.generated.h"
 
 UCLASS()
-class REAL_API AMonsterManager : public AActor
+class REAL_API ABulletManager : public AActor
 {
 	GENERATED_BODY()
-	
+
 	float GetLifeSpan();
 	
 	class UBoxComponent* SpawnVolume;
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
-	UObjectPoolComponent* ObjectPooler;
+	UBulletPoolComopnent* ObjectPooler;
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	bool trigger;
@@ -33,11 +32,13 @@ class REAL_API AMonsterManager : public AActor
 	FTimerHandle SpawnCooldownTimer;
 
 	void Spawn();
+
+	
 public:	
 	// Sets default values for this actor's properties
-	AMonsterManager();
+	ABulletManager();
 
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,6 +46,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 
 };

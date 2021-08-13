@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "BulletPoolComopnent.h"
+
 #include "MainPawn.generated.h"
 
 UCLASS(Blueprintable)
@@ -24,6 +26,9 @@ class REAL_API AMainPawn : public APawn
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	UBulletPoolComopnent* ObjectPooler;
+	
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
 
