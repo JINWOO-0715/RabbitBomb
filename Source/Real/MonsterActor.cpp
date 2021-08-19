@@ -23,9 +23,9 @@ AMonsterActor::AMonsterActor()
 {
 	
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/MonsterMesh.MonsterMesh"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/MonsterBaseMesh.MonsterBaseMesh"));
 	MonseterMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = MonseterMeshComponent;
 	SetActorEnableCollision(false);
@@ -45,7 +45,6 @@ void AMonsterActor::SetLifeSpan(float InLifespan)
 	Lifespan = InLifespan;
 	GetWorldTimerManager().SetTimer(LifespanTimer,this
 		,&AMonsterActor::Deactivate,Lifespan,false);
-	
 
 }
 
@@ -54,13 +53,17 @@ void AMonsterActor::SetActive(bool InActive)
 {
 	
 		Active =InActive;
+	// 충돌 off
 		SetActorEnableCollision(InActive);
+	//숨기기
 		SetActorHiddenInGame(!InActive);
-		MonseterMeshComponent->SetActive(InActive);
-
-		// 여기에 새로운 타이머를 넣는다?  0.3변수로 쓰세요
-		GetWorldTimerManager().SetTimer(MovespanTimer,this
-			,&AMonsterActor::MoveToTarget,MovetoTagetUpdateDuration,InActive);
+	//메시 지우기 이거 필요한가
+		//MonseterMeshComponent->SetActive(InActive);
+	//틱종료
+		SetActorTickEnabled(InActive);
+		//
+		// GetWorldTimerManager().SetTimer(MovespanTimer,this
+		// 	,&AMonsterActor::MoveToTarget,MovetoTagetUpdateDuration,InActive);
 }
 
 // 테스트 꼭 고치거나 지울것. -> 이걸 최적화 할 방법은 없는건가!? 
@@ -68,8 +71,9 @@ void AMonsterActor::MoveToTarget()
 {
 	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 	FVector Dir = player->GetActorLocation() - this->GetActorLocation();
-	Dir.Normalize();
-	const FVector Movement = Dir * MoveSpeed * MovetoTagetUpdateDuration;
+	Dir.Normalize();// 방향벡터
+	
+	const FVector Movement = Dir * MoveSpeed;// 
 	FRotator NewRotation = Movement.Rotation();
 	RootComponent->MoveComponent(Movement, NewRotation, true);
 
@@ -120,9 +124,13 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 //}
 
 // Called every frame
-//void AMonsterActor::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//}
+void AMonsterActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (Active)
+	{
+		MoveToTarget();
+		
+	}
+}
 

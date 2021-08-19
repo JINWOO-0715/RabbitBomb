@@ -30,7 +30,7 @@ class REAL_API AMonsterActor : public AActor
 
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
-	FTimerHandle MovespanTimer;
+//	FTimerHandle MovespanTimer;
 
 
 	bool Active;
@@ -40,10 +40,10 @@ public:
 	AMonsterActor();
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MoveSpeed =300.f;
+	float MoveSpeed =0.3f;
 	
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MovetoTagetUpdateDuration =0.1f;
+	//UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	//float MovetoTagetUpdateDuration =0.1f;
 	
 	virtual void SetLifeSpan(float InLifespan) override;
 	void SetActive(bool InActive);
@@ -55,6 +55,6 @@ public:
 
 public:	
 	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;
 
 };

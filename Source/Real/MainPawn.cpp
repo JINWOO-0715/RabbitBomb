@@ -27,7 +27,7 @@ AMainPawn::AMainPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
 	//메인 메쉬 설정
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MainMesh(TEXT("/Game/Mesh/TwinStickUFO.TwinStickUFO"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MainMesh(TEXT("/Game/Mesh/MainCharacterMesh.MainCharacterMesh"));
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = ShipMeshComponent;
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);

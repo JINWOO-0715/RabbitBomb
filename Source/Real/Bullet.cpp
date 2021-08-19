@@ -18,8 +18,8 @@ ABullet::ABullet()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 
 	//PrimaryActorTick.bCanEverTick = true;
-		// 틱X
-	PrimaryActorTick.bCanEverTick = false;
+		// 생성자에서만 설정 절대 틱을 안쓴다 = false
+	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BulletMeshAsset(TEXT("/Game/Mesh/BulletMesh.BulletMesh"));
 
 	// Create mesh component for the projectile sphere
@@ -79,10 +79,15 @@ void ABullet::SetLifeSpan(float InLifespan)
 void ABullet::SetActive(bool InActive)
 {
 	Active =InActive;
+	// 충돌off
 	SetActorEnableCollision(InActive);
+	// 숨기기
 	SetActorHiddenInGame(!InActive);
-	BulletMesh->SetActive(InActive);
-	
+	// 메시지우기
+	//BulletMesh->SetActive(InActive);
+	// 틱종료
+	SetActorTickEnabled(InActive);
+	MoveToTarget(InActive);
 
 }
 
@@ -98,16 +103,40 @@ bool ABullet::IsActive()
 }
 
 // Called when the game starts or when spawned
-//void ABullet::BeginPlay()
-//{
-//	Super::BeginPlay();
+void ABullet::BeginPlay()
+{
+	Super::BeginPlay();
+
 //	
-//}
+}
+void ABullet::MoveToTarget(bool InActive)
+{
+	if(InActive)
+	{
+		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
+		FVector Dir = player->GetActorLocation() - this->GetActorLocation();
+		Dir.Normalize();// 방향벡터
+	
+		const FVector Movement = Dir * 300.f  ;// 
+		FRotator NewRotation = Movement.Rotation();
+		BulletMovement->Velocity = Movement;
+		//RootComponent->MoveComponent(Movement, NewRotation, true);
+		//BulletMovement->SetVelocityInLocalSpace(Movement);
+		
+	}
+
+	
+}
 
 // Called every frame
-//void ABullet::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
+void ABullet::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	// if(IsActive())
+	// {
+	// 	MoveToTarget();
+	// }
+
 //
-//}
+}
 

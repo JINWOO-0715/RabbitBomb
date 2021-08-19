@@ -42,7 +42,7 @@ void ABulletManager::Spawn()
 		return;
 	}
 	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
-	FVector Dir = player->GetActorLocation() - this->GetActorLocation();
+	FVector Dir = GetActorLocation();
 	//	FRotator.Dir.Rotation();
 	PoolableActor->SetActorLocation(Dir);
 	PoolableActor->SetActorRotation(FRotator(90.f,-90.f,0.f));
