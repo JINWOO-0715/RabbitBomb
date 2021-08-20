@@ -16,6 +16,7 @@ class REAL_API UObjectPoolComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UObjectPoolComponent();
+	
 	AMonsterActor* GetPooledObject();
 	
 protected:

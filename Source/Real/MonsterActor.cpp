@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/CollisionProfile.h"
 #include "Engine/StaticMesh.h"
+#include "RealGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -29,9 +30,10 @@ AMonsterActor::AMonsterActor()
 	MonseterMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = MonseterMeshComponent;
 	SetActorEnableCollision(false);
+	
 	//MonseterMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	MonseterMeshComponent->SetStaticMesh(MeshAsset.Object);
-
+	MonseterMeshComponent->SetCollisionObjectType(ECC_GameTraceChannel2);
 	MonseterMeshComponent->SetGenerateOverlapEvents(false);
     Tags.Add("Monster");
 
@@ -48,25 +50,37 @@ void AMonsterActor::SetLifeSpan(float InLifespan)
 
 }
 
-// 활성화시  
+// 활성화 on/off
 void AMonsterActor::SetActive(bool InActive)
 {
 	
 		Active =InActive;
 	// 충돌 off
 		SetActorEnableCollision(InActive);
+	
 	//숨기기
 		SetActorHiddenInGame(!InActive);
+
 	//메시 지우기 이거 필요한가
 		//MonseterMeshComponent->SetActive(InActive);
+
 	//틱종료
 		SetActorTickEnabled(InActive);
+
+	// 공격 속도에 따라 총알을 발사함. 
+	GetWorldTimerManager().SetTimer(AttackTimer,this
+		,&AMonsterActor::ShotTimerExpired,FireRate,InActive);
 		//
 		// GetWorldTimerManager().SetTimer(MovespanTimer,this
 		// 	,&AMonsterActor::MoveToTarget,MovetoTagetUpdateDuration,InActive);
 }
+void AMonsterActor::ShotTimerExpired()
+{
+	bCanFire =true;
+}
 
-// 테스트 꼭 고치거나 지울것. -> 이걸 최적화 할 방법은 없는건가!? 
+
+// 움직이는 함수 
 void AMonsterActor::MoveToTarget()
 {
 	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
@@ -79,11 +93,13 @@ void AMonsterActor::MoveToTarget()
 
 	
 }
-
+// 활성화 받는 함수.
 bool AMonsterActor::IsActive()
 {
 	return Active;
 }
+
+//활성화 종료 함수
 void AMonsterActor::Deactivate()
 {
 	// 여기에 타이머 종료를 넣는다. 
@@ -93,7 +109,7 @@ void AMonsterActor::Deactivate()
 }
 
 
-// 오버라이드 사용
+// 데미지 받는 함수 오버라이드 사용
 float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
                                 AActor* DamageCauser)
 {
@@ -106,6 +122,34 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	}
 
 	return Damage;
+}
+
+// 총쏘는 함수 
+void AMonsterActor::FireShot()
+{
+	if(bCanFire)
+	{
+		bCanFire = false;// 끊고
+		
+		UWorld* const World = GetWorld();
+		 ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+		 ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
+		if(monsterBullet && World)
+		{
+			monsterBullet->SetOwnerActor(this);
+			FVector Dir = GetActorLocation();
+			monsterBullet->SetActorLocation(Dir);
+			// monsterBullet->SetActorRotation(FRotator(90.f,-90.f,0.f));
+			monsterBullet->SetLifeSpan();
+			monsterBullet->SetActive(true);
+		}	
+		//
+		// AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
+	
+		// 타이머 작동
+		//World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);
+
+	}
 }
 
 //
@@ -127,10 +171,12 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 void AMonsterActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//if 문을 지워도 괜찮은거 아닌가!
 	if (Active)
 	{
 		MoveToTarget();
 		
+		FireShot();
 	}
 }
 

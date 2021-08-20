@@ -17,8 +17,7 @@ class ARealGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	UBulletPoolComopnent* BulletPooler;
+
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	bool trigger;
@@ -29,5 +28,8 @@ protected:
 	virtual void BeginPlay() override;
 public:
 	ARealGameModeBase();
+	
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	UBulletPoolComopnent* BulletPooler;
 	
 };

@@ -27,14 +27,21 @@ class REAL_API AMonsterActor : public AActor
 
 	//5초동안 살아남기
 	float Lifespan = 5.0f;
+	float FireRate = 1.f;
 
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
+	FTimerHandle AttackTimer;
+	
 //	FTimerHandle MovespanTimer;
-
+	
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	float BulletLifeSpan = 5.0f;
 
 	bool Active;
+	bool bCanFire;
 	void Deactivate();
+	
 public:	
 	// Sets default values for this actor's properties
 	AMonsterActor();
@@ -47,7 +54,8 @@ public:
 	
 	virtual void SetLifeSpan(float InLifespan) override;
 	void SetActive(bool InActive);
-	
+	void ShotTimerExpired();
+	void FireShot();
 	
 	bool IsActive();
 	//// Called when the game starts or when spawned

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//#define ECC_BULLET EEC_GameTraceChannel1
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"

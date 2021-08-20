@@ -9,6 +9,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/CollisionProfile.h"
+#include "RealGameModeBase.h"
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
@@ -30,7 +31,8 @@ AMainPawn::AMainPawn()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MainMesh(TEXT("/Game/Mesh/MainCharacterMesh.MainCharacterMesh"));
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = ShipMeshComponent;
-	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
+	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);	
+	
 	ShipMeshComponent->SetStaticMesh(MainMesh.Object);
 
 
@@ -47,11 +49,13 @@ AMainPawn::AMainPawn()
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
 
+	Tags.Add("Player");
+	
 	// Movement
 	MoveSpeed = 1000.0f;
 
 	// Weapon
-	GunOffset = FVector(90.f, 0.f, 0.f);
+	GunOffset = FVector(80.f, 0.f, 0.f);
 	FireRate = 0.1f;
 	bCanFire = true;
 }
@@ -111,16 +115,26 @@ void AMainPawn::FireShot(FVector FireDir)
 		// 방향이있으면 
 		if (FireDir.SizeSquared() > 0.0f)
 		{
-			const FRotator FireRotation = FireDir.Rotation();
+			FRotator FireRotation = FireDir.Rotation();
 			
 			// 스폰위치잡기
-			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
-
+			FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+		
 			UWorld* const World = GetWorld();
+			//AActor* const TempActor = Cast<AActor>(this);
 			if (World != nullptr)
 			{
+				//FireRotation = FireRotation.GetInverse();
+				ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+				ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
 				// 총알 소환
-				World->SpawnActor<ABullet>(SpawnLocation, FireRotation);
+				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireRotation.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireDir.ToString());
+				monsterBullet->SetOwnerActor(this);
+				monsterBullet->SetActorLocation(SpawnLocation);
+				monsterBullet->SetActorRotation(FireRotation.GetInverse());
+				monsterBullet->SetLifeSpan();
+				monsterBullet->SetActive(true);
 			}
 
 			bCanFire = false;// 끊고

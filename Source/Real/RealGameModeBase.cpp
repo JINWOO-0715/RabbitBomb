@@ -14,6 +14,7 @@ ARealGameModeBase::ARealGameModeBase()
 }
 void ARealGameModeBase::BeginPlay()
 {
-
+	BulletPooler->Spawn();
+	
 }
 

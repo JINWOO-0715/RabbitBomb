@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
+
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StaticMesh.h"
@@ -29,6 +30,14 @@ ABullet::ABullet()
 	BulletMesh->SetGenerateOverlapEvents(false);
 	BulletMesh->BodyInstance.SetCollisionProfileName("Projectile");
 	BulletMesh->OnComponentHit.AddDynamic(this, &ABullet::OnHit);		// set up a notification for when this component hits something
+	BulletMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
+	BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	//BulletMesh->SetCollisionProfileName("Bullet");
+	// 기본 충돌 셋팅
+	BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic,ECollisionResponse::ECR_Block);
+	//BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2,ECollisionResponse::ECR_Block);
+	//BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
+	//BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic,ECollisionResponse::ECR_Block);
 	RootComponent = BulletMesh;
 
 	// Use a ProjectileMovementComponent to govern this projectile's movement
@@ -55,7 +64,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		//OtherActor->
 		
 	}
-
+	//UE_LOG(LogTemp,Warning,TEXT("HIT"));
 	// 몬스터 처리 
 	if (OtherActor->ActorHasTag("Monster"))
 	{
@@ -88,8 +97,31 @@ void ABullet::SetActive(bool InActive)
 	// 틱종료
 	SetActorTickEnabled(InActive);
 	MoveToTarget(InActive);
+	BulletMovement->SetActive(InActive);
 
 }
+
+void ABullet::SetOwnerActor(AActor* ActorClass)
+{
+	OwnerActor = ActorClass;
+	
+	if(OwnerActor)
+	{
+		if (OwnerActor->ActorHasTag("Monster"))
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
+			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+		}
+		if (OwnerActor->ActorHasTag("Player"))
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
+			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);
+		}
+	}
+}
+
 
 
 void ABullet::Deactivate()

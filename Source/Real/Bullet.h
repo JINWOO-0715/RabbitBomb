@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Actor.h"
 #include "Bullet.generated.h"
 
@@ -33,8 +34,11 @@ class REAL_API ABullet : public AActor
 	FTimerHandle LifespanTimer;
 	FTimerHandle MovespanTimer;
 	
-	// 끄는건 나만 할수있게
+
+	//
 	bool Active;
+
+	//비활성화
 	void Deactivate();
 	
 protected:
@@ -55,9 +59,16 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float MovetoTagetUpdateDuration =0.1f;
 	
-	virtual void SetLifeSpan(float InLifespan) override;
+	virtual void SetLifeSpan(float InLifespan=5.0f) override;
 	void SetActive(bool InActive);
-
+	
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	AActor* OwnerActor;
+	
+	UFUNCTION(BlueprintCallable)
+	void SetOwnerActor(AActor* ActorClass);
+	
+	
 	bool IsActive();
 
 	void MoveToTarget(bool InActive);

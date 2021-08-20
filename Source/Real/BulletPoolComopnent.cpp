@@ -32,6 +32,27 @@ void UBulletPoolComopnent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// if(PooledBulletSubClass !=NULL)
+	// {
+	// 	UWorld* const world = GetWorld();
+	// 	if(world)
+	// 	{
+	// 		for(int i = 0 ; i <Poolsize ; i++)
+	// 		{
+	// 			ABullet* PoolableActor = GetWorld()->SpawnActor<ABullet>(PooledBulletSubClass,FVector().ZeroVector,FRotator().ZeroRotator);
+	// 			PoolableActor->SetActive(false);
+	// 			Pool.Add(PoolableActor);
+	// 			UE_LOG(LogTemp,Warning,TEXT("add object"));
+	// 		}
+	// 	}
+	// }
+	
+}
+
+void UBulletPoolComopnent::Spawn()
+{
+	//Super::BeginPlay();
+
 	if(PooledBulletSubClass !=NULL)
 	{
 		UWorld* const world = GetWorld();
@@ -48,7 +69,6 @@ void UBulletPoolComopnent::BeginPlay()
 	}
 	
 }
-
 
 // Called every frame
 void UBulletPoolComopnent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

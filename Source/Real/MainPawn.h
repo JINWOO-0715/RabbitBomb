@@ -34,6 +34,7 @@ class REAL_API AMainPawn : public APawn
 
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
+	
 /*protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;*/
