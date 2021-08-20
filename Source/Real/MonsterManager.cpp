@@ -38,10 +38,10 @@ void AMonsterManager::Spawn()
 	}
 
 	PoolableActor->SetActorLocation(GetActorLocation());
-	PoolableActor->SetLifeSpan(LifeSpan);
+	//PoolableActor->SetLifeSpan(LifeSpan);
 	PoolableActor->SetActive(true);
 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer,this,&AMonsterManager::Spawn ,SpawnCooldown,true);
-	UE_LOG(LogTemp,Warning,TEXT("spawn"));
+	UE_LOG(LogTemp,Warning,TEXT("Monster spawn"));
 }
 
 

@@ -27,7 +27,8 @@ class REAL_API AMonsterActor : public AActor
 
 	//5초동안 살아남기
 	float Lifespan = 5.0f;
-	float FireRate = 1.f;
+	float FireRate = 1.0f;
+	float BulletSpeed = 1000.0f;
 
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
@@ -47,7 +48,7 @@ public:
 	AMonsterActor();
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MoveSpeed =0.3f;
+	float MoveSpeed =300.0f;
 	
 	//UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	//float MovetoTagetUpdateDuration =0.1f;

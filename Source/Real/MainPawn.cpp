@@ -115,12 +115,13 @@ void AMainPawn::FireShot(FVector FireDir)
 		// 방향이있으면 
 		if (FireDir.SizeSquared() > 0.0f)
 		{
-			FRotator FireRotation = FireDir.Rotation();
+			const FRotator FireRotation = FireDir.Rotation();
 			
 			// 스폰위치잡기
 			FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
 		
 			UWorld* const World = GetWorld();
+
 			//AActor* const TempActor = Cast<AActor>(this);
 			if (World != nullptr)
 			{
@@ -128,11 +129,15 @@ void AMainPawn::FireShot(FVector FireDir)
 				ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 				ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
 				// 총알 소환
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireRotation.ToString());
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireDir.ToString());
+				//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireRotation.ToString());
+				//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireDir.ToString());
 				monsterBullet->SetOwnerActor(this);
+				//SpawnLocation*=1.2f;
 				monsterBullet->SetActorLocation(SpawnLocation);
 				monsterBullet->SetActorRotation(FireRotation.GetInverse());
+				FireDir.Normalize();
+				const FVector Movement = FireDir * 1000.f  ;// 
+				monsterBullet->SetVelocity(Movement);
 				monsterBullet->SetLifeSpan();
 				monsterBullet->SetActive(true);
 			}

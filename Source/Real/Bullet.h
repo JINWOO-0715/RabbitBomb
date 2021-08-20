@@ -67,7 +67,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetOwnerActor(AActor* ActorClass);
+
 	
+	void SetVelocity(FVector Velocity);
 	
 	bool IsActive();
 

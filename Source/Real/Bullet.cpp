@@ -96,7 +96,7 @@ void ABullet::SetActive(bool InActive)
 	//BulletMesh->SetActive(InActive);
 	// Æ½Á¾·á
 	SetActorTickEnabled(InActive);
-	MoveToTarget(InActive);
+	
 	BulletMovement->SetActive(InActive);
 
 }
@@ -110,12 +110,14 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 		if (OwnerActor->ActorHasTag("Monster"))
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 		}
 		if (OwnerActor->ActorHasTag("Player"))
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);
 		}
@@ -141,6 +143,10 @@ void ABullet::BeginPlay()
 
 //	
 }
+void ABullet::SetVelocity(FVector Velocity)
+{
+	BulletMovement->Velocity = Velocity;
+}
 void ABullet::MoveToTarget(bool InActive)
 {
 	if(InActive)
@@ -148,7 +154,6 @@ void ABullet::MoveToTarget(bool InActive)
 		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 		FVector Dir = player->GetActorLocation() - this->GetActorLocation();
 		Dir.Normalize();// ¹æÇâº¤ÅÍ
-	
 		const FVector Movement = Dir * 300.f  ;// 
 		FRotator NewRotation = Movement.Rotation();
 		BulletMovement->Velocity = Movement;
