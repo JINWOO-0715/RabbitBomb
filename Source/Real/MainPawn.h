@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BulletPoolComopnent.h"
+#include "Components/WidgetComponent.h"
+#include "RightWidget.h"
 
 #include "MainPawn.generated.h"
 
@@ -35,9 +37,9 @@ class REAL_API AMainPawn : public APawn
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
 	
-/*protected:
+protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;*/
+	virtual void BeginPlay() override;
 
 public:
 	// Sets default values for this pawn's properties
@@ -55,12 +57,22 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float MoveSpeed;
 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		bool PressedFireButton;
+
 
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 		class USoundBase* FireSound;
 
 
+	//위젯
+	UPROPERTY(EditAnywhere)
+	 TSubclassOf<UUserWidget> PlayerRightWidgetClass;
+
+	
+	UPROPERTY(VisibleInstanceOnly)
+	class URightWidget* PlayerRightWidget;
 
 	// 움직임 총알방향 static const 이런건 배워야함
 	static const FName MoveForwardBinding;
@@ -69,7 +81,10 @@ public:
 	static const FName FireRightBinding;
 
 	// 발사
-	void FireShot(FVector FireDirection);
+	UFUNCTION(BlueprintCallable)
+	void FireShot();
+
+	void Dash();
 
 	//이건 발사타이머.
 	void ShotTimerExpired();

@@ -14,7 +14,7 @@ class REAL_API AMonsterManager : public AActor
 {
 	GENERATED_BODY()
 	
-	float GetLifeSpan();
+	//float GetLifeSpan();
 	
 	class UBoxComponent* SpawnVolume;
 	

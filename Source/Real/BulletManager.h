@@ -14,7 +14,7 @@ class REAL_API ABulletManager : public AActor
 {
 	GENERATED_BODY()
 
-	float GetLifeSpan();
+	//float GetLifeSpan();
 	
 	class UBoxComponent* SpawnVolume;
 	

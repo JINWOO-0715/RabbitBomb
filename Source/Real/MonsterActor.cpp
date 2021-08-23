@@ -16,7 +16,7 @@
 #include "GameplayTags.h"
 #include "GameplayTagsManager.h"
 #include "Sound/SoundBase.h"
-#include "Systems/MovieSceneQuaternionInterpolationRotationSystem.h"
+//#include "Systems/MovieSceneQuaternionInterpolationRotationSystem.h"
 
 
 // Sets default values
