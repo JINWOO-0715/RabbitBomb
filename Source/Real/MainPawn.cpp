@@ -216,7 +216,10 @@ void AMainPawn::FireShot()
 
 void AMainPawn::Dash()
 {
-	
+	FHitResult Hit(1.f);
+	const FVector TeleportPoint = GetActorLocation() +( GetActorForwardVector()*300.f);
+
+	SetActorLocation(TeleportPoint,true,&Hit);
 }
 
 void AMainPawn::ShotTimerExpired()

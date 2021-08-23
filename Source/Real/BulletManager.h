@@ -29,6 +29,7 @@ class REAL_API ABulletManager : public AActor
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float SpawnCooldown  = 1.2f;
+	
 
 	FTimerHandle SpawnCooldownTimer;
 

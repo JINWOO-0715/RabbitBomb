@@ -15,7 +15,7 @@ UObjectPoolComponent::UObjectPoolComponent()
 	
 }
 
-AMonsterActor* UObjectPoolComponent::GetPooledObject()
+AMonsterActor* UObjectPoolComponent::GetPooledMonster()
 {
 	for (AMonsterActor* PoolableActor : Pool)
 	{
@@ -27,18 +27,39 @@ AMonsterActor* UObjectPoolComponent::GetPooledObject()
 	return nullptr;
 }
 
+void UObjectPoolComponent::Spawn()
+{
+	//Super::BeginPlay();
+
+	if(PooledMonsterSubclass !=NULL)
+	{
+		UWorld* const world = GetWorld();
+		if(world)
+		{
+			for(int i = 0 ; i <PoolSize ; i++)
+			{
+				AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(PooledMonsterSubclass,FVector().ZeroVector,FRotator().ZeroRotator);
+				PoolableActor->SetActive(false);
+				Pool.Add(PoolableActor);
+				UE_LOG(LogTemp,Warning,TEXT("add object"));
+			}
+		}
+	}
+	
+}
+
 // Called when the game starts
 void UObjectPoolComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	if(PooledObjectSubclass !=NULL)
+	if(PooledMonsterSubclass !=NULL)
 	{
 		UWorld* const world =GetWorld();
 		if(world)
 		{
 			for(int i =0 ; i<PoolSize;i++)
 			{
-				AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(PooledObjectSubclass,FVector().ZeroVector,FRotator().ZeroRotator);
+				AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(PooledMonsterSubclass,FVector().ZeroVector,FRotator().ZeroRotator);
 				PoolableActor->SetActive(false);
 				Pool.Add(PoolableActor);
 				//UE_LOG(LogTemp,Warning,TEXT("add object"));

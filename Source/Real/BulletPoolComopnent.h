@@ -30,6 +30,7 @@ public:
 
 
 	void Spawn();
+
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class ABullet> PooledBulletSubClass;
 	

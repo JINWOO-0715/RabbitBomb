@@ -19,6 +19,7 @@ void URightWidget::NativeConstruct()
 
 void URightWidget::DashOn()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 	if(!Player)
 	{
 		SetPlayer();

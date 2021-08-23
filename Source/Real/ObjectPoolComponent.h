@@ -17,7 +17,7 @@ public:
 	// Sets default values for this component's properties
 	UObjectPoolComponent();
 	
-	AMonsterActor* GetPooledObject();
+	AMonsterActor* GetPooledMonster();
 	
 protected:
 	// Called when the game starts
@@ -27,9 +27,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	//몬스터 스폰
+	void Spawn();
+
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
-	TSubclassOf<class AMonsterActor> PooledObjectSubclass;
+	TSubclassOf<class AMonsterActor> PooledMonsterSubclass;
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int PoolSize =100;

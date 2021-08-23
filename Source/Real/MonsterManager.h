@@ -4,9 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ObjectPoolComponent.h"
-#include "MonsterActor.h" // Áö¿öµµ?
-
 #include "MonsterManager.generated.h"
 
 UCLASS()
@@ -18,18 +15,20 @@ class REAL_API AMonsterManager : public AActor
 	
 	class UBoxComponent* SpawnVolume;
 	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	UObjectPoolComponent* ObjectPooler;
+	// UPROPERTY(EditAnywhere,Category="Spawner")
+	// UObjectPoolComponent* ObjectPooler;
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	bool trigger;
 	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	float LifeSpan = 5.0f;
+	// UPROPERTY(EditAnywhere,Category="Spawner")
+	// float LifeSpan = 5.0f;
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float SpawnCooldown  = 1.2f;
+	
 
+	
 	FTimerHandle SpawnCooldownTimer;
 
 	void Spawn();

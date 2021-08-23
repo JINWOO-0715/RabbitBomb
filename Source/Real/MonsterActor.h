@@ -20,6 +20,7 @@ class REAL_API AMonsterActor : public AActor
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	// A스타가 될 상.
 	UFUNCTION()
 	void MoveToTarget();
 
@@ -27,8 +28,12 @@ class REAL_API AMonsterActor : public AActor
 
 	//5초동안 살아남기
 	float Lifespan = 5.0f;
+
+	// 공속
 	float FireRate = 1.0f;
-	float BulletSpeed = 1000.0f;
+	
+	// 총알 속도
+	float BulletSpeed = 500.0f;
 
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
@@ -48,7 +53,7 @@ public:
 	AMonsterActor();
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MoveSpeed =300.0f;
+	float MoveSpeed =100.0f;
 	
 	//UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	//float MovetoTagetUpdateDuration =0.1f;

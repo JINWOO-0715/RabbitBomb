@@ -17,8 +17,6 @@ class ARealGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-
-	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	bool trigger;
 	
@@ -30,13 +28,16 @@ protected:
 public:
 	ARealGameModeBase();
 
+	
 	//총알 담기
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	UBulletPoolComopnent* BulletPooler;
 
 	// 몬스터 담기 
-	UPROPERTY(EditAnywhere,Category="Spawner")
+	UPROPERTY(EditAnywhere,Category="Spawnere")
 	UObjectPoolComponent* MonsterPooler;
+	
+	
 	
 	// 플레이어 오른쪽아래 위젯
 	UPROPERTY(EditAnywhere)

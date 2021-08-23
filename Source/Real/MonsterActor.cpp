@@ -25,12 +25,17 @@ AMonsterActor::AMonsterActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// 메시
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/MonsterBaseMesh.MonsterBaseMesh"));
 	MonseterMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = MonseterMeshComponent;
 	SetActorEnableCollision(false);
 	MonseterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	MonseterMeshComponent->SetCollisionProfileName("Monster");
+
+
+
+
 	//충돌에대해 다시 해보기
 	//MonseterMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	

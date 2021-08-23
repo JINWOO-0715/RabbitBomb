@@ -9,13 +9,24 @@ ARealGameModeBase::ARealGameModeBase()
 {
 
 	DefaultPawnClass = AMainPawn::StaticClass();
-	BulletPooler= CreateDefaultSubobject<UBulletPoolComopnent>(TEXT("ObjectPoller"));
+
+	BulletPooler= CreateDefaultSubobject<UBulletPoolComopnent>(TEXT("BulletPoller"));
+	
+	//BulletPooler->SetupAttachment(RootComponent);
+	MonsterPooler= CreateDefaultSubobject<UObjectPoolComponent>(TEXT("MonsterPoller"));
+
+
 	
 }
+
+
+
 void ARealGameModeBase::BeginPlay()
 {
 	// ÃÑ¾Ë ½ºÆù
 	BulletPooler->Spawn();
+	MonsterPooler->Spawn();
+
 
 	//À§Á¬ »ý¼º
 	PlayerRightWidget = Cast<URightWidget>(CreateWidget(GetWorld(),PlayerRightWidgetClass));
