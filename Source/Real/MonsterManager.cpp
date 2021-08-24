@@ -6,6 +6,7 @@
 #include "MonsterDataTable.h"
 #include "Components/BoxComponent.h"
 #include "RealGameModeBase.h"
+
 #include "GameFramework/Pawn.h"
 
 // Sets default values
@@ -36,7 +37,7 @@ void AMonsterManager::Spawn()
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	AMonsterActor* Monster = gm->MonsterPooler->GetPooledMonster();
-
+		
 	if (Monster == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
@@ -46,7 +47,9 @@ void AMonsterManager::Spawn()
 
 	Monster->SetActorLocation(GetActorLocation());
 	//PoolableActor->SetLifeSpan(LifeSpan);
+	Monster->InitMonster(MonsterNum);
 	Monster->SetActive(true);
+
 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, true);
 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
 

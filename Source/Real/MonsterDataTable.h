@@ -31,6 +31,9 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float BulletLifeSpan = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MoveSpeed = 5.0f;
 };
 
 UCLASS()

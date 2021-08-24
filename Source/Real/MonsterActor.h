@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MonsterDataTable.h"
 #include "MonsterActor.generated.h"
 
 UCLASS()
@@ -62,6 +63,7 @@ public:
 	void SetActive(bool InActive);
 	void ShotTimerExpired();
 	void FireShot();
+	void InitMonster(int dataRowN);
 	
 	bool IsActive();
 	//// Called when the game starts or when spawned

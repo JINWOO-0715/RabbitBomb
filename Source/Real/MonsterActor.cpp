@@ -73,6 +73,7 @@ void AMonsterActor::SetActive(bool InActive)
 	SetActorTickEnabled(InActive);
 
 
+	
 	// 공격 속도에 따라 총알을 발사함. 
 	GetWorldTimerManager().SetTimer(AttackTimer, this
 	                                , &AMonsterActor::ShotTimerExpired, FireRate, InActive);
@@ -80,6 +81,8 @@ void AMonsterActor::SetActive(bool InActive)
 	// GetWorldTimerManager().SetTimer(MovespanTimer,this
 	// 	,&AMonsterActor::MoveToTarget,MovetoTagetUpdateDuration,InActive);
 }
+
+
 
 void AMonsterActor::ShotTimerExpired()
 {
@@ -140,6 +143,8 @@ void AMonsterActor::FireShot()
 	{
 		bCanFire = false; // 끊고
 
+
+		// 그냥 1발 플레이어 방향으로 발사.
 		UWorld* const World = GetWorld();
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 		ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
@@ -147,27 +152,66 @@ void AMonsterActor::FireShot()
 		{
 			AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 			FVector Dir = player->GetActorLocation() - this->GetActorLocation();
-			Dir.Normalize(); // 벡터
+			// Dir.Normalize(); // 벡터
+			//
+			// const FVector Movement = Dir * BulletSpeed; //
+			// // 가지고있는 액터 누구?
+			// monsterBullet->SetOwnerActor(this);
+			// // 가지고있는 총알위치
+			// monsterBullet->SetActorLocation(GetActorLocation());
+			// //총알 속도
+			// monsterBullet->SetVelocity(Movement);
+			// // 알아서 살아지게하고
+			// monsterBullet->SetLifeSpan();
+			// // 활성화시킨다.
+			// monsterBullet->SetActive(true);
 
-			const FVector Movement = Dir * BulletSpeed; //
-			// 가지고있는 액터 누구?
-			monsterBullet->SetOwnerActor(this);
-			// 가지고있는 총알위치
-			monsterBullet->SetActorLocation(GetActorLocation());
-
-			//총알 속도
-			monsterBullet->SetVelocity(Movement);
-			// 알아서 살아지게하고
-			monsterBullet->SetLifeSpan();
-			// 활성화시킨다.
-			monsterBullet->SetActive(true);
+			// 4방향으로 발사
+			for(int i = 0 ; i<5;i++)
+			{
+				monsterBullet = gm->BulletPooler->GetPooledBullet();
+				const FVector randomV(FMath::RandRange(-0.5f, 0.5f),FMath::RandRange(0.f, 2.f),0.f);
+				Dir+=randomV;
+				Dir.Normalize();
+				const FVector FMovement = Dir * BulletSpeed; //
+				// 가지고있는 액터 누구?
+				monsterBullet->SetOwnerActor(this);
+				// 가지고있는 총알위치
+				monsterBullet->SetActorLocation(GetActorLocation());
+				//총알 속도
+				monsterBullet->SetVelocity(FMovement);
+				// 알아서 살아지게하고
+				monsterBullet->SetLifeSpan();
+				// 활성화시킨다.
+				monsterBullet->SetActive(true);
+			}
+		
 		}
+		// 
+		float angle = 36;
+
+
+		
 		//
 		// AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 
 		// 타이머 작동
 		//World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);
 	}
+}
+
+void AMonsterActor::InitMonster(int dataRowN)
+{
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
+
+	BulletSpeed=MonsterData->BulletSpeed;
+	FireRate=MonsterData->FireRate;
+	Lifespan=MonsterData->Lifespan;
+	MonsterHP=MonsterData->MonsterHP;
+	MoveSpeed=MonsterData->BulletSpeed;
+
 }
 
 //

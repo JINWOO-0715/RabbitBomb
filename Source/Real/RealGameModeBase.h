@@ -7,6 +7,9 @@
 #include "ObjectPoolComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+
+#include "MonsterDataTable.h"
+
 #include "RealGameModeBase.generated.h"
 
 /**
@@ -23,11 +26,15 @@ class ARealGameModeBase : public AGameModeBase
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
 
+	// 데이터 테이블
+	class UDataTable* LevelUpDataTable;
 protected:
 	virtual void BeginPlay() override;
 public:
 	ARealGameModeBase();
+	
 
+	TArray<FMonsterRow*> MonsterRow;
 	
 	//총알 담기
 	UPROPERTY(EditAnywhere,Category="Spawner")
@@ -36,7 +43,8 @@ public:
 	// 몬스터 담기 
 	UPROPERTY(EditAnywhere,Category="Spawnere")
 	UObjectPoolComponent* MonsterPooler;
-	
+
+	FMonsterRow* GetMonsterRowData(int rowN);
 	
 	
 	// 플레이어 오른쪽아래 위젯

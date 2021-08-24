@@ -21,12 +21,13 @@ class REAL_API AMonsterManager : public AActor
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	bool trigger;
 	
-	// UPROPERTY(EditAnywhere,Category="Spawner")
-	// float LifeSpan = 5.0f;
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int MonsterNum = 5;
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float SpawnCooldown  = 1.2f;
 	
+
 
 	
 	FTimerHandle SpawnCooldownTimer;
