@@ -34,11 +34,9 @@ AMonsterActor::AMonsterActor()
 	MonseterMeshComponent->SetCollisionProfileName("Monster");
 
 
-
-
 	//충돌에대해 다시 해보기
 	//MonseterMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
-	
+
 	//MonseterMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	//MonseterMeshComponent->SetCollisionObjectType(ECC_GameTraceChannel2);
 	MonseterMeshComponent->SetGenerateOverlapEvents(false);
@@ -73,7 +71,6 @@ void AMonsterActor::SetActive(bool InActive)
 	SetActorTickEnabled(InActive);
 
 
-	
 	// 공격 속도에 따라 총알을 발사함. 
 	GetWorldTimerManager().SetTimer(AttackTimer, this
 	                                , &AMonsterActor::ShotTimerExpired, FireRate, InActive);
@@ -81,7 +78,6 @@ void AMonsterActor::SetActive(bool InActive)
 	// GetWorldTimerManager().SetTimer(MovespanTimer,this
 	// 	,&AMonsterActor::MoveToTarget,MovetoTagetUpdateDuration,InActive);
 }
-
 
 
 void AMonsterActor::ShotTimerExpired()
@@ -166,18 +162,30 @@ void AMonsterActor::FireShot()
 			// // 활성화시킨다.
 			// monsterBullet->SetActive(true);
 
-			// 4방향으로 발사
-			for(int i = 0 ; i<5;i++)
+
+			//원형 36은 변수로 넣기
+
+			for (int i = 0; i < 36; i++)
 			{
 				monsterBullet = gm->BulletPooler->GetPooledBullet();
-				const FVector randomV(FMath::RandRange(-0.5f, 0.5f),FMath::RandRange(0.f, 2.f),0.f);
-				Dir+=randomV;
+				// 몬스터 위치
+				FVector Location = GetActorLocation();
+				// 원 (x,y)
+				FVector Circledir(cos((2 * PI * i) / 36), sin((2 * PI * i) / 36), 0.f);
+				// 반지금이 100인 원(x,y)
+				Circledir *= 100;
+				// 내위치에 그 위치를 더해서
+				Location += Circledir;
+				// 방향은 먼위치 - 내위치
+				FVector Dir = Location - GetActorLocation();
+				// 방향벡터 
 				Dir.Normalize();
+
 				const FVector FMovement = Dir * BulletSpeed; //
 				// 가지고있는 액터 누구?
 				monsterBullet->SetOwnerActor(this);
 				// 가지고있는 총알위치
-				monsterBullet->SetActorLocation(GetActorLocation());
+				monsterBullet->SetActorLocation(Location);
 				//총알 속도
 				monsterBullet->SetVelocity(FMovement);
 				// 알아서 살아지게하고
@@ -185,17 +193,29 @@ void AMonsterActor::FireShot()
 				// 활성화시킨다.
 				monsterBullet->SetActive(true);
 			}
-		
+
+
+			// 4방향으로 발사
+			// for(int i = 0 ; i<5;i++)
+			// {
+			// 	monsterBullet = gm->BulletPooler->GetPooledBullet();
+			// 	const FVector randomV(FMath::RandRange(-0.5f, 0.5f),FMath::RandRange(0.f, 2.f),0.f);
+			// 	Dir+=randomV;
+			// 	Dir.Normalize();
+			// 	const FVector FMovement = Dir * BulletSpeed; //
+			// 	// 가지고있는 액터 누구?
+			// 	monsterBullet->SetOwnerActor(this);
+			// 	// 가지고있는 총알위치
+			// 	monsterBullet->SetActorLocation(GetActorLocation());
+			// 	//총알 속도
+			// 	monsterBullet->SetVelocity(FMovement);
+			// 	// 알아서 살아지게하고
+			// 	monsterBullet->SetLifeSpan();
+			// 	// 활성화시킨다.
+			// 	monsterBullet->SetActive(true);
+			// }
 		}
-		// 
-		float angle = 36;
 
-
-		
-		//
-		// AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
-
-		// 타이머 작동
 		//World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);
 	}
 }
@@ -206,12 +226,11 @@ void AMonsterActor::InitMonster(int dataRowN)
 	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
 
-	BulletSpeed=MonsterData->BulletSpeed;
-	FireRate=MonsterData->FireRate;
-	Lifespan=MonsterData->Lifespan;
-	MonsterHP=MonsterData->MonsterHP;
-	MoveSpeed=MonsterData->BulletSpeed;
-
+	BulletSpeed = MonsterData->BulletSpeed;
+	FireRate = MonsterData->FireRate;
+	Lifespan = MonsterData->Lifespan;
+	MonsterHP = MonsterData->MonsterHP;
+	MoveSpeed = MonsterData->BulletSpeed;
 }
 
 //
@@ -240,15 +259,15 @@ void AMonsterActor::Tick(float DeltaTime)
 		FVector Dir = player->GetActorLocation() - this->GetActorLocation();
 		Dir.Normalize(); // 벡터
 
-		const FVector Movement = Dir * MoveSpeed *DeltaTime; //
+		const FVector Movement = Dir * MoveSpeed * DeltaTime; //
 		if (Movement.SizeSquared() > 0.0f)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 			const FRotator NewRotation = Movement.Rotation();
 			FHitResult Hit(1.f);
-			RootComponent->MoveComponent(Movement, NewRotation, true , &Hit);
+			RootComponent->MoveComponent(Movement, NewRotation, true, &Hit);
 			AddActorWorldOffset(Movement, true, nullptr);
-		
+
 			if (Hit.IsValidBlockingHit())
 			{
 				const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
@@ -258,7 +277,7 @@ void AMonsterActor::Tick(float DeltaTime)
 			//FTransform d (Movement,NewRotation,NULL;
 			//SetActorRotation(NewRotation);
 			//AddActorWorldOffset(Movement,true,nullptr);
-	
+
 			//MoveToTarget();
 		}
 		FireShot();
