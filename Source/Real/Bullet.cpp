@@ -2,10 +2,12 @@
 
 
 #include "Bullet.h"
+
+#include "MonsterActor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-
+#include "MainPawn.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StaticMesh.h"
@@ -68,10 +70,14 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	// 몬스터 처리 
 	if (OtherActor->ActorHasTag("Monster"))
 	{
+		
 		UGameplayStatics::ApplyDamage(OtherActor, BulletDamage,nullptr, nullptr, nullptr);
 	}
 
-
+	if (OtherActor->ActorHasTag("Player"))
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, BulletDamage,nullptr, nullptr, nullptr);
+	}
 	// 재사용
 	Deactivate();
 }
@@ -109,6 +115,10 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 	{
 		if (OwnerActor->ActorHasTag("Monster"))
 		{
+			
+			AMonsterActor* TempMonster = Cast<AMonsterActor>(OwnerActor);
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletDamage=TempMonster->BulletPower;
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
@@ -116,7 +126,9 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 		}
 		if (OwnerActor->ActorHasTag("Player"))
 		{
+			AMainPawn* Player = Cast<AMainPawn>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletDamage=Player->BulletPowe ;
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);

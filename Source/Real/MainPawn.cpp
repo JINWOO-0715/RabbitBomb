@@ -13,7 +13,7 @@
 #include "RightWidget.h"
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "SkillComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Sound/SoundBase.h"
 
@@ -136,6 +136,23 @@ void AMainPawn::Tick(float DeltaTime)
 
 
 }
+
+
+// 데미지 받는 함수 오버라이드 사용
+float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+								AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
+	// MonsterHP -= Damage;
+	// if (MonsterHP < 0.f)
+	// {
+	// 	Deactivate();
+	// }
+
+	return Damage;
+}
+
 void AMainPawn::FireShot()
 {
 	if (bCanFire)

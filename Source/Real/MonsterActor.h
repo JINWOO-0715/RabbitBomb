@@ -35,7 +35,9 @@ class REAL_API AMonsterActor : public AActor
 	
 	// 총알 속도
 	float BulletSpeed = 500.0f;
-
+	
+	
+	
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
 	FTimerHandle AttackTimer;
@@ -68,7 +70,9 @@ public:
 	bool IsActive();
 	//// Called when the game starts or when spawned
 	//virtual void BeginPlay() override;
-
+	//
+	// 총알 파워
+	float BulletPower = 10.0f;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

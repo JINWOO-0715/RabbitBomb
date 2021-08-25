@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
 #include "UObject/ConstructorHelpers.h"
+#include "NavigationSystem.h"
+
 #include "MainPawn.h"
 
 ARealGameModeBase::ARealGameModeBase()
@@ -57,5 +59,41 @@ void ARealGameModeBase::BeginPlay()
 		// PlayerRightWidget->Player=this;
 		// PlayerRightWidget->AddToViewport();
 	}
+
+	UWorld* const World = GetWorld();
+	World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime);
+	
 }
 
+void ARealGameModeBase:: MonsterSpawn()
+{
+	UWorld* const World = GetWorld();
+	
+	AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
+		
+	if (Monster == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+		GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
+		return;
+	}
+	// 랜덤위치에 스폰하고
+	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
+	
+	auto result = FMath::VRand();
+	// 원 800~1500범위에 랜덤하게.
+	result *= FMath::RandRange(800,1500);
+	result *= FVector(1.f,1.f,0.f);
+	result+=player->GetActorLocation();
+	Monster->SetActorLocation(result);
+	
+	// 몬스터 번호를 가져와 초기화한다
+	Monster->InitMonster(MonsterNum);
+
+	// 실행한다
+	Monster->SetActive(true);
+
+	GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime);
+	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
+
+}

@@ -33,7 +33,7 @@ class REAL_API ABullet : public AActor
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
 	FTimerHandle MovespanTimer;
-	
+	FTimerHandle TimerHandle_ShotTimerExpired;
 
 	//
 	bool Active;

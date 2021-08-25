@@ -15,6 +15,8 @@ class REAL_API AMainPawn : public APawn
 {
 	GENERATED_BODY()
 
+	UFUNCTION()
+			virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//스테틱 메쉬 컴포넌트
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -49,17 +51,23 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		FVector GunOffset;
 
-	// Rate float
+	// 공격속도
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float FireRate;
 
-	// 스피드
+	// 이동속도 스피드
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float MoveSpeed;
-
+	// 공격력
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		float BulletPowe;
+	
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		bool PressedFireButton;
 
+	// 플레이어 최대체력
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	float MaxHP =100;
 
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
