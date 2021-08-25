@@ -128,7 +128,7 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 		{
 			AMainPawn* Player = Cast<AMainPawn>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
-			BulletDamage=Player->BulletPower ;
+			BulletDamage=Player->GetBulletPower();
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);

@@ -7,7 +7,7 @@
 #include "BulletPoolComopnent.h"
 #include "Components/WidgetComponent.h"
 #include "RightWidget.h"
-
+#include "SkillComponent.h"
 #include "MainPawn.generated.h"
 
 UCLASS(Blueprintable)
@@ -33,6 +33,9 @@ class REAL_API AMainPawn : public APawn
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	UBulletPoolComopnent* ObjectPooler;
 	
+	UPROPERTY(EditAnywhere)
+	USkillComponent* SkillContainer;
+	
 	// 플레이어 최대경험치
 	UPROPERTY()
 	float MaxEXP =100.f;
@@ -40,11 +43,27 @@ class REAL_API AMainPawn : public APawn
 	UPROPERTY()
 	float NowEXP =0.f;
 	
+	// 공격속도
+	UPROPERTY()
+	float FireRate = 3.f;
+
+	// 이동속도 스피드
+	UPROPERTY()
+	float MoveSpeed;
+	
+	// 공격력
+	UPROPERTY()
+	float BulletPower=50.f;
+	//HP
+	UPROPERTY()
+	float MaxHP =100.f;
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
 
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
+
+
 	
 protected:
 	// Called when the game starts or when spawned
@@ -57,42 +76,29 @@ public:
 	// 총알 발사 위치 벡터
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		FVector GunOffset;
-
-	// 공격속도
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float FireRate = 3.f;
-
-	// 이동속도 스피드
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float MoveSpeed;
-	
-	// 공격력
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float BulletPower=50.f;
 	
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		bool PressedFireButton;
 
 	// 플레이어 최대체력
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MaxHP =100.f;
 
+
+	
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 		class USoundBase* FireSound;
 
-	
+
+	// //위젯
+	// UPROPERTY(EditAnywhere)
+	//  TSubclassOf<UUserWidget> PlayerRightWidgetClass;
+	//
+	//
+	// UPROPERTY(VisibleInstanceOnly)
+	// class URightWidget* PlayerRightWidget;
+
 
 	
-
-	//위젯
-	UPROPERTY(EditAnywhere)
-	 TSubclassOf<UUserWidget> PlayerRightWidgetClass;
-
-	
-	UPROPERTY(VisibleInstanceOnly)
-	class URightWidget* PlayerRightWidget;
-
 	// 움직임 총알방향 static const 이런건 배워야함
 	static const FName MoveForwardBinding;
 	static const FName MoveRightBinding;
@@ -106,7 +112,8 @@ public:
 	//경험치 획득
 	UFUNCTION(BlueprintCallable)
 	void GetExperience(float Exp);
-	
+
+	UFUNCTION(BlueprintCallable)
 	void Dash();
 
 	//이건 발사타이머.
@@ -117,6 +124,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	
+
+	
+	// 총알 공격력 리턴
+	FORCEINLINE	float GetBulletPower() const {return BulletPower;};
 	// 메시 리턴
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }
 	// 카메라 리턴

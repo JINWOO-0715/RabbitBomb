@@ -11,6 +11,10 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class REAL_API USkillComponent : public UActorComponent
 {
 	GENERATED_BODY()
+	bool IsPassive;
+
+	float DecreaseCount;
+	float IncreaseCount;
 
 public:	
 	// Sets default values for this component's properties
@@ -23,6 +27,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+
+	void Adrenaline();
 	
-	void IceSkill();
 };

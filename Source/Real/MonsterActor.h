@@ -36,8 +36,6 @@ class REAL_API AMonsterActor : public AActor
 	// 총알 속도
 	float BulletSpeed = 500.0f;
 	
-	
-	
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
 	FTimerHandle AttackTimer;

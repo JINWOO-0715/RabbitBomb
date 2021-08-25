@@ -3,6 +3,7 @@
 
 #include "MainPawn.h"
 #include "Bullet.h"
+#include "ChooseSkillWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -237,11 +238,21 @@ void AMainPawn::GetExperience(float Exp)
 	float persent = (NowEXP/MaxEXP);
 	if(persent>=1.f)
 	{
+		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+		if (gm->PlayerSkillChooseWidget)
+		{
+			gm->PlayerSkillChooseWidget->AddToViewport();
+			//PlayerRightWidget->SetPlayer();
+			UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
+		}
+		// 스킬 선택
+		// 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("LevelUp"));
 		NowEXP=0.f;
 		MaxEXP*=1.2f;
 	}
 }
+
 
 void AMainPawn::Dash()
 {

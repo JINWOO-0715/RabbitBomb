@@ -18,7 +18,7 @@ class REAL_API AItemActor : public AActor
 	float Lifespan = 5.0f;
 
 	//올려주는 경험치
-	float UPExp = 5.0f;
+	float UPExp = 101.0f;
 
 	
 public:	

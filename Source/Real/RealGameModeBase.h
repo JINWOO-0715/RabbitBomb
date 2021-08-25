@@ -7,8 +7,9 @@
 #include "ObjectPoolComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-
+#include "PlayerSkillDataTable.h"
 #include "MonsterDataTable.h"
+
 
 #include "RealGameModeBase.generated.h"
 
@@ -28,8 +29,9 @@ class ARealGameModeBase : public AGameModeBase
 	//타이머 핸들
 	FTimerHandle MonsterSpawnTimer;
 
-	// 데이터 테이블
-	class UDataTable* LevelUpDataTable;
+	class UDataTable* MonsterData;
+	class UDataTable* PlayerSkillData;
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -55,9 +57,11 @@ public:
 
 	//몬스터 데이터 초기화
 	FMonsterRow* GetMonsterRowData(int rowN);
+
+	//플레이어 스킬 초기화
+	FPlayerSkillRow* GetPlayerSkillRowData(int rowN);
 	
-	//몬스터 데이터 
-	TArray<FMonsterRow*> MonsterRow;
+
 	
 	// 플레이어 오른쪽아래 위젯
 	UPROPERTY(EditAnywhere)
@@ -66,4 +70,12 @@ public:
 	// 플레이어 오른쪽아래 위젯
 	UPROPERTY(VisibleInstanceOnly)
 	class URightWidget* PlayerRightWidget;
+
+	// 플레이어 스킬선택
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> PlayerSkillChooseClass;
+
+	// 플레이어 스킬선택 위젯
+	UPROPERTY(VisibleInstanceOnly)
+	class UChooseSkillWidget* PlayerSkillChooseWidget;
 };

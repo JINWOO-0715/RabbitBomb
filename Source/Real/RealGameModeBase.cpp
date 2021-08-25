@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
 #include "UObject/ConstructorHelpers.h"
+#include "ChooseSkillWidget.h" 
 #include "ItemActor.h"
 
 #include "MainPawn.h"
@@ -14,16 +15,22 @@ ARealGameModeBase::ARealGameModeBase()
 	DefaultPawnClass = AMainPawn::StaticClass();
 
 	BulletPooler = CreateDefaultSubobject<UBulletPoolComopnent>(TEXT("BulletPoller"));
-
-	//BulletPooler->SetupAttachment(RootComponent);
+	
 	MonsterPooler = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("MonsterPoller"));
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/BP/MonsterDT"));
-	if (DataTable.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/MonsterDT"));
+	if (MonsterDataAsset.Succeeded())
 	{
-		LevelUpDataTable = DataTable.Object;
+		MonsterData = MonsterDataAsset.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UDataTable> PlayerSkillDataAsset(TEXT("/Game/BP/PlayerSkillDT"));
+	if (PlayerSkillDataAsset.Succeeded())
+	{
+		PlayerSkillData = PlayerSkillDataAsset.Object;
 	}
 }
+
 
 void ARealGameModeBase::Tick(float DeltaTime)
 {
@@ -33,10 +40,18 @@ void ARealGameModeBase::Tick(float DeltaTime)
 
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 {
-	FMonsterRow* MonsterRowData = LevelUpDataTable->FindRow<FMonsterRow>(
+	FMonsterRow* MonsterRowData = MonsterData->FindRow<FMonsterRow>(
 			FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
 	return MonsterRowData;
+}
+
+FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowData(int rowN)
+{
+	FPlayerSkillRow* MonsterRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
+			FName(*(FString::FormatAsNumber(rowN))), FString(""));
+	
+	 return nullptr;
 }
 
 
@@ -58,6 +73,14 @@ void ARealGameModeBase::BeginPlay()
 			//PlayerRightWidget->SetPlayer();
 			UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
 		}
+		// PlayerRightWidget->Player=this;
+		// PlayerRightWidget->AddToViewport();
+	}
+	
+	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
+	if (PlayerSkillChooseClass != nullptr)
+	{
+		
 		// PlayerRightWidget->Player=this;
 		// PlayerRightWidget->AddToViewport();
 	}
