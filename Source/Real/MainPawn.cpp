@@ -231,6 +231,18 @@ void AMainPawn::FireShot()
 
 }
 
+void AMainPawn::GetExperience(float Exp)
+{
+	NowEXP+=Exp;
+	float persent = (NowEXP/MaxEXP);
+	if(persent>=1.f)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("LevelUp"));
+		NowEXP=0.f;
+		MaxEXP*=1.2f;
+	}
+}
+
 void AMainPawn::Dash()
 {
 	FHitResult Hit(1.f);
@@ -257,4 +269,6 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(FireRightBinding);
 
 }
+
+
 

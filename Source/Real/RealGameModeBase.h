@@ -32,10 +32,11 @@ class ARealGameModeBase : public AGameModeBase
 	class UDataTable* LevelUpDataTable;
 protected:
 	virtual void BeginPlay() override;
+	
 public:
 	ARealGameModeBase();
 	
-	
+	virtual void Tick(float DeltaTime) override;
 	
 	// 몬스터 생성 주기
 	UPROPERTY(EditAnywhere,Category="Spawner")

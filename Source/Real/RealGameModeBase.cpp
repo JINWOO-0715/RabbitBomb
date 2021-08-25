@@ -5,7 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
 #include "UObject/ConstructorHelpers.h"
-#include "NavigationSystem.h"
+#include "ItemActor.h"
 
 #include "MainPawn.h"
 
@@ -25,15 +25,16 @@ ARealGameModeBase::ARealGameModeBase()
 	}
 }
 
+void ARealGameModeBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 {
 	FMonsterRow* MonsterRowData = LevelUpDataTable->FindRow<FMonsterRow>(
-FName(*(FString::FormatAsNumber(rowN))), FString(""));
-	if(MonsterRowData)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("sucess Init"));
-	}
-	
+			FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
 	return MonsterRowData;
 }
@@ -44,6 +45,7 @@ void ARealGameModeBase::BeginPlay()
 	// ÃÑ¾Ë ½ºÆù
 	BulletPooler->Spawn();
 	MonsterPooler->Spawn();
+
 
 
 	//À§Á¬ »ý¼º

@@ -33,6 +33,13 @@ class REAL_API AMainPawn : public APawn
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	UBulletPoolComopnent* ObjectPooler;
 	
+	// 플레이어 최대경험치
+	UPROPERTY()
+	float MaxEXP =100.f;
+	// 플레이어 현재경험치
+	UPROPERTY()
+	float NowEXP =0.f;
+	
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
 
@@ -53,26 +60,30 @@ public:
 
 	// 공격속도
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float FireRate;
+		float FireRate = 3.f;
 
 	// 이동속도 스피드
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float MoveSpeed;
+	
 	// 공격력
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float BulletPowe;
+		float BulletPower=50.f;
 	
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		bool PressedFireButton;
 
 	// 플레이어 최대체력
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float MaxHP =100;
+	float MaxHP =100.f;
 
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 		class USoundBase* FireSound;
 
+	
+
+	
 
 	//위젯
 	UPROPERTY(EditAnywhere)
@@ -91,7 +102,11 @@ public:
 	// 발사
 	UFUNCTION(BlueprintCallable)
 	void FireShot();
-
+	
+	//경험치 획득
+	UFUNCTION(BlueprintCallable)
+	void GetExperience(float Exp);
+	
 	void Dash();
 
 	//이건 발사타이머.

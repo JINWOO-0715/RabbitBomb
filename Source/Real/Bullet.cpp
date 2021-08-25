@@ -63,7 +63,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	{
 		// 히트하면 처리 여기서 
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());			
-		//OtherActor->
+
 		
 	}
 	//UE_LOG(LogTemp,Warning,TEXT("HIT"));
@@ -128,7 +128,7 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 		{
 			AMainPawn* Player = Cast<AMainPawn>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
-			BulletDamage=Player->BulletPowe ;
+			BulletDamage=Player->BulletPower ;
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);
