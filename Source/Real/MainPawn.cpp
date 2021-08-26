@@ -241,7 +241,10 @@ void AMainPawn::GetExperience(float Exp)
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 		if (gm->PlayerSkillChooseWidget)
 		{
+			gm->PlayerSkillChooseWidget->SetRandomSkill();
 			gm->PlayerSkillChooseWidget->AddToViewport();
+			
+
 			//PlayerRightWidget->SetPlayer();
 			UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
 		}

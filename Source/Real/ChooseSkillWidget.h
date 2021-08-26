@@ -50,7 +50,7 @@ protected:
 
 	UFUNCTION()
 	void ChooseSkillTrd();
-
+public:
 	UFUNCTION()
 	void SetRandomSkill();
 };

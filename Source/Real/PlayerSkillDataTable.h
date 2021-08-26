@@ -21,6 +21,9 @@ struct FPlayerSkillRow: public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DecreaseCount;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SkillLevel;
 
 };
 
