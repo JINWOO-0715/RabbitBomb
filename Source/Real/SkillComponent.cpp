@@ -32,16 +32,18 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void USkillComponent::AddSkill(FName mSkillName)
 {
+	// 없다면 스킬추가.
 	if (!HasSkill.Find(mSkillName))
 	{
 		HasSkill.Add(mSkillName, 1);
 		ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 		FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillName);
 
-
+		
 		// 패시브라면
 		if (!PlayerSkillRowData->IsActiveSkill)
 		{
+
 			SetPlayerBuff(PlayerSkillRowData);
 		}
 
@@ -74,15 +76,22 @@ void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow)
 }
 void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow)
 {
-	if (mSkillRow->SKillName == "Faster")
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, mSkillRow->SKillName.ToString());
+	if (mSkillRow->SKillName == FName("FasterRabbit"))
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, TEXT("Not Active"));
 		AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		float TempSpeed = PlayerPawn->GetMoveSpeed();
 		TempSpeed *= mSkillRow->IncreaseCount;
 		PlayerPawn->SetMoveSpeed(TempSpeed);
+
+		float TempFireRate = PlayerPawn->GetFireRate();
+		
+		TempFireRate *= (2-mSkillRow->IncreaseCount);
+		PlayerPawn->SetFireRate(TempFireRate);
 	}
 
-	if (mSkillRow->SKillName == "Powerful")
+	if (mSkillRow->SKillName == "PowerfulRabbit")
 	{
 		AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		float TempSpeed = PlayerPawn->GetMoveSpeed();

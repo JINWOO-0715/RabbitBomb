@@ -79,6 +79,9 @@ void AMainPawn::SetMaxHp(float mMaxHP)
 
 void AMainPawn::SetFireRate(float mFireRate)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(FireRate));
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("sucess"));
 	FireRate =mFireRate;
 }
 
@@ -265,6 +268,7 @@ void AMainPawn::GetExperience(float Exp)
 		{
 			gm->PlayerSkillChooseWidget->SetRandomSkill();
 			gm->PlayerSkillChooseWidget->AddToViewport();
+			// 게임 중지 넣어함
 			//PlayerRightWidget->SetPlayer();
 			//UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
 		}
