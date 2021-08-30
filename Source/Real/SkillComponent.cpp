@@ -67,9 +67,22 @@ void USkillComponent::AddSkill(FName mSkillName)
 	SkillLevelUp(mSkillName);
 }
 
+void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow)
+{
+	
+	
+}
 void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow)
 {
 	if (mSkillRow->SKillName == "Faster")
+	{
+		AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		float TempSpeed = PlayerPawn->GetMoveSpeed();
+		TempSpeed *= mSkillRow->IncreaseCount;
+		PlayerPawn->SetMoveSpeed(TempSpeed);
+	}
+
+	if (mSkillRow->SKillName == "Powerful")
 	{
 		AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		float TempSpeed = PlayerPawn->GetMoveSpeed();

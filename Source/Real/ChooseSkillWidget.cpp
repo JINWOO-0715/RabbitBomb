@@ -65,10 +65,10 @@ void UChooseSkillWidget::SetRandomSkill()
 	{
 		SkillOneText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
 	
-		PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(2);
+		PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(FName("Powerful"));
 		SkillTwoText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
 
-		PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(3);
+		PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(FName("IceBullet"));
 		SkillTrdText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
 	}
 	

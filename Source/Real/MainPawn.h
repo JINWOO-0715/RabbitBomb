@@ -85,10 +85,19 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		bool PressedFireButton;
 
-	// 플레이어 최대체력
-
+	// 이속설정
 	UFUNCTION(BlueprintCallable)
 	void SetMoveSpeed(float mMoveSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxHp(float mMaxHP);
+
+	UFUNCTION(BlueprintCallable)
+	void SetFireRate(float mFireRate);
+	
+	UFUNCTION(BlueprintCallable)
+	void SetBulletPower(float mBulletPower);
+	
 	
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
@@ -133,6 +142,16 @@ public:
 	
 
 
+
+	
+	//HP 
+	FORCEINLINE	float GetMaxHp() const {return MaxHP;};
+	//공속 
+	FORCEINLINE	float GetFireRate() const {return FireRate;};
+	//공격력 
+	FORCEINLINE	float Get() const {return BulletPower;};
+	
+	//이속 
 	FORCEINLINE	float GetMoveSpeed() const {return MoveSpeed;};
 	// 총알 공격력 리턴
 	FORCEINLINE	float GetBulletPower() const {return BulletPower;};

@@ -57,6 +57,6 @@ public:
 	void SkillLevelUp(FName mSkillName);
 
 	void SetPlayerBuff(FPlayerSkillRow* mSkillRow);
-	
+	void SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow);
 
 };

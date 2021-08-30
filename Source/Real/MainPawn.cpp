@@ -72,6 +72,21 @@ void AMainPawn::SetMoveSpeed(float mMoveSpeed)
 	MoveSpeed = mMoveSpeed;
 }
 
+void AMainPawn::SetMaxHp(float mMaxHP)
+{
+	MaxHP= mMaxHP;
+}
+
+void AMainPawn::SetFireRate(float mFireRate)
+{
+	FireRate =mFireRate;
+}
+
+void AMainPawn::SetBulletPower(float mBulletPower)
+{
+	BulletPower=mBulletPower;
+}
+
 
 //// Called when the game starts or when spawned 비긴플레이 쓸일있으면 사용
 void AMainPawn::BeginPlay()
