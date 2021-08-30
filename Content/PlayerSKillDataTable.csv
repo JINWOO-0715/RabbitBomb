@@ -1,10 +1,7 @@
-﻿,SKillName,IncreaseCount,DecreaseCount,SkillLevel
-1,소형토끼,,1.2,1
-2,소형토끼,,1.4,2
-3,소형토끼,,1.6,3
-4,광속토끼,1.2,,1
-5,광속토끼,1.4,,2
-6,광속토끼,1.6,,3
-7,근육토끼,1.4,,1
-8,근육토끼,1.6,,2
-9,근육토끼,2,,3
+﻿,SKillName,SkillDescription,IncreaseCount,DecreaseCount,TargetName,SkillLevel
+Faster,광속토끼,움직이는 속도가 %f 빨라진다.,1.2,,Player,1
+Po,광속토끼,,1.2,,Player,1
+근육토끼,근육토끼,,1.4,,Player,1
+1,소형토끼,,,1.2,Player,1
+2,광속토끼,,1.2,,Player,1
+3,근육토끼,,1.4,,Player,1

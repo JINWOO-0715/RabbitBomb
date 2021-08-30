@@ -20,21 +20,35 @@ void UChooseSkillWidget::NativeConstruct()
 
 void UChooseSkillWidget::ChooseSkillOne()
 {
-	SetRandomSkill();
-	
+
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
-	 RemoveFromParent();
+	// 폰을 가져와서 스킬컴포넌트에 스킬 추가 스킬추가는 playerPawn에서 함수로 알아서 작동되게.
+
+   //PlayerSkillRowData.SkillActive
+
+	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	// 스킬 컴포넌트에 스킬을 추가해서 추가한 스킬은 알아서 작동되게
+
+	PlayerPawn->SkillComp->AddSkill(FName("Faster"));//추가
+	
+	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
+
+	RemoveFromParent();
+	
 
 }
 
 void UChooseSkillWidget::ChooseSkillTwo()
 {
+	
+	RemoveFromParent();
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 
 }
 
 void UChooseSkillWidget::ChooseSkillTrd()
 {
+	RemoveFromParent();
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 
 }
@@ -42,16 +56,21 @@ void UChooseSkillWidget::ChooseSkillTrd()
 void UChooseSkillWidget::SetRandomSkill()
 {
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
 	//여기에 랜덤을 넣어야겠지
 	
-
-	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowData(1);
-	SkillOneText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
+	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(FName("Faster"));
+	//FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowData(1);
+	if(PlayerSkillRowData)
+	{
+		SkillOneText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
 	
-	PlayerSkillRowData = gm->GetPlayerSkillRowData(2);
-	SkillTwoText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
+		PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(2);
+		SkillTwoText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
 
-	PlayerSkillRowData = gm->GetPlayerSkillRowData(3);
-	SkillTrdText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
+		PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(3);
+		SkillTrdText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
+	}
+	
 	
 }

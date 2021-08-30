@@ -17,10 +17,19 @@ struct FPlayerSkillRow: public FTableRowBase
 	FName SKillName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText SkillDescription;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsActiveSkill;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float IncreaseCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DecreaseCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName TargetName;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SkillLevel;

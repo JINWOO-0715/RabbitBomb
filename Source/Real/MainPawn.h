@@ -35,6 +35,8 @@ class REAL_API AMainPawn : public APawn
 	
 	UPROPERTY(EditAnywhere)
 	USkillComponent* SkillContainer;
+
+
 	
 	// 플레이어 최대경험치
 	UPROPERTY()
@@ -45,7 +47,7 @@ class REAL_API AMainPawn : public APawn
 	
 	// 공격속도
 	UPROPERTY()
-	float FireRate = 3.f;
+	float FireRate = 1.f;
 
 	// 이동속도 스피드
 	UPROPERTY()
@@ -73,6 +75,9 @@ public:
 	// Sets default values for this pawn's properties
 	AMainPawn();
 
+	UPROPERTY(EditAnywhere,Category="Spawner")
+		class USkillComponent* SkillComp;
+	
 	// 총알 발사 위치 벡터
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		FVector GunOffset;
@@ -82,7 +87,8 @@ public:
 
 	// 플레이어 최대체력
 
-
+	UFUNCTION(BlueprintCallable)
+	void SetMoveSpeed(float mMoveSpeed);
 	
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
@@ -107,7 +113,7 @@ public:
 
 	// 발사
 	UFUNCTION(BlueprintCallable)
-	void FireShot();
+	void FireShot(FVector FireDir);
 	
 	//경험치 획득
 	UFUNCTION(BlueprintCallable)
@@ -126,7 +132,8 @@ public:
 
 	
 
-	
+
+	FORCEINLINE	float GetMoveSpeed() const {return MoveSpeed;};
 	// 총알 공격력 리턴
 	FORCEINLINE	float GetBulletPower() const {return BulletPower;};
 	// 메시 리턴

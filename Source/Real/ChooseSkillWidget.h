@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "PlayerSkillDataTable.h"
 #include "Components/Button.h"
 
 #include "ChooseSkillWidget.generated.h"
@@ -14,6 +15,7 @@
 /**
  * 
  */
+
 UCLASS()
 class REAL_API UChooseSkillWidget : public UUserWidget
 {
@@ -53,4 +55,13 @@ protected:
 public:
 	UFUNCTION()
 	void SetRandomSkill();
+
+	// UPROPERTY()
+	// FPlayerSkillRow PlayerSkillRowData;
+
+	// UPROPERTY()
+	// FPlayerSkillRow PlayerSkillRowData;
+	//
+	// UPROPERTY()
+	// FPlayerSkillRow PlayerSkillRowData;
 };
