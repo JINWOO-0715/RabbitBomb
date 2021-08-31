@@ -81,7 +81,7 @@ void AMainPawn::SetFireRate(float mFireRate)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(FireRate));
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("sucess"));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("sucess"));
 	FireRate =mFireRate;
 }
 

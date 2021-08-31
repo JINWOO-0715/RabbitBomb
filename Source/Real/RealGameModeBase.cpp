@@ -71,25 +71,25 @@ void ARealGameModeBase::BeginPlay()
 
 
 
-	//困连 积己
-	PlayerRightWidget = Cast<URightWidget>(CreateWidget(GetWorld(), PlayerRightWidgetClass));
-	if (PlayerRightWidgetClass != nullptr)
-	{
-		if (PlayerRightWidget)
-		{
-			PlayerRightWidget->AddToViewport();
-			//PlayerRightWidget->SetPlayer();
-			UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
-		}
-		// PlayerRightWidget->Player=this;
-		// PlayerRightWidget->AddToViewport();
-	}
+	// //困连 积己
+	// PlayerRightWidget = Cast<URightWidget>(CreateWidget(GetWorld(), PlayerRightWidgetClass));
+	// if (PlayerRightWidgetClass != nullptr)
+	// {
+	// 	if (PlayerRightWidget)
+	// 	{
+	// 		PlayerRightWidget->AddToViewport();
+	// 		//PlayerRightWidget->SetPlayer();
+	// 		UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
+	// 	}
+	// 	// PlayerRightWidget->Player=this;
+	// 	// PlayerRightWidget->AddToViewport();
+	// }
 	
 	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
 	if (PlayerSkillChooseClass != nullptr)
 	{
 		
-		// PlayerRightWidget->Player=this;
+		// PlayerSkillChooseWidget->Player=this;
 		// PlayerRightWidget->AddToViewport();
 	}
 

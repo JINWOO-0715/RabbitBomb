@@ -12,16 +12,14 @@ void UChooseSkillWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	SkillOneButton->OnClicked.AddDynamic(this, &UChooseSkillWidget::ChooseSkillOne);
-	SkillTwoButton->OnClicked.AddDynamic(this, &UChooseSkillWidget::ChooseSkillTwo);
-	SkillTrdButton->OnClicked.AddDynamic(this, &UChooseSkillWidget::ChooseSkillTrd);
+
 	//DashButton->OnReleased.AddDynamic(this, &URightWidget::FireOff);
 }
 
 void UChooseSkillWidget::ChooseSkillOne()
 {
 
-	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
+	UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 	// 폰을 가져와서 스킬컴포넌트에 스킬 추가 스킬추가는 playerPawn에서 함수로 알아서 작동되게.
 
    //PlayerSkillRowData.SkillActive
@@ -32,23 +30,25 @@ void UChooseSkillWidget::ChooseSkillOne()
 	PlayerPawn->SkillComp->AddSkill(FName("Faster"));//추가
 	
 	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
+	//
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->PlayerSkillChooseWidget->RemoveFromViewport();
 
-	RemoveFromParent();
-	
+	//
 
 }
 
 void UChooseSkillWidget::ChooseSkillTwo()
 {
 	
-	RemoveFromParent();
+//	RemoveFromParent();
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 
 }
 
 void UChooseSkillWidget::ChooseSkillTrd()
 {
-	RemoveFromParent();
+	//RemoveFromParent();
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 
 }

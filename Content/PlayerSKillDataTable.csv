@@ -1,5 +1,0 @@
-﻿,SKillName,SkillDescription,IsActiveSkill,IncreaseCount,DecreaseCount,TargetName,SkillLevel
-Faster,광속토끼,이동 속도와 공격속도가 상승한다.,0,1.2,,Player,1
-Powerful,근육토끼,공격력과 최대HP가 증가한다.,0,1.2,,Player,1
-LaunchIncrease,삼두사,총알을 3발씩 발사한다.,,3,,Player,1
-IceBullet,얼음총,총알에 얼음속성을 붙여 몬스터를 얼린다.,,,,Player,1

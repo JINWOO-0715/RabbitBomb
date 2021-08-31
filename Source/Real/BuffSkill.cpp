@@ -16,20 +16,20 @@ void UBuffSkill::SetPlayerBuff(FName mSkillName)
 	// 적용하는데
 	// 
 	// skill = 광속토끼
-	// skill =
-	if(mSkillName==FName("Faster"))
-	{
-		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-		if(gm)
-		{
-			FPlayerSkillRow* SkillRowData =gm->GetPlayerSkillRowDataToNum(FName("Faster"));// 번호대신 이름
-
-			AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-			float TempSpeed = PlayerPawn->GetMoveSpeed();
-			TempSpeed*=SkillRowData->IncreaseCount;
-			PlayerPawn->SetMoveSpeed(TempSpeed);
-			
-		}
-
-	}
+	// // skill =
+	// if(mSkillName==FName("Faster"))
+	// {
+	// 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	// 	if(gm)
+	// 	{
+	// 		FPlayerSkillRow* SkillRowData =gm->GetPlayerSkillRowDataToNum(FName("Faster"));// 번호대신 이름
+	//
+	// 		AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	// 		float TempSpeed = PlayerPawn->GetMoveSpeed();
+	// 		TempSpeed*=SkillRowData->IncreaseCount;
+	// 		PlayerPawn->SetMoveSpeed(TempSpeed);
+	// 		
+	// 	}
+	//
+	// }
 }

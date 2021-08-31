@@ -38,7 +38,7 @@ void AItemActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 {
 	if (OtherActor->ActorHasTag("Player"))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("COllision BoxItem"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("COllision BoxItem"));
 		AMainPawn* Player = Cast<AMainPawn>(OtherActor);
 		Player->GetExperience(UPExp);
 		//Player.add

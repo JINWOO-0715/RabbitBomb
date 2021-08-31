@@ -30,10 +30,9 @@ struct FPlayerSkillRow: public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName TargetName;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SkillLevel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<int,float> SkillLevelMap;
 };
 
 UCLASS()

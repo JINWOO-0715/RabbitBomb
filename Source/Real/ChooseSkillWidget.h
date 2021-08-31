@@ -44,7 +44,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* SkillTrdText;
 
-	UFUNCTION()
+
+public:
+	UFUNCTION(BlueprintCallable)
 	void ChooseSkillOne();
 	
 	UFUNCTION()
@@ -52,7 +54,7 @@ protected:
 
 	UFUNCTION()
 	void ChooseSkillTrd();
-public:
+	
 	UFUNCTION()
 	void SetRandomSkill();
 

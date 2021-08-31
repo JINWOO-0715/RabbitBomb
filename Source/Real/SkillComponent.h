@@ -15,11 +15,6 @@ class REAL_API USkillComponent : public UActorComponent
 
 
 
-	// string/int 형식의 맵이나 스킬번호/int형식의 맵으로 스킬 레벨관리
-	int SkillLevel;
-
-	FName SkillName;
-
 	// 모든 스킬 적용하기
 	
 
@@ -41,7 +36,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere,Category="SkillSet")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="SkillSet")
 	TMap<FName,int> HasSkill;
 
 	UPROPERTY(EditAnywhere,Category="SkillSet")
@@ -56,7 +51,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SkillLevelUp(FName mSkillName);
 
-	void SetPlayerBuff(FPlayerSkillRow* mSkillRow);
+	void SetPlayerBuff( FPlayerSkillRow* mSkillRow , int mSkillLevel=1);
 	void SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow);
 
 };
