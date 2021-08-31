@@ -27,16 +27,15 @@ const FName AMainPawn::FireRightBinding("FireRight");
 // Sets default values
 AMainPawn::AMainPawn()
 {
-
-
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
 	//메인 메쉬 설정
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MainMesh(TEXT("/Game/Mesh/MainCharacterMesh.MainCharacterMesh"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MainMesh(
+		TEXT("/Game/Mesh/MainCharacterMesh.MainCharacterMesh"));
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = ShipMeshComponent;
-	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);	
-	
+	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
+
 	ShipMeshComponent->SetStaticMesh(MainMesh.Object);
 
 
@@ -51,19 +50,30 @@ AMainPawn::AMainPawn()
 	// 카메라 만들기
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
+	CameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
-	
+
 	Tags.Add("Player");
-	
+
 	// Movement
 	MoveSpeed = 1000.0f;
 
-	
+
+	//경험치
+	NowEXP = 0.f;
+	MaxEXP = 100.f;
+
+	//스텟 (HP 공격력)
+	MaxHP = 100.f;
+	BulletPower = 50.f;
+
 	// Weapon
+
+
+	NumberOfShotBullet = 1;
 	GunOffset = FVector(80.f, 0.f, 0.f);
-	FireRate = 0.1f;
+	FireRate = 1.f;
 	bCanFire = true;
 }
 
@@ -74,7 +84,7 @@ void AMainPawn::SetMoveSpeed(float mMoveSpeed)
 
 void AMainPawn::SetMaxHp(float mMaxHP)
 {
-	MaxHP= mMaxHP;
+	MaxHP = mMaxHP;
 }
 
 void AMainPawn::SetFireRate(float mFireRate)
@@ -82,12 +92,12 @@ void AMainPawn::SetFireRate(float mFireRate)
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(FireRate));
 
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("sucess"));
-	FireRate =mFireRate;
+	FireRate = mFireRate;
 }
 
 void AMainPawn::SetBulletPower(float mBulletPower)
 {
-	BulletPower=mBulletPower;
+	BulletPower = mBulletPower;
 }
 
 
@@ -95,8 +105,8 @@ void AMainPawn::SetBulletPower(float mBulletPower)
 void AMainPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	SkillComp->OwnerActor = this;
 
-	
 	//CreateWidget<URightWidget>((GetWorld(), PlayerRightWidgetClass);
 	//PlayerRightWidgetClass = LoadClass<URightWidget>(this,TEXT(""));
 	//PlayerRightWidget = PlayerRightWidget->GetClass();
@@ -114,8 +124,6 @@ void AMainPawn::BeginPlay()
 	// 	// PlayerRightWidget->AddToViewport();
 	// 	
 	// }
-	
-	
 }
 
 // Called every frame
@@ -159,14 +167,12 @@ void AMainPawn::Tick(float DeltaTime)
 	// {
 	// 	FireShot(FireDirection);
 	// }
-
-
 }
 
 
 // 데미지 받는 함수 오버라이드 사용
 float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-								AActor* DamageCauser)
+                            AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
@@ -183,85 +189,97 @@ void AMainPawn::FireShot(FVector FireDir)
 {
 	if (bCanFire)
 	{
-
-		
-		// UWorld* const World = GetWorld();
-		// ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-		// ABullet* playerBullet = gm->BulletPooler->GetPooledBullet();
-		// playerBullet->SetOwnerActor(this);
-		// playerBullet->SetActorTransform(GetActorTransform());
-		// const FVector Movement = GetActorForwardVector() * 1000.f; // 
-		// playerBullet->SetVelocity(Movement);
-		// playerBullet->SetLifeSpan();
-		// playerBullet->SetActive(true);
-		//
-		//
-		// bCanFire = false; // 끊고
-		//
-		// // 타이머 작동
-		// World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &AMainPawn::ShotTimerExpired, FireRate);
-		//
-		// // 소리재생
-		// if (FireSound != nullptr)
-		// {
-		// 	UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-		// }
-		//
-		// bCanFire = false;
-		
-		// 		
-		//방향이있으면 
 		if (FireDir.SizeSquared() > 0.0f)
 		{
 			const FRotator FireRotation = FireDir.Rotation();
-			
+
 			// 스폰위치잡기
 			FVector const SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
-		
+
 			UWorld* const World = GetWorld();
-		
+
 			//AActor* const TempActor = Cast<AActor>(this);
-			if (World != nullptr)
+			ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+			ABullet* PlayerBullet = gm->BulletPooler->GetPooledBullet();
+			if (NumberOfShotBullet == 1)
 			{
-				//FireRotation = FireRotation.GetInverse();
-				ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-				ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
-				// 총알 소환
-				//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireRotation.ToString());
-				//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FireDir.ToString());
-				monsterBullet->SetOwnerActor(this);
-				//SpawnLocation*=1.2f;
-				monsterBullet->SetActorLocation(SpawnLocation);
-				monsterBullet->SetActorRotation(FireRotation.GetInverse());
-				FireDir.Normalize();
-				const FVector Movement = FireDir * 1000.f  ;// 
-				monsterBullet->SetVelocity(Movement);
-				monsterBullet->SetLifeSpan();
-				monsterBullet->SetActive(true);
+				if (World != nullptr)
+				{
+					PlayerBullet->SetOwnerActor(this);
+					PlayerBullet->SetActorLocation(SpawnLocation);
+					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
+					FireDir.Normalize();
+					const FVector Movement = FireDir * 1000.f; // 
+					PlayerBullet->SetVelocity(Movement);
+					PlayerBullet->SetLifeSpan();
+					PlayerBullet->SetActive(true);
+				}
 			}
-		
-			bCanFire = false;// 끊고
-		
+			else if (NumberOfShotBullet == 3)
+			{
+				float parameter = -0.3f;
+				
+				for (int i = 0; i < 3; i++)
+				{
+					PlayerBullet = gm->BulletPooler->GetPooledBullet();
+					PlayerBullet->SetOwnerActor(this);
+					PlayerBullet->SetActorLocation(SpawnLocation);
+					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
+	
+					FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
+					                       FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
+					RotationVector.Normalize();
+					parameter += 0.3f;
+					const FVector Movement = RotationVector * 1000.f; // 
+					PlayerBullet->SetVelocity(Movement);
+					PlayerBullet->SetLifeSpan();
+					PlayerBullet->SetActive(true);
+				}
+			}
+			else if (NumberOfShotBullet == 5)
+			{
+				float parameter = -0.4f;
+				
+				for (int i = 0; i < 5; i++)
+				{
+					PlayerBullet = gm->BulletPooler->GetPooledBullet();
+					PlayerBullet->SetOwnerActor(this);
+					PlayerBullet->SetActorLocation(SpawnLocation);
+					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
+	
+					FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
+										FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
+					RotationVector.Normalize();
+					parameter += 0.2f;
+					const FVector Movement = RotationVector * 1000.f; // 
+					PlayerBullet->SetVelocity(Movement);
+					PlayerBullet->SetLifeSpan();
+					PlayerBullet->SetActive(true);
+				}
+			}
+			bCanFire = false; // 끊고
+
 			// 타이머 작동
-			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &AMainPawn::ShotTimerExpired, FireRate);
-		
+			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &AMainPawn::ShotTimerExpired,
+			                                  FireRate);
+
 			// 소리재생
 			if (FireSound != nullptr)
 			{
 				UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 			}
-		
+
 			bCanFire = false;
 		}
 	}
-
 }
+
 
 void AMainPawn::GetExperience(float Exp)
 {
-	NowEXP+=Exp;
-	float persent = (NowEXP/MaxEXP);
-	if(persent>=1.f)
+	NowEXP += Exp;
+	float persent = (NowEXP / MaxEXP);
+	if (persent >= 1.f)
 	{
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 		if (gm->PlayerSkillChooseWidget)
@@ -275,8 +293,8 @@ void AMainPawn::GetExperience(float Exp)
 		// 스킬 선택
 		// 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("LevelUp"));
-		NowEXP=0.f;
-		MaxEXP*=1.2f;
+		NowEXP = 0.f;
+		MaxEXP *= 1.2f;
 	}
 }
 
@@ -284,15 +302,16 @@ void AMainPawn::GetExperience(float Exp)
 void AMainPawn::Dash()
 {
 	FHitResult Hit(1.f);
-	const FVector TeleportPoint = GetActorLocation() +( GetActorForwardVector()*300.f);
+	const FVector TeleportPoint = GetActorLocation() + (GetActorForwardVector() * 300.f);
 
-	SetActorLocation(TeleportPoint,true,&Hit);
+	SetActorLocation(TeleportPoint, true, &Hit);
 }
 
 void AMainPawn::ShotTimerExpired()
 {
 	bCanFire = true;
 }
+
 // Called to bind functionality to input
 void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -305,8 +324,10 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(MoveRightBinding);
 	PlayerInputComponent->BindAxis(FireForwardBinding);
 	PlayerInputComponent->BindAxis(FireRightBinding);
-
 }
 
-
-
+void AMainPawn::SetNumberOfShotBullet(float mNumOfBullet)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(NumberOfShotBullet));
+	NumberOfShotBullet = int(mNumOfBullet);
+}

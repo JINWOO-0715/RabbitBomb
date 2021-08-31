@@ -8,7 +8,6 @@
 #include "ChooseSkillWidget.h" 
 #include "ItemActor.h"
 
-#include "MainPawn.h"
 
 ARealGameModeBase::ARealGameModeBase()
 {

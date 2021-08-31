@@ -9,7 +9,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "PlayerSkillDataTable.h"
 #include "MonsterDataTable.h"
-
+#include "MainPawn.h"
 
 #include "RealGameModeBase.generated.h"
 

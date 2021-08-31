@@ -3,7 +3,7 @@
 
 #include "MonsterActor.h"
 
-#include <concrt.h>
+//#include <concrt.h>
 
 #include "Bullet.h"
 #include "UObject/ConstructorHelpers.h"

@@ -46,7 +46,7 @@ class REAL_API AMainPawn : public APawn
 	float NowEXP =0.f;
 	
 	// 공격속도
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	float FireRate = 1.f;
 
 	// 이동속도 스피드
@@ -59,6 +59,10 @@ class REAL_API AMainPawn : public APawn
 	//HP
 	UPROPERTY()
 	float MaxHP =100.f;
+
+	UPROPERTY()
+	int NumberOfShotBullet =1;
+	
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
 
@@ -143,7 +147,9 @@ public:
 
 
 
-	
+	void SetNumberOfShotBullet (float mNumOfBullet);
+// 발사수
+	FORCEINLINE	float GetNumOfShotBullet() const {return NumberOfShotBullet;};
 	//HP 
 	FORCEINLINE	float GetMaxHp() const {return MaxHP;};
 	//공속 

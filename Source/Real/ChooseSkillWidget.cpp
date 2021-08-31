@@ -27,7 +27,7 @@ void UChooseSkillWidget::ChooseSkillOne()
 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	// 스킬 컴포넌트에 스킬을 추가해서 추가한 스킬은 알아서 작동되게
 
-	PlayerPawn->SkillComp->AddSkill(FName("Faster"));//추가
+	PlayerPawn->SkillComp->AddSkill(FName("LaunchIncrease"));//추가
 	
 	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
 	//
@@ -59,7 +59,7 @@ void UChooseSkillWidget::SetRandomSkill()
 
 	//여기에 랜덤을 넣어야겠지
 	
-	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(FName("Faster"));
+	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(FName("LaunchIncrease"));
 	//FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowData(1);
 	if(PlayerSkillRowData)
 	{

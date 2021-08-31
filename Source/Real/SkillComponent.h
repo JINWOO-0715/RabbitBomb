@@ -41,17 +41,21 @@ public:
 
 	UPROPERTY(EditAnywhere,Category="SkillSet")
 	TArray<UObject*> HasSkillObjects;
+
+	UPROPERTY(EditAnywhere,Category="SkillSet")
+	AActor* OwnerActor ;
 	
-	UFUNCTION(BlueprintCallable)
-	void ActiveSkill();
+	void ActiveSkill(FPlayerSkillRow* mSkillRow ,FName mSkillName);
 
 	UFUNCTION(BlueprintCallable)
 	void AddSkill(FName mSkillName);
 
 	UFUNCTION(BlueprintCallable)
 	void SkillLevelUp(FName mSkillName);
+	void ThreeLaunch(FVector FireDir);
 
-	void SetPlayerBuff( FPlayerSkillRow* mSkillRow , int mSkillLevel=1);
-	void SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow);
+	
+	void SetPlayerBuff( FPlayerSkillRow* mSkillRow , int mSkillLevel=0);
+	void SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkillLevel=0);
 
 };
