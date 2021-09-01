@@ -70,8 +70,13 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	// 몬스터 처리 
 	if (OtherActor->ActorHasTag("Monster"))
 	{
-		
 		UGameplayStatics::ApplyDamage(OtherActor, BulletDamage,nullptr, nullptr, nullptr);
+		if(BulletType==FName("Ice"))
+		{
+			AMonsterActor* TempMonster = Cast<AMonsterActor>(OtherActor);
+			TempMonster->SetStunMonster(2.f);
+		}
+
 	}
 
 	if (OtherActor->ActorHasTag("Player"))

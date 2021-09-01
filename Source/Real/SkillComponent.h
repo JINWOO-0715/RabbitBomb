@@ -52,8 +52,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SkillLevelUp(FName mSkillName);
-	void ThreeLaunch(FVector FireDir);
+	
 
+	void IceBulletCircle();
+
+	
 	
 	void SetPlayerBuff( FPlayerSkillRow* mSkillRow , int mSkillLevel=0);
 	void SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkillLevel=0);

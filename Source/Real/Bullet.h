@@ -16,7 +16,7 @@ class REAL_API ABullet : public AActor
 	GENERATED_BODY()
 	
 	//메쉬
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* BulletMesh;
 
 	//총알 움직임 컴포넌트 
@@ -24,11 +24,6 @@ class REAL_API ABullet : public AActor
 		UProjectileMovementComponent* BulletMovement;
 
 
-	float BulletDamage = 10.f;
-
-
-	//5초간 총알 유지
-	float Lifespan = 5.0f;
 
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
@@ -36,15 +31,20 @@ class REAL_API ABullet : public AActor
 	FTimerHandle TimerHandle_ShotTimerExpired;
 
 	//
-	bool Active;
-
-	//비활성화
-	void Deactivate();
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	bool Active;
+
+	float BulletDamage = 10.f;
+
+
+	//5초간 총알 유지
+	float Lifespan = 5.0f;
+	//비활성화
+	void Deactivate();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -74,6 +74,8 @@ public:
 	bool IsActive();
 
 	void MoveToTarget(bool InActive);
+
+	FName BulletType;
 
 	
 	//메쉬 getter

@@ -257,6 +257,8 @@ void AMainPawn::FireShot(FVector FireDir)
 					PlayerBullet->SetActive(true);
 				}
 			}
+
+			
 			bCanFire = false; // 끊고
 
 			// 타이머 작동

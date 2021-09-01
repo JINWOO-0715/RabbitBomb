@@ -2,9 +2,10 @@
 
 
 #include "SkillComponent.h"
-#include "BuffSkill.h"
+
 #include "MainPawn.h"
 #include "Kismet/GameplayStatics.h"
+#include "IceSkillComponent.h"
 #include "RealGameModeBase.h"
 // Sets default values for this component's properties
 USkillComponent::USkillComponent()
@@ -28,8 +29,9 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	
-	
+	// 스킬이 있다면.
 }
+
 
 void USkillComponent::AddSkill(FName const mSkillName)
 {
@@ -40,10 +42,10 @@ void USkillComponent::AddSkill(FName const mSkillName)
 	// 없다면 스킬추가.
 	if (!HasSkill.Find(mSkillName))
 	{
-		HasSkill.Add(mSkillName,0);
+		HasSkill.Add(mSkillName, 0);
 		ActiveSkill(PlayerSkillRowData, mSkillName);
 	}
-	// 있는 스킬이라면
+		// 있는 스킬이라면
 	else
 	{
 		ActiveSkill(PlayerSkillRowData, mSkillName);
@@ -68,8 +70,40 @@ void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkil
 	if (mSkillRow->SKillName == FName("IceBullet"))
 	{
 		
+		 if (OwnerActor->ActorHasTag("Player"))
+		 {
+		 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, mSkillRow->SKillName.ToString());
+		// {
+
+		 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		 	
+		 	UIceSkillComponent* component = NewObject<UIceSkillComponent>(PlayerPawn, UIceSkillComponent::StaticClass());
+		// 	// 여기에 아이스 스킬 엑터 추가. 컴포넌트
+		// 	//
+		// 	
+		 	//UIceSkillComponent* Ice = CreateDefaultSubobject<UIceSkillComponent>(FName("ItemStaticMesh"));
+		// 	Ice->OwnerActor = OwnerActor;
+	
+		 	component->bCanFire=true;
+		 	component->OwnerActor =PlayerPawn;
+		 	component->Activate(true);
+		 	component->RegisterComponent();
+			
+		 	PlayerPawn->OwnsComponent(component);
+		 	
+		 	
+		// 	
+		// 	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(PlayerPawn->GetNumOfShotBullet()));
+		// 	
+		 }
+
+		// 총알을 바꾼다?
 	}
 	// 작동되게 한다 
+}
+
+void USkillComponent::IceBulletCircle()
+{
 
 }
 
@@ -81,7 +115,7 @@ void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 	if (mSkillRow->SKillName == FName("FasterRabbit"))
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(mSkillLevel));
-		
+
 		float TempSpeed = PlayerPawn->GetMoveSpeed();
 		// 레벨 값을 가져와서 적용한다.
 
@@ -96,7 +130,6 @@ void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 
 	if (mSkillRow->SKillName == FName("PowerfulRabbit"))
 	{
-		
 		float TempBulletPower = PlayerPawn->GetBulletPower();
 		TempBulletPower *= mSkillRow->SkillLevelMap[mSkillLevel];
 		PlayerPawn->SetBulletPower(TempBulletPower);
@@ -108,15 +141,19 @@ void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 
 
 	if (mSkillRow->SKillName == FName("LaunchIncrease"))
-	{	//if(ownerac)
-		if(OwnerActor->ActorHasTag("Player"))
+	{
+		//if(ownerac)
+		if (OwnerActor->ActorHasTag("Player"))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(PlayerPawn->GetNumOfShotBullet()));
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
+			                                 FString::FromInt(PlayerPawn->GetNumOfShotBullet()));
 			PlayerPawn->SetNumberOfShotBullet(mSkillRow->SkillLevelMap[mSkillLevel]);
 			// 등록하면 알아서 진행되는건 파이어볼 같은 액티브고
 			// 아래는 페시브라고 생각하는게 맞는??
 		}
 	}
+
+
 	// 아래로 계속 스킬 추가하면됌!
 }
 

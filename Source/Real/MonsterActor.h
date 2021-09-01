@@ -50,6 +50,7 @@ class REAL_API AMonsterActor : public AActor
 	bool bCanFire;
 	bool isStun;
 	void Deactivate();
+	void StunMonster();
 	
 public:	
 	// Sets default values for this actor's properties
@@ -75,7 +76,7 @@ public:
 	float BulletPower = 10.0f;
 
 	void SetStunMonster(float mStunTime);
-	void StunMonster();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

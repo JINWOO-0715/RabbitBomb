@@ -288,7 +288,6 @@ void AMonsterActor::InitMonster(int dataRowN)
 
 void AMonsterActor::SetStunMonster(float mStunTime)
 {
-
 	// 스턴상태로 바꾼다
 	isStun =true;
 	// 3초후 원래대로
@@ -299,7 +298,6 @@ void AMonsterActor::SetStunMonster(float mStunTime)
 void AMonsterActor::StunMonster()
 {
 	isStun =false;
-	
 }
 
 // Called every frame
