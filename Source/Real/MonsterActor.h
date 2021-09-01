@@ -39,6 +39,7 @@ class REAL_API AMonsterActor : public AActor
 	// 타이머 핸들 이름
 	FTimerHandle LifespanTimer;
 	FTimerHandle AttackTimer;
+	FTimerHandle StunTimer;
 	
 //	FTimerHandle MovespanTimer;
 	
@@ -47,6 +48,7 @@ class REAL_API AMonsterActor : public AActor
 
 	bool Active;
 	bool bCanFire;
+	bool isStun;
 	void Deactivate();
 	
 public:	
@@ -71,6 +73,9 @@ public:
 	//
 	// 총알 파워
 	float BulletPower = 10.0f;
+
+	void SetStunMonster(float mStunTime);
+	void StunMonster();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

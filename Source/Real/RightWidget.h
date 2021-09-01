@@ -8,7 +8,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
-#include "MainPawn.h"
+
 #include "RightWidget.generated.h"
 
 /**

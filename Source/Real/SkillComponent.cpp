@@ -28,6 +28,7 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	
+	
 }
 
 void USkillComponent::AddSkill(FName const mSkillName)
@@ -62,6 +63,13 @@ void USkillComponent::AddSkill(FName const mSkillName)
 
 void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 {
+	// 타이머 추가해서
+
+	if (mSkillRow->SKillName == FName("IceBullet"))
+	{
+		
+	}
+	// 작동되게 한다 
 
 }
 

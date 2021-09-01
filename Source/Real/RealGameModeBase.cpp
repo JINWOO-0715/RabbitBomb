@@ -11,7 +11,7 @@
 
 ARealGameModeBase::ARealGameModeBase()
 {
-	DefaultPawnClass = AMainPawn::StaticClass();
+	//DefaultPawnClass = AMainPawn::StaticClass();
 
 	BulletPooler = CreateDefaultSubobject<UBulletPoolComopnent>(TEXT("BulletPoller"));
 	

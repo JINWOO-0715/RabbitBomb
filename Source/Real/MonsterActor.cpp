@@ -286,12 +286,28 @@ void AMonsterActor::InitMonster(int dataRowN)
 //	
 //}
 
+void AMonsterActor::SetStunMonster(float mStunTime)
+{
+
+	// 스턴상태로 바꾼다
+	isStun =true;
+	// 3초후 원래대로
+	GetWorldTimerManager().SetTimer(StunTimer, this
+		, &AMonsterActor::StunMonster, mStunTime, false);
+}
+
+void AMonsterActor::StunMonster()
+{
+	isStun =false;
+	
+}
+
 // Called every frame
 void AMonsterActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//if 문을 지워도 괜찮은거 아닌가!
-	if (Active)
+	if (Active && !isStun)
 	{
 		const AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 		FVector Dir = player->GetActorLocation() - this->GetActorLocation();
