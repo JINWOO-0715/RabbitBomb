@@ -32,20 +32,51 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// 스킬이 있다면.
 }
 
+//
+// void USkillComponent::AddSkill(FName const mSkillName)
+// {
+// 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+// 	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillName);
+//
+//
+// 	// 없다면 스킬추가.
+// 	if (!HasSkill.Find(mSkillName))
+// 	{
+// 		HasSkill.Add(mSkillName, 0);
+// 		ActiveSkill(PlayerSkillRowData, mSkillName);
+// 	}
+// 		// 있는 스킬이라면
+// 	else
+// 	{
+// 		ActiveSkill(PlayerSkillRowData, mSkillName);
+// 	}
+//
+//
+// 	// 오브젝트에 버프중 fname에 해당하는걸 적용한다.
+//
+// 	//레벨에 따른 건 또 datatble을 만든다???
+//
+//
+// 	//가져온 오브젝트가 알아서 스킬을 적용한다.
+//
+// 	// 오브젝트 가져오는 함수
+// }
 
-void USkillComponent::AddSkill(FName const mSkillName)
+void USkillComponent::AddSkill(int mSkillInt)
 {
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillName);
+	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillInt);
 
+	FName mSkillName =PlayerSkillRowData->SKillName;
 
 	// 없다면 스킬추가.
+	
 	if (!HasSkill.Find(mSkillName))
 	{
 		HasSkill.Add(mSkillName, 0);
 		ActiveSkill(PlayerSkillRowData, mSkillName);
 	}
-		// 있는 스킬이라면
+	// 있는 스킬이라면
 	else
 	{
 		ActiveSkill(PlayerSkillRowData, mSkillName);
@@ -61,7 +92,6 @@ void USkillComponent::AddSkill(FName const mSkillName)
 
 	// 오브젝트 가져오는 함수
 }
-
 
 void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 {

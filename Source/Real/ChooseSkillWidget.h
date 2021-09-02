@@ -46,17 +46,31 @@ protected:
 
 
 public:
+
+
+	
 	UFUNCTION(BlueprintCallable)
 	void ChooseSkillOne();
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ChooseSkillTwo();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ChooseSkillTrd();
 	
 	UFUNCTION()
 	void SetRandomSkill();
+
+
+	UPROPERTY()
+	int SkillName[4];
+
+	
+	UPROPERTY()
+	int32 SkillSize=4;
+
+
+
 
 	// UPROPERTY()
 	// FPlayerSkillRow PlayerSkillRowData;

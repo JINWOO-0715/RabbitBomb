@@ -15,7 +15,8 @@ struct FMonsterRow : public FTableRowBase
     GENERATED_USTRUCT_BODY()
 
 public:
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMesh* MonsterMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float MonsterHP;

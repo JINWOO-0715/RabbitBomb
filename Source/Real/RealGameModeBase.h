@@ -57,10 +57,12 @@ public:
 
 	//몬스터 데이터 초기화
 	FMonsterRow* GetMonsterRowData(int rowN);
+	FMonsterRow* GetMonsterRowData(FName mSkillName);
 
 	//플레이어 스킬 가져오기
 	FPlayerSkillRow* GetPlayerSkillRowDataToNum(int rowN);
 	FPlayerSkillRow* GetPlayerSkillRowDataToNum(FName mSkillName);
+	
 	// //플레이어 스킬 초기화
 	// FPlayerSkillRow* GetPlayerSkillRowDataToName(FName mSkillName);
 

@@ -45,6 +45,14 @@ FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 	return MonsterRowData;
 }
 
+FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
+{
+	FMonsterRow* MonsterRowData = MonsterData->FindRow<FMonsterRow>(
+		mSkillName, FString(""));
+
+	return MonsterRowData;
+}
+
 FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(int rowN)
 {
 	FPlayerSkillRow* PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(

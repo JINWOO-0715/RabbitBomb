@@ -43,7 +43,7 @@ AMainPawn::AMainPawn()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when ship does
-	CameraBoom->TargetArmLength = 1200.f;
+	CameraBoom->TargetArmLength = 1800.f;
 	CameraBoom->SetRelativeRotation(FRotator(-80.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
@@ -57,7 +57,7 @@ AMainPawn::AMainPawn()
 	Tags.Add("Player");
 
 	// Movement
-	MoveSpeed = 1000.0f;
+	MoveSpeed = 500.0f;
 
 
 	//경험치
@@ -66,7 +66,7 @@ AMainPawn::AMainPawn()
 
 	//스텟 (HP 공격력)
 	MaxHP = 100.f;
-	BulletPower = 50.f;
+	BulletPower = 100.f;
 
 	// Weapon
 

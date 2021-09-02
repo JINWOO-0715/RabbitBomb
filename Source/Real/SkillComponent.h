@@ -46,10 +46,12 @@ public:
 	AActor* OwnerActor ;
 	
 	void ActiveSkill(FPlayerSkillRow* mSkillRow ,FName mSkillName);
+	//void AddSkill(FName mSkillName);
 
+	
 	UFUNCTION(BlueprintCallable)
-	void AddSkill(FName mSkillName);
-
+	void AddSkill(int mSkillInt);
+	
 	UFUNCTION(BlueprintCallable)
 	void SkillLevelUp(FName mSkillName);
 	

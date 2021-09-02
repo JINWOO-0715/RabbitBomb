@@ -1,0 +1,38 @@
+[
+	{
+		"Name": "1",
+		"MonsterMesh": "StaticMesh'/Game/Mesh/MonsterBaseMesh.MonsterBaseMesh'",
+		"MonsterHP": 100,
+		"Lifespan": 0,
+		"FireRate": 2,
+		"BulletSpeed": 500,
+		"BulletLifeSpan": 5,
+		"MoveSpeed": 110,
+		"BulletPower": 5
+	},
+
+
+	{
+		"Name": "2",
+		"MonsterMesh": "StaticMesh'/Game/Mesh/TowerRabbit.TowerRabbit'",
+		"MonsterHP": 200,
+		"Lifespan": 0,
+		"FireRate": 2,
+		"BulletSpeed": 500,
+		"BulletLifeSpan": 5,
+		"MoveSpeed": 0,
+		"BulletPower": 5
+	},
+
+	{
+		"Name": "3",
+		"MonsterMesh": "StaticMesh'/Game/Mesh/Box.Box'",
+		"MonsterHP": 200,
+		"Lifespan": 0,
+		"FireRate": 2,
+		"BulletSpeed": 500,
+		"BulletLifeSpan": 5,
+		"MoveSpeed": 0,
+		"BulletPower": 5
+	}
+]
