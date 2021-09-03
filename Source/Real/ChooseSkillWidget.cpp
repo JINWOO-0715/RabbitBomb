@@ -35,6 +35,11 @@ void UChooseSkillWidget::ChooseSkillOne()
 	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
 	//
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	if (MyPlayer != NULL)
+	{
+		MyPlayer->SetPause(false);
+	}
 	gm->PlayerSkillChooseWidget->RemoveFromViewport();
 
 	//
@@ -50,6 +55,11 @@ void UChooseSkillWidget::ChooseSkillTwo()
 	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
 	//
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	if (MyPlayer != NULL)
+	{
+		MyPlayer->SetPause(false);
+	}
 	gm->PlayerSkillChooseWidget->RemoveFromViewport();
 	//	RemoveFromParent();
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
@@ -65,7 +75,13 @@ void UChooseSkillWidget::ChooseSkillTrd()
 	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
 	//
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	if (MyPlayer != NULL)
+	{
+		MyPlayer->SetPause(false);
+	}
 	gm->PlayerSkillChooseWidget->RemoveFromViewport();
+	
 	//RemoveFromParent();
 	//UE_LOG(LogTemp, Warning, TEXT("Pressed"));
 }

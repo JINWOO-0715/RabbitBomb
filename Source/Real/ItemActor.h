@@ -39,7 +39,9 @@ public:
 	FORCEINLINE	float GetItemExp() const {return UPExp;};
 
 	bool isFollowing ;
+	bool Active;
 	void FollowingPlayer();
-	
+	bool IsActive();
+	void SetActive(bool InActive);
 
 };

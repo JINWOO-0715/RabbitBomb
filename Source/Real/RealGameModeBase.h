@@ -8,6 +8,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "PlayerSkillDataTable.h"
+#include "ItemPoolComponent.h"
 #include "MonsterDataTable.h"
 #include "MainPawn.h"
 
@@ -63,10 +64,7 @@ public:
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float SpawnCoolTimeRandomMax =2.0f;
-
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	int SpawnMonsterNum =1;
-
+	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	int SpawnMonsterRandomNumMin=0;
 
@@ -79,8 +77,12 @@ public:
 	UBulletPoolComopnent* BulletPooler;
 
 	// 몬스터 담기 
-	UPROPERTY(EditAnywhere,Category="Spawnere")
+	UPROPERTY(EditAnywhere,Category="Spawner")
 	UObjectPoolComponent* MonsterPooler;
+
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	UItemPoolComponent* ItemPooler;
+
 
 	//몬스터 데이터 초기화
 	FMonsterRow* GetMonsterRowData(int rowN);

@@ -52,6 +52,11 @@ void AItemActor::FollowingPlayer()
 	}
 }
 
+bool AItemActor::IsActive()
+{
+	return Active;
+}
+
 void AItemActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor->ActorHasTag("Player"))
@@ -64,4 +69,18 @@ void AItemActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 		Destroy();
 	}
 	
+}
+
+void AItemActor::SetActive(bool InActive)
+{
+	Active =InActive;
+	// 충돌off
+	SetActorEnableCollision(InActive);
+	// 숨기기
+	SetActorHiddenInGame(!InActive);
+	// 메시지우기
+	ItemMesh->SetActive(InActive);
+	// 틱종료
+	SetActorTickEnabled(InActive);
+
 }

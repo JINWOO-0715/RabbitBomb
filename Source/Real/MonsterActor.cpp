@@ -129,6 +129,9 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	MonsterHP -= Damage;
 	if (MonsterHP < 0.f)
 	{
+		int rand = FMath::RandRange(0,9);
+
+		// 아이템 스폰한다 10%!
 		Deactivate();
 	}
 
@@ -272,7 +275,7 @@ void AMonsterActor::InitMonster(int dataRowN)
 	Lifespan = MonsterData->Lifespan;
 	float const time =GetWorld()->GetAudioTimeSeconds();
 	MonsterHP = HPPowerfulNum*time*time+MonsterData->MonsterHP;
-	
+	MonsterHP=MonsterData->MonsterHP;
 	MoveSpeed = MonsterData->MoveSpeed;
 	//0.0008*x*x+100;
 }

@@ -49,6 +49,8 @@ class REAL_API AMainPawn : public APawn
 	USkillComponent* SkillContainer;
 
 
+	UPROPERTY()
+	int level =1;
 	
 	// 플레이어 최대경험치
 	UPROPERTY()

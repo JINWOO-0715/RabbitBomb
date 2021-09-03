@@ -215,7 +215,7 @@ void AMainPawn::FireShot(FVector FireDir)
 			ABullet* PlayerBullet = gm->BulletPooler->GetPooledBullet();
 			if (NumberOfShotBullet == 1)
 			{
-				if (World != nullptr)
+				if (World != nullptr&& PlayerBullet)
 				{
 					PlayerBullet->SetOwnerActor(this);
 					PlayerBullet->SetActorLocation(SpawnLocation);
@@ -233,19 +233,25 @@ void AMainPawn::FireShot(FVector FireDir)
 				
 				for (int i = 0; i < 3; i++)
 				{
+					
 					PlayerBullet = gm->BulletPooler->GetPooledBullet();
-					PlayerBullet->SetOwnerActor(this);
-					PlayerBullet->SetActorLocation(SpawnLocation);
-					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
+					if(PlayerBullet)
+					{
+						PlayerBullet->SetActive(true);
+						PlayerBullet->SetOwnerActor(this);
+						PlayerBullet->SetActorLocation(SpawnLocation);
+						PlayerBullet->SetActorRotation(FireRotation.GetInverse());
 	
-					FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
-					                       FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
-					RotationVector.Normalize();
-					parameter += 0.3f;
-					const FVector Movement = RotationVector * 1000.f; // 
-					PlayerBullet->SetVelocity(Movement);
-					PlayerBullet->SetLifeSpan();
-					PlayerBullet->SetActive(true);
+						FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
+											FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
+						RotationVector.Normalize();
+						parameter += 0.3f;
+						const FVector Movement = RotationVector * 1000.f; // 
+						PlayerBullet->SetVelocity(Movement);
+						PlayerBullet->SetLifeSpan();
+						
+					}
+				
 				}
 			}
 			else if (NumberOfShotBullet == 5)
@@ -305,10 +311,19 @@ void AMainPawn::GetExperience(float Exp)
 			//UE_LOG(LogTemp, Warning, TEXT("sucess wiget"));
 		}
 		// 스킬 선택
-		// 
-		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("LevelUp"));
+		//
+
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("LevelUp"));
 		NowEXP = 0.f;
-		MaxEXP *= 1.2f;
+		level+=1;
+		MaxEXP *= 0.1*level*level;
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::FromInt(level));
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(MaxEXP));
+		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+		if (MyPlayer != NULL)
+		{
+			MyPlayer->SetPause(true);
+		}
 	}
 }
 
