@@ -45,7 +45,8 @@ class REAL_API AMonsterActor : public AActor
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float BulletLifeSpan = 5.0f;
-
+	float HPPowerfulNum = 0.001f;
+	
 	bool Active;
 	bool bCanFire;
 	bool isStun;

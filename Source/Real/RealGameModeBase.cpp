@@ -34,7 +34,10 @@ ARealGameModeBase::ARealGameModeBase()
 void ARealGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//GetWorld()->GetRealTimeSeconds();
 
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(GetWorld()->GetRealTimeSeconds()));
+	
 }
 
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
@@ -72,10 +75,12 @@ FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
 
 void ARealGameModeBase::BeginPlay()
 {
+	StartTime=0.0f;
 	// 총알 스폰
 	BulletPooler->Spawn();
 	MonsterPooler->Spawn();
-
+	
+	
 
 
 	// //위젯 생성
@@ -108,31 +113,43 @@ void ARealGameModeBase::BeginPlay()
 void ARealGameModeBase:: MonsterSpawn()
 {
 	UWorld* const World = GetWorld();
-	
-	AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
-		
-	if (Monster == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
-		GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
-		return;
-	}
-	// 랜덤위치에 스폰하고
 	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 	
 	auto result = FMath::VRand();
-	// 원 800~1500범위에 랜덤하게.
-	result *= FMath::RandRange(800,1500);
-	result *= FVector(1.f,1.f,0.f);
-	result+=player->GetActorLocation();
-	Monster->SetActorLocation(result);
+
 	
-	// 몬스터 번호를 가져와 초기화한다
-	Monster->InitMonster(MonsterNum);
+	// 몬스터 몇마리 도 랜덤하게 (최소 1마리 ~최대 몇마리)
+	int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin,SpawnMonsterRandomNumMax);
+	MonsterSpawnNum+=randMonsterMun;
+	// 몬스터 생성
+	for(int i =0 ; i<MonsterSpawnNum;i++)
+	{
+		AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
+		// 몬스터 범위  (SpawnRangeMin,SpawnRangeMax) 랜덤하게
+		result *= FMath::RandRange(SpawnRangeMin,SpawnRangeMax);
+		if (Monster == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+			GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
+			return;
+		}
+	
+		result *= FVector(1.f,1.f,0.f);
+		result+=player->GetActorLocation();
+		Monster->SetActorLocation(result);
 
-	// 실행한다
-	Monster->SetActive(true);
+		
+		// 몬스터 번호를 가져와 초기화한다
+		Monster->InitMonster(MonsterType);
 
+		// 실행한다
+		Monster->SetActive(true);
+	}
+
+
+	//쿨타임 랜덤하게 조절
+	float const RandCoolTime = FMath::RandRange(SpawnCoolTimeRandomMin,SpawnCoolTimeRandomMax);
+	MonsterSpawnCoolTime+=RandCoolTime;
 	GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime);
 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
 

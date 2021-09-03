@@ -54,10 +54,15 @@ AMainPawn::AMainPawn()
 
 	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
 
+	ItemGettingSphere = CreateDefaultSubobject<USphereComponent>(TEXT("GetItemCullusion"));
+	ItemGettingSphere->InitSphereRadius(400.f);
+	
+
+	
 	Tags.Add("Player");
 
 	// Movement
-	MoveSpeed = 500.0f;
+	MoveSpeed = 700.0f;
 
 
 	//경험치
@@ -66,7 +71,7 @@ AMainPawn::AMainPawn()
 
 	//스텟 (HP 공격력)
 	MaxHP = 100.f;
-	BulletPower = 100.f;
+	BulletPower = 100.5f;
 
 	// Weapon
 

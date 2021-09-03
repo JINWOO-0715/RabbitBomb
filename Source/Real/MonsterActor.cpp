@@ -158,7 +158,7 @@ void AMonsterActor::FireShot()
 			 monsterBullet->SetOwnerActor(this);
 			 // 가지고있는 총알위치
 			 monsterBullet->SetActorLocation(GetActorLocation());
-			 //총알 속도
+			 // 총알 속도
 			 monsterBullet->SetVelocity(Movement);
 			 // 알아서 살아지게하고
 			 monsterBullet->SetLifeSpan();
@@ -270,8 +270,11 @@ void AMonsterActor::InitMonster(int dataRowN)
 	BulletSpeed = MonsterData->BulletSpeed;
 	FireRate = MonsterData->FireRate;
 	Lifespan = MonsterData->Lifespan;
-	MonsterHP = MonsterData->MonsterHP;
+	float const time =GetWorld()->GetAudioTimeSeconds();
+	MonsterHP = HPPowerfulNum*time*time+MonsterData->MonsterHP;
+	
 	MoveSpeed = MonsterData->MoveSpeed;
+	//0.0008*x*x+100;
 }
 
 //

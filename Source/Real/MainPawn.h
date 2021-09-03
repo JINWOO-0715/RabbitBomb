@@ -7,6 +7,8 @@
 #include "BulletPoolComopnent.h"
 #include "Components/WidgetComponent.h"
 #include "RightWidget.h"
+#include "Engine/Classes/Components/SphereComponent.h"
+
 #include "SkillComponent.h"
 #include "MainPawn.generated.h"
 
@@ -29,6 +31,11 @@ class REAL_API AMainPawn : public APawn
 	//카메라 스프링 컴포넌트
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class USphereComponent* ItemGettingSphere;
+
+	
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	UBulletPoolComopnent* ObjectPooler;

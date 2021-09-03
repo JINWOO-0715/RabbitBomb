@@ -31,6 +31,7 @@ class ARealGameModeBase : public AGameModeBase
 
 	class UDataTable* MonsterData;
 	class UDataTable* PlayerSkillData;
+	float StartTime =0.0f;
 
 protected:
 	virtual void BeginPlay() override;
@@ -45,7 +46,33 @@ public:
 	float MonsterSpawnCoolTime =2.0f;
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
-	int MonsterNum =2;
+	int MonsterSpawnNum =2;
+
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int MonsterType =2;
+
+	
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int SpawnRangeMin =800;
+	
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int SpawnRangeMax =1500;
+	
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	float SpawnCoolTimeRandomMin =0.f;
+	
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	float SpawnCoolTimeRandomMax =2.0f;
+
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int SpawnMonsterNum =1;
+
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int SpawnMonsterRandomNumMin=0;
+
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	int SpawnMonsterRandomNumMax=5;
+	
 	
 	//총알 담기
 	UPROPERTY(EditAnywhere,Category="Spawner")
@@ -82,4 +109,6 @@ public:
 	// 플레이어 스킬선택 위젯
 	UPROPERTY(VisibleInstanceOnly)
 	class UChooseSkillWidget* PlayerSkillChooseWidget;
+
+	FORCEINLINE	float GetPlayTime() const {return StartTime;};
 };
