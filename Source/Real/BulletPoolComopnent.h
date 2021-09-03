@@ -12,13 +12,16 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class REAL_API UBulletPoolComopnent : public UActorComponent
 {
 	GENERATED_BODY()
+	
 
 public:	
 	// Sets default values for this component's properties
 	UBulletPoolComopnent();
 
 	// 들어간거 가져오는거
-	ABullet* GetPooledBullet();
+	class ABullet* GetPooledBullet();
+
+	
 
 protected:
 	// Called when the game starts
@@ -36,6 +39,9 @@ public:
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int Poolsize = 100;
+
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	class UStaticMesh* MonsterBulletMesh;
 
 	TArray<ABullet*> Pool;
 	

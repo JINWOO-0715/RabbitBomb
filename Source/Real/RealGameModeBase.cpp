@@ -81,8 +81,9 @@ void ARealGameModeBase::BeginPlay()
 	// 총알 스폰
 	BulletPooler->Spawn();
 	MonsterPooler->Spawn();
+	ItemPooler->Spawn();
 	
-	
+
 
 
 	// //위젯 생성
@@ -144,6 +145,7 @@ void ARealGameModeBase:: MonsterSpawn()
 
 		
 		// 몬스터 번호를 가져와 초기화한다 (랜덤하게???~?~?)
+		MonsterType= FMath::RandRange(1,3);
 		Monster->InitMonster(MonsterType);
 
 		// 실행한다

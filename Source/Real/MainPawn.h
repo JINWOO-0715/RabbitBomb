@@ -43,10 +43,10 @@ class REAL_API AMainPawn : public APawn
 	
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
-	UBulletPoolComopnent* ObjectPooler;
+	class UBulletPoolComopnent* ObjectPooler;
 	
 	UPROPERTY(EditAnywhere)
-	USkillComponent* SkillContainer;
+	class USkillComponent* SkillContainer;
 
 
 	UPROPERTY()

@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RealGameModeBase.h"
+#include "MonsterActor.h"
+#include "MainPawn.h"
 
-#include "GameFramework/Actor.h"
 #include "Bullet.generated.h"
 
 class UProjectileMovementComponent;
@@ -18,6 +20,8 @@ class REAL_API ABullet : public AActor
 	//메쉬
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Projectile, meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* BulletMesh;
+
+
 
 	//총알 움직임 컴포넌트 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
@@ -49,6 +53,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	ABullet();
+	
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

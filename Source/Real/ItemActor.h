@@ -17,7 +17,7 @@ class REAL_API AItemActor : public AActor
 
 	//올려주는 경험치
 	float UPExp = 101.0f;
-
+	bool Active;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -38,8 +38,8 @@ public:
 
 	FORCEINLINE	float GetItemExp() const {return UPExp;};
 
-	bool isFollowing ;
-	bool Active;
+	bool isFollowing;
+
 	void FollowingPlayer();
 	bool IsActive();
 	void SetActive(bool InActive);

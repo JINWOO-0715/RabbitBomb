@@ -3,12 +3,12 @@
 
 #include "Bullet.h"
 
-#include "MonsterActor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-#include "MainPawn.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/Actor.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StaticMesh.h"
 
@@ -24,9 +24,12 @@ ABullet::ABullet()
 		// 생성자에서만 설정 절대 틱을 안쓴다 = false
 	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BulletMeshAsset(TEXT("/Game/Mesh/BulletMesh.BulletMesh"));
-
+	
 	// Create mesh component for the projectile sphere
 	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
+
+
+		
 	BulletMesh->SetStaticMesh(BulletMeshAsset.Object);
 	BulletMesh->SetupAttachment(RootComponent);
 	BulletMesh->SetGenerateOverlapEvents(false);
@@ -42,6 +45,8 @@ ABullet::ABullet()
 	//BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic,ECollisionResponse::ECR_Block);
 	RootComponent = BulletMesh;
 
+
+	
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	BulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	BulletMovement->UpdatedComponent = BulletMesh;
@@ -120,11 +125,15 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 	{
 		if (OwnerActor->ActorHasTag("Monster"))
 		{
-			
+			// 총알 설정.
 			AMonsterActor* TempMonster = Cast<AMonsterActor>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 			BulletDamage=TempMonster->BulletPower;
+			// mesh를 2개가지고 바꿔가면서 쓴다.
+			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+			
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+			BulletMesh->SetStaticMesh(gm->BulletPooler->MonsterBulletMesh);
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);

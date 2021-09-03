@@ -130,7 +130,15 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	if (MonsterHP < 0.f)
 	{
 		int rand = FMath::RandRange(0,9);
-
+		if(rand==0)
+		{
+			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+			AItemActor* Item =gm->ItemPooler->GetPooledUItem();
+			Item->SetActorLocation(GetActorLocation());
+			Item->SetActive(true);
+			
+			
+		}
 		// 아이템 스폰한다 10%!
 		Deactivate();
 	}

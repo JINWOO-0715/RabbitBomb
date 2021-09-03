@@ -11,6 +11,7 @@ UBulletPoolComopnent::UBulletPoolComopnent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
+
 	// ...
 }
 
@@ -31,7 +32,7 @@ ABullet* UBulletPoolComopnent::GetPooledBullet()
 void UBulletPoolComopnent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// if(PooledBulletSubClass !=NULL)
 	// {
 	// 	UWorld* const world = GetWorld();

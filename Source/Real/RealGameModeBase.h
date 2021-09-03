@@ -40,6 +40,9 @@ protected:
 public:
 	ARealGameModeBase();
 	
+	//메쉬
+
+	
 	virtual void Tick(float DeltaTime) override;
 	
 	// 몬스터 생성 주기
@@ -74,14 +77,14 @@ public:
 	
 	//총알 담기
 	UPROPERTY(EditAnywhere,Category="Spawner")
-	UBulletPoolComopnent* BulletPooler;
+		class 	UBulletPoolComopnent* BulletPooler;
 
 	// 몬스터 담기 
 	UPROPERTY(EditAnywhere,Category="Spawner")
-	UObjectPoolComponent* MonsterPooler;
+		class UObjectPoolComponent* MonsterPooler;
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
-	UItemPoolComponent* ItemPooler;
+		class UItemPoolComponent* ItemPooler;
 
 
 	//몬스터 데이터 초기화

@@ -9,7 +9,7 @@ AItemActor::AItemActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BulletMeshAsset(TEXT("/Game/Mesh/coinsLarge.coinsLarge"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BulletMeshAsset(TEXT("/Game/Mesh/ExpMesh.ExpMesh"));
 
 	// Create mesh component for the projectile sphere
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
@@ -45,7 +45,7 @@ void AItemActor::FollowingPlayer()
 		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 		FVector Dir = player->GetActorLocation() - GetActorLocation();
 		Dir.Normalize();// ¹æÇâº¤ÅÍ
-		const FVector Movement = Dir * 20.f  ;//
+		const FVector Movement = Dir * 10.f  ;//
 		FRotator NewRotation = Movement.Rotation();
 		RootComponent->MoveComponent(Movement,NewRotation,true);
 
@@ -74,6 +74,8 @@ void AItemActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 void AItemActor::SetActive(bool InActive)
 {
 	Active =InActive;
+	ItemMesh->SetGenerateOverlapEvents(InActive);
+	ItemMesh->SetNotifyRigidBodyCollision(InActive);
 	// Ãæµ¹off
 	SetActorEnableCollision(InActive);
 	// ¼û±â±â
