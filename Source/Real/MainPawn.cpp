@@ -54,9 +54,12 @@ AMainPawn::AMainPawn()
 
 	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
 
-	ItemGettingSphere = CreateDefaultSubobject<USphereComponent>(TEXT("GetItemCullusion"));
-	ItemGettingSphere->InitSphereRadius(400.f);
 	
+	ItemGettingSphere = CreateDefaultSubobject<USphereComponent>(TEXT("GetItemCullusion"));
+	ItemGettingSphere->SetupAttachment(RootComponent);
+	ItemGettingSphere->InitSphereRadius(400.f);
+	ItemGettingSphere->OnComponentBeginOverlap.AddDynamic(this, &AMainPawn::OnOverlapBegin);
+
 
 	
 	Tags.Add("Player");
@@ -81,6 +84,7 @@ AMainPawn::AMainPawn()
 	FireRate = 1.f;
 	bCanFire = true;
 }
+
 
 void AMainPawn::SetMoveSpeed(float mMoveSpeed)
 {
@@ -112,23 +116,7 @@ void AMainPawn::BeginPlay()
 	Super::BeginPlay();
 	SkillComp->OwnerActor = this;
 
-	//CreateWidget<URightWidget>((GetWorld(), PlayerRightWidgetClass);
-	//PlayerRightWidgetClass = LoadClass<URightWidget>(this,TEXT(""));
-	//PlayerRightWidget = PlayerRightWidget->GetClass();
-	//PlayerRightWidget =  Cast<URightWidget>(CreateWidget(GetWorld(), PlayerRightWidgetClass));
-	// PlayerRightWidget = Cast<URightWidget>(CreateWidget(GetWorld(),PlayerRightWidgetClass));
-	// if(PlayerRightWidgetClass !=nullptr)
-	// {
-	// 	//layerRightWidget = CreateWidget<URightWidget>(GetWorld(),PlayerRightWidgetClass);
-	// 	if(PlayerRightWidget)
-	// 	{
-	// 		PlayerRightWidget->AddToViewport();
-	// 		PlayerRightWidget->Player=this;
-	// 	}
-	// 	// PlayerRightWidget->Player=this;
-	// 	// PlayerRightWidget->AddToViewport();
-	// 	
-	// }
+
 }
 
 // Called every frame
@@ -188,6 +176,25 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	// }
 
 	return Damage;
+}
+
+void AMainPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Line"));
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
+
+
+	}
+	if(OtherActor->ActorHasTag("Item"))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
+		AItemActor* ItemActor = Cast<AItemActor>(OtherActor);
+		ItemActor->isFollowing=true;
+
+	}
 }
 
 void AMainPawn::FireShot(FVector FireDir)

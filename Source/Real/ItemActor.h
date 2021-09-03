@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "ItemActor.generated.h"
 
 UCLASS()
@@ -13,9 +14,6 @@ class REAL_API AItemActor : public AActor
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* ItemMesh;
 
-	
-	//5초동안 유지
-	float Lifespan = 5.0f;
 
 	//올려주는 경험치
 	float UPExp = 101.0f;
@@ -37,5 +35,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FORCEINLINE	float GetItemExp() const {return UPExp;};
+
+	bool isFollowing ;
+	void FollowingPlayer();
+	
 
 };

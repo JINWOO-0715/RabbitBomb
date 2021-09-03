@@ -18,6 +18,8 @@ AItemActor::AItemActor()
 	ItemMesh->SetGenerateOverlapEvents(false);
 	ItemMesh->OnComponentHit.AddDynamic(this, &AItemActor::OnHit);
 	ItemMesh->SetNotifyRigidBodyCollision(true);
+	Tags.Add("Item");
+	
 }
 
 // Called when the game starts or when spawned
@@ -31,13 +33,30 @@ void AItemActor::BeginPlay()
 void AItemActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// 니가 오게 하는 함수를 작동한다.
+	FollowingPlayer();
 
+}
+
+void AItemActor::FollowingPlayer()
+{
+	if(isFollowing)
+	{
+		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
+		FVector Dir = player->GetActorLocation() - GetActorLocation();
+		Dir.Normalize();// 방향벡터
+		const FVector Movement = Dir * 20.f  ;//
+		FRotator NewRotation = Movement.Rotation();
+		RootComponent->MoveComponent(Movement,NewRotation,true);
+
+	}
 }
 
 void AItemActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor->ActorHasTag("Player"))
 	{
+		isFollowing=false;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("COllision BoxItem"));
 		AMainPawn* Player = Cast<AMainPawn>(OtherActor);
 		Player->GetExperience(UPExp);
