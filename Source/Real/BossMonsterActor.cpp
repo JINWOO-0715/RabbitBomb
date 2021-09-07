@@ -17,7 +17,14 @@ void ABossMonsterActor::Tick(float DeltaTime)
 
 	if (Active && !isStun)
 	{
+		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+		FRotator newrot = (player->GetActorLocation() - GetActorLocation()).Rotation();
+		newrot.Pitch=0.f;
+		newrot.Roll=0.f;
 		
+		SetActorRotation(newrot);
+
+
 		FireShot();
 	}
 }
@@ -26,7 +33,7 @@ void ABossMonsterActor::FireShot()
 {
 	if (bCanFire)
 	{
-		BossBulletPattern =FMath::RandRange(0, 2);
+		BossBulletPattern =4;//FMath::RandRange(0, 2);
 		FireRate = FMath::RandRange(1.f, 2.5f);
 		switch (BossBulletPattern)
 		{
@@ -40,12 +47,14 @@ void ABossMonsterActor::FireShot()
 			break;
 		case 2:
 			// 0.3초 총 5번
-			FireCircularsector();
+			FireStraightRandom();
 			break;
 		case 3:
-			
+			AttackCount = -5;
+			FireCircularsector();
 			break;
 		case 4:
+			FireShotStar();
 			break;
 		default:
 			break;
@@ -117,7 +126,7 @@ void ABossMonsterActor::FireStraight()
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 		FVector Dir = player->GetActorLocation() - this->GetActorLocation();
@@ -154,7 +163,7 @@ void ABossMonsterActor::FireStraight()
 	
 }
 
-void ABossMonsterActor::FireCircularsector()
+void ABossMonsterActor::FireStraightRandom()
 {
 
 
@@ -189,7 +198,7 @@ void ABossMonsterActor::FireCircularsector()
 	{
 
 		AttackCount++;
-		World->GetTimerManager().SetTimer(AttackTimer, this, &ABossMonsterActor::FireCircularsector, 0.3f);
+		World->GetTimerManager().SetTimer(AttackTimer, this, &ABossMonsterActor::FireStraightRandom, 0.3f);
 	}
 	else
 	{
@@ -197,4 +206,127 @@ void ABossMonsterActor::FireCircularsector()
 		World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);	
 	}
 
+}
+
+void ABossMonsterActor::FireCircularsector()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(3));
+
+	FVector FireDir = GetActorForwardVector();
+	UWorld* const World = GetWorld();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
+
+
+	if (AttackCount < 5)
+	{
+
+		if (monsterBullet && World)
+		{
+			monsterBullet = gm->BulletPooler->GetPooledBullet();
+			monsterBullet->SetActive(true);
+			monsterBullet->SetOwnerActor(this);
+			monsterBullet->SetActorLocation(GetActorLocation());
+			FVector RotationVector(FireDir.X * cos(AttackCount * 0.1f) - FireDir.Y * sin(AttackCount * 0.1f),
+			                       FireDir.X * sin(AttackCount * 0.1f) + FireDir.Y * cos(AttackCount * 0.1f), 0.f);
+			RotationVector.Normalize();
+		
+
+			const FVector Movement = RotationVector * 1000.f; // 
+			monsterBullet->SetVelocity(Movement);
+			monsterBullet->SetLifeSpan();
+		}
+
+
+		AttackCount++;
+		World->GetTimerManager().SetTimer(AttackTimer, this, &ABossMonsterActor::FireCircularsector, 0.2f);
+	}
+	else
+	{
+		
+		ReverseFireCircularsector();
+	}
+
+
+	
+}
+void ABossMonsterActor::ReverseFireCircularsector()
+{
+	
+
+	FVector FireDir = GetActorForwardVector();
+	UWorld* const World = GetWorld();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
+	
+	if(AttackCount>-5)
+	{
+			if (monsterBullet && World)
+			{
+				monsterBullet = gm->BulletPooler->GetPooledBullet();
+				monsterBullet->SetActive(true);
+				monsterBullet->SetOwnerActor(this);
+				monsterBullet->SetActorLocation(GetActorLocation());
+				FVector RotationVector(FireDir.X * cos(AttackCount*0.1f) - FireDir.Y * sin(AttackCount*0.1f),
+									FireDir.X * sin(AttackCount*0.1f) + FireDir.Y * cos(AttackCount*0.1f), 0.f);
+				RotationVector.Normalize();
+				const FVector Movement = RotationVector * 1000.f; // 
+				monsterBullet->SetVelocity(Movement);
+				monsterBullet->SetLifeSpan();
+						
+			}
+	
+		AttackCount--;
+		World->GetTimerManager().SetTimer(AttackTimer, this, &ABossMonsterActor::ReverseFireCircularsector, 0.2f);
+	}
+	else
+	{
+		AttackCount=0;
+		World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);	
+	}
+
+
+}
+
+void ABossMonsterActor::FireShotStar()
+{
+	FVector FireDir = GetActorForwardVector();
+	UWorld* const World = GetWorld();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
+	
+
+	for(int t = -50;t<50;t++)
+	{
+		monsterBullet = gm->BulletPooler->GetPooledBullet();
+		monsterBullet->SetActive(true);
+		monsterBullet->SetOwnerActor(this);
+	
+		FVector V = GetActorLocation();
+		
+		V.X += 500*cos(2*t) + 200*cos(3*t);
+		V.Y += 200*sin(3*t) -500*sin(2*t);
+		V.Z =0.f;
+		// 여기까지는 별그리기
+		monsterBullet->SetActorLocation(V);
+		
+		// 몬스터위치에서 총알위치를 뺀다
+		V =  monsterBullet->GetActorLocation() - GetActorLocation();
+
+		
+
+
+		// 합방향벡터를 더해준다.
+		
+		//V*=monsterBullet->GetActorForwardVector();
+
+		
+		V.Normalize();
+		const FVector Movement = V *1000.f; // 
+		monsterBullet->SetVelocity(Movement);
+		monsterBullet->SetLifeSpan();
+
+	
+	}
+	World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);	
 }

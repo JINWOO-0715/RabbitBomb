@@ -32,7 +32,10 @@ class REAL_API ABossMonsterActor : public AMonsterActor
 
 	void FireCircleShot();
 	void FireStraight();
+	void FireStraightRandom();
 	void FireCircularsector();
+	void ReverseFireCircularsector();
+	void FireShotStar();
 
 	
 };
