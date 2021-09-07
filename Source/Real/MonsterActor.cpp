@@ -30,11 +30,11 @@ AMonsterActor::AMonsterActor()
 
 	// 메시
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/MonsterBaseMesh.MonsterBaseMesh"));
-	MonseterMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	RootComponent = MonseterMeshComponent;
+	MonsterMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	RootComponent = MonsterMeshComponent;
 	SetActorEnableCollision(false);
-	MonseterMeshComponent->SetStaticMesh(MeshAsset.Object);
-	MonseterMeshComponent->SetCollisionProfileName("Monster");
+	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
+	MonsterMeshComponent->SetCollisionProfileName("Monster");
 
 
 	//충돌에대해 다시 해보기
@@ -42,7 +42,7 @@ AMonsterActor::AMonsterActor()
 
 	//MonseterMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	//MonseterMeshComponent->SetCollisionObjectType(ECC_GameTraceChannel2);
-	MonseterMeshComponent->SetGenerateOverlapEvents(false);
+	MonsterMeshComponent->SetGenerateOverlapEvents(false);
 	Tags.Add("Monster");
 
 
@@ -68,7 +68,7 @@ void AMonsterActor::SetActive(bool InActive)
 	SetActorHiddenInGame(!InActive);
 
 	//메시 
-	MonseterMeshComponent->SetActive(InActive);
+	MonsterMeshComponent->SetActive(InActive);
 
 	//틱종료
 	SetActorTickEnabled(InActive);
@@ -116,7 +116,7 @@ void AMonsterActor::Deactivate()
 {
 	// 여기에 타이머 종료를 넣는다. 
 	SetActive(false);
-	MonseterMeshComponent->Deactivate();
+	MonsterMeshComponent->Deactivate();
 }
 
 
@@ -277,7 +277,7 @@ void AMonsterActor::InitMonster(int dataRowN)
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
-	MonseterMeshComponent->SetStaticMesh( MonsterData->MonsterMesh);
+	MonsterMeshComponent->SetStaticMesh( MonsterData->MonsterMesh);
 	BulletSpeed = MonsterData->BulletSpeed;
 	FireRate = MonsterData->FireRate;
 	Lifespan = MonsterData->Lifespan;

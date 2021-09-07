@@ -43,6 +43,9 @@ public:
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	class UStaticMesh* MonsterBulletMesh;
 
+	UPROPERTY(EditAnywhere, Category = "ObjectPooler");
+	class UStaticMesh* PlayeruBulletMesh;
+
 	TArray<ABullet*> Pool;
 	
 };

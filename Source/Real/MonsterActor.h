@@ -12,14 +12,13 @@ class REAL_API AMonsterActor : public AActor
 {
 	GENERATED_BODY()
 	
+protected:
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* MonseterMeshComponent;
+	class UStaticMeshComponent* MonsterMeshComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float MonsterHP = 50.f;
 
-	UFUNCTION()
-		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	// A스타가 될 상.
 	UFUNCTION()
@@ -46,12 +45,19 @@ class REAL_API AMonsterActor : public AActor
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float BulletLifeSpan = 5.0f;
 	float HPPowerfulNum = 0.001f;
+
+
+	UFUNCTION()
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	
 	bool Active;
 	bool bCanFire;
 	bool isStun;
 	void Deactivate();
 	void StunMonster();
+
+
 	
 public:	
 	// Sets default values for this actor's properties
@@ -64,9 +70,12 @@ public:
 	//float MovetoTagetUpdateDuration =0.1f;
 	
 	virtual void SetLifeSpan(float InLifespan) override;
+	
+	UFUNCTION(BlueprintCallable)
 	void SetActive(bool InActive);
+	
 	void ShotTimerExpired();
-	void FireShot();
+	virtual void FireShot();
 	void InitMonster(int dataRowN);
 	
 	bool IsActive();

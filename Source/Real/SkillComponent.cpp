@@ -102,30 +102,22 @@ void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkil
 		
 		 if (OwnerActor->ActorHasTag("Player"))
 		 {
+// iceSkill 1·¾ 2·¾ 3·¾  Ãß°¡ÇÏ¸é‰Î!
 		 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, mSkillRow->SKillName.ToString());
-		// {
+		
 
 		 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		 	
 		 	UIceSkillComponent* component = NewObject<UIceSkillComponent>(PlayerPawn, UIceSkillComponent::StaticClass());
-		// 	// ¿©±â¿¡ ¾ÆÀÌ½º ½ºÅ³ ¿¢ÅÍ Ãß°¡. ÄÄÆ÷³ÍÆ®
-		// 	//
-		// 	
-		 	//UIceSkillComponent* Ice = CreateDefaultSubobject<UIceSkillComponent>(FName("ItemStaticMesh"));
-		// 	Ice->OwnerActor = OwnerActor;
-	
+
 		 	component->bCanFire=true;
 		 	component->OwnerActor =PlayerPawn;
 		 	component->Activate(true);
 		 	component->RegisterComponent();
-			
-		 	PlayerPawn->OwnsComponent(component);
-		 	
-		 	
-		// 	
-		// 	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(PlayerPawn->GetNumOfShotBullet()));
-		// 	
+		
+		
 		 }
+		
 
 		// ÃÑ¾ËÀ» ¹Ù²Û´Ù?
 	}

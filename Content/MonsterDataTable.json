@@ -34,5 +34,17 @@
 		"BulletLifeSpan": 5,
 		"MoveSpeed": 0,
 		"BulletPower": 5
+	},
+
+	{
+		"Name": "4",
+		"MonsterMesh": "StaticMesh'/Game/Mesh/Boss.Boss'",
+		"MonsterHP": 2000,
+		"Lifespan": 0,
+		"FireRate": 2,
+		"BulletSpeed": 500,
+		"BulletLifeSpan": 5,
+		"MoveSpeed": 0,
+		"BulletPower": 10
 	}
 ]
