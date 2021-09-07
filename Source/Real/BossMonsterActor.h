@@ -18,11 +18,21 @@ class REAL_API ABossMonsterActor : public AMonsterActor
 
 	private:
 	
+	FTimerHandle BossAttackTimer;
+	int BossBulletPattern;
+	
 
+	int AttackCount =0;
 	public:
 	ABossMonsterActor();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void FireShot() override;
+
+	void FireCircleShot();
+	void FireStraight();
+	void FireCircularsector();
+
+	
 };
