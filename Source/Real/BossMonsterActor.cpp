@@ -33,7 +33,8 @@ void ABossMonsterActor::FireShot()
 {
 	if (bCanFire)
 	{
-		BossBulletPattern =4;//FMath::RandRange(0, 2);
+		
+		BossBulletPattern =4;//FMath::RandRange(0, 4);
 		FireRate = FMath::RandRange(1.f, 2.5f);
 		switch (BossBulletPattern)
 		{
@@ -167,7 +168,7 @@ void ABossMonsterActor::FireStraightRandom()
 {
 
 
-	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(3));
+	//
 	float parameter = -0.5f;
 	FVector FireDir = GetActorForwardVector();
 	UWorld* const World = GetWorld();
@@ -313,9 +314,7 @@ void ABossMonsterActor::FireShotStar()
 		// 몬스터위치에서 총알위치를 뺀다
 		V =  monsterBullet->GetActorLocation() - GetActorLocation();
 
-		
-
-
+		V.Z=0.f;
 		// 합방향벡터를 더해준다.
 		
 		//V*=monsterBullet->GetActorForwardVector();

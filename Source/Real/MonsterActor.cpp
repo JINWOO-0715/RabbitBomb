@@ -36,6 +36,12 @@ AMonsterActor::AMonsterActor()
 	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	MonsterMeshComponent->SetCollisionProfileName("Monster");
 
+	
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> HitedMTAsset(TEXT("/Game/Mesh/MonsterHitedMT.MonsterHitedMT"));
+	//MonsterHitedMT = CreateDefaultSubobject<UMaterialInterface>(TEXT("Mesh"));
+	MonsterHitedMT = HitedMTAsset.Object;
+	
+	
 
 	//충돌에대해 다시 해보기
 	//MonseterMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
@@ -127,9 +133,11 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	MonsterHP -= Damage;
+	ChangeHitedMTTimer();
 	if (MonsterHP < 0.f)
 	{
 		int rand = FMath::RandRange(0,9);
+		
 		if(rand==0)
 		{
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
@@ -145,7 +153,6 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 	return Damage;
 }
-
 // 총쏘는 함수 
 void AMonsterActor::FireShot()
 {
@@ -224,6 +231,29 @@ void AMonsterActor::SetStunMonster(float mStunTime)
 void AMonsterActor::StunMonster()
 {
 	isStun =false;
+}
+
+void AMonsterActor::ChangeHitedMTTimer()
+{
+	UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
+	
+	MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
+	MonsterHitedMT=temp;
+	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color" ), FVector(1.f,0.f,0.f));
+
+	GetWorldTimerManager().SetTimer(MTChangeTimer, this
+		, &AMonsterActor::ChangeHitMT, 0.2, false);
+	
+}
+
+void AMonsterActor::ChangeHitMT()
+{
+	UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
+	
+	MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
+	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color" ), FVector(0.f,0.f,1.f));
+	MonsterHitedMT=temp;
+	// 원상복귀시킨다.	
 }
 
 // Called every frame

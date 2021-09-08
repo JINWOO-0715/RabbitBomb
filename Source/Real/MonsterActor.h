@@ -39,6 +39,7 @@ protected:
 	FTimerHandle LifespanTimer;
 	FTimerHandle AttackTimer;
 	FTimerHandle StunTimer;
+	FTimerHandle MTChangeTimer;
 	
 //	FTimerHandle MovespanTimer;
 	
@@ -56,6 +57,8 @@ protected:
 	bool isStun;
 	void Deactivate();
 	void StunMonster();
+	void ChangeHitedMTTimer();
+	void ChangeHitMT();
 
 
 	
@@ -73,6 +76,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetActive(bool InActive);
+
+	UPROPERTY(EditAnywhere,Category	="MonsterMesh");
+	class UMaterialInterface* MonsterHitedMT;
 	
 	void ShotTimerExpired();
 	virtual void FireShot();
