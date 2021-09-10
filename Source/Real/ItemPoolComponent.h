@@ -18,7 +18,7 @@ public:
 	UItemPoolComponent();
 
 	// 들어간거 가져오는거
-	AItemActor* GetPooledUItem();
+	class AItemActor* GetPooledUItem();
 
 protected:
 	// Called when the game starts

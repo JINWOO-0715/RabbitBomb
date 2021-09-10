@@ -7,6 +7,7 @@
 #include "BulletPoolComopnent.h"
 #include "Components/WidgetComponent.h"
 #include "RightWidget.h"
+#include "Bullet.h"
 #include "ItemActor.h"
 #include "Engine/Classes/Components/SphereComponent.h"
 
@@ -75,6 +76,9 @@ class REAL_API AMainPawn : public APawn
 	float MaxHP =100.f;
 
 	UPROPERTY()
+	float NowHP =100.f;
+
+	UPROPERTY()
 	int NumberOfShotBullet =1;
 	
 	//발사 한다 한한다 flag
@@ -123,12 +127,12 @@ public:
 
 
 	// //위젯
-	// UPROPERTY(EditAnywhere)
-	//  TSubclassOf<UUserWidget> PlayerRightWidgetClass;
+	 UPROPERTY(EditAnywhere)
+	  TSubclassOf<UUserWidget> PlayerHPWidgetClass;
 	//
 	//
-	// UPROPERTY(VisibleInstanceOnly)
-	// class URightWidget* PlayerRightWidget;
+	 UPROPERTY(VisibleInstanceOnly)
+	 class UMainInGameWidget* PlayerHPWidget;
 
 
 	
@@ -157,13 +161,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
 
 
-
+void UpHp(float mUphp);
 	void SetNumberOfShotBullet (float mNumOfBullet);
 // 발사수
 	FORCEINLINE	float GetNumOfShotBullet() const {return NumberOfShotBullet;};
+	//HP 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE	float GetNowHp() const {return NowHP;};
 	//HP 
 	FORCEINLINE	float GetMaxHp() const {return MaxHP;};
 	//공속 

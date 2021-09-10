@@ -2,8 +2,9 @@
 
 
 #include "MainPawn.h"
-#include "Bullet.h"
+
 #include "ChooseSkillWidget.h"
+#include "MainInGameWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -37,6 +38,11 @@ AMainPawn::AMainPawn()
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 
 	ShipMeshComponent->SetStaticMesh(MainMesh.Object);
+
+
+	static ConstructorHelpers::FClassFinder<UMainInGameWidget> HPBarAsset(
+		TEXT("/Game/BP/HPBar"));
+	PlayerHPWidgetClass = HPBarAsset.Class;
 
 
 	//Ä«¸Þ¶ó ½ºÇÁ¸µ
@@ -115,6 +121,13 @@ void AMainPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SkillComp->OwnerActor = this;
+	PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
+	if (PlayerHPWidget != nullptr)
+	{
+		PlayerHPWidget->AddToViewport();
+		// PlayerSkillChooseWidget->Player=this;
+		// PlayerRightWidget->AddToViewport();
+	}
 
 
 }
@@ -169,7 +182,9 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
-	// MonsterHP -= Damage;
+	NowHP -= Damage;
+	PlayerHPWidget->HPBar->SetPercent(NowHP/MaxHP);
+	// »ç¸Á Á×À½
 	// if (MonsterHP < 0.f)
 	// {
 	// 	Deactivate();
@@ -353,6 +368,13 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(MoveRightBinding);
 	PlayerInputComponent->BindAxis(FireForwardBinding);
 	PlayerInputComponent->BindAxis(FireRightBinding);
+}
+
+void AMainPawn::UpHp(float mUphp)
+{
+	NowHP+=mUphp;
+	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);
+
 }
 
 void AMainPawn::SetNumberOfShotBullet(float mNumOfBullet)

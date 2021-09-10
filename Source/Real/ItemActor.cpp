@@ -2,7 +2,7 @@
 
 
 #include "ItemActor.h"
-#include "MainPawn.h"
+
 // Sets default values
 AItemActor::AItemActor()
 {
@@ -13,6 +13,8 @@ AItemActor::AItemActor()
 
 	// Create mesh component for the projectile sphere
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
+	ItemMesh->SetupAttachment(RootComponent);
+
 	ItemMesh->SetStaticMesh(BulletMeshAsset.Object);
 	ItemMesh->SetupAttachment(RootComponent);
 	ItemMesh->SetGenerateOverlapEvents(false);
