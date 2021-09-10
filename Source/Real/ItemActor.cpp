@@ -13,10 +13,9 @@ AItemActor::AItemActor()
 
 	// Create mesh component for the projectile sphere
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
-	ItemMesh->SetupAttachment(RootComponent);
+	RootComponent=ItemMesh;
 
 	ItemMesh->SetStaticMesh(BulletMeshAsset.Object);
-	ItemMesh->SetupAttachment(RootComponent);
 	ItemMesh->SetGenerateOverlapEvents(false);
 	ItemMesh->OnComponentHit.AddDynamic(this, &AItemActor::OnHit);
 	ItemMesh->SetNotifyRigidBodyCollision(true);

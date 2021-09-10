@@ -11,7 +11,7 @@
 #include "ItemPoolComponent.h"
 #include "MonsterDataTable.h"
 #include "MainPawn.h"
-
+#include "PlayerSaveGame.h"
 #include "RealGameModeBase.generated.h"
 
 /**
@@ -116,4 +116,11 @@ public:
 	class UChooseSkillWidget* PlayerSkillChooseWidget;
 
 	FORCEINLINE	float GetPlayTime() const {return StartTime;};
+
+	UFUNCTION(BlueprintCallable)
+	void Save();
+
+	UFUNCTION(BlueprintCallable)
+	void Load();
 };
+

@@ -2,6 +2,8 @@
 
 
 #include "RealGameModeBase.h"
+
+#include "BossMonsterActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
 #include "UObject/ConstructorHelpers.h"
@@ -72,6 +74,61 @@ FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
 		mSkillName, FString(""));
 	
 	return PlayerKillRowData;
+}
+
+void ARealGameModeBase::Save()
+{
+	UPlayerSaveGame* SaveGameInstance = Cast<UPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
+
+	if (SaveGameInstance)
+	{
+		/** Save file data **/
+		SaveGameInstance->SaveSlotName = "MySaveGame";
+		SaveGameInstance->SaveIndex = 0;
+
+		/** Save data **/
+		SaveGameInstance->SaveName = "Player0";
+
+
+		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
+		SaveGameInstance->FireRate = player->GetFireRate();
+		SaveGameInstance->MoveSpeed = player->GetMoveSpeed();
+		SaveGameInstance->BulletPower =	player->GetBulletPower();
+		SaveGameInstance->MaxHP =player->GetMaxHp();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("SaveGameInstance is nullptr"));
+	}
+
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->SaveIndex);
+}
+
+void ARealGameModeBase::Load()
+{
+	UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
+
+	if (LoadGameInstance)
+	{
+		LoadGameInstance->SaveSlotName = "MySaveGame";
+		LoadGameInstance->SaveIndex = 0;
+
+		LoadGameInstance = Cast<UPlayerSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->SaveIndex));
+
+
+		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
+
+		if(LoadGameInstance)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SaveName : %s"), *LoadGameInstance->SaveName.ToString());
+			UE_LOG(LogTemp, Warning, TEXT("SaveFloat : %f"), LoadGameInstance->BulletPower);
+			player->SetFireRate(LoadGameInstance->FireRate);
+			player->SetMoveSpeed(LoadGameInstance->MoveSpeed);
+			player->SetMaxHp(LoadGameInstance->MaxHP);
+			player->SetBulletPower(LoadGameInstance->BulletPower);
+		}
+
+	}
 }
 
 
@@ -145,11 +202,12 @@ void ARealGameModeBase:: MonsterSpawn()
 
 		
 		// 몬스터 번호를 가져와 초기화한다 (랜덤하게???~?~?)
-		MonsterType= FMath::RandRange(1,3);
+		MonsterType= FMath::RandRange(1,4);
 		Monster->InitMonster(MonsterType);
 
-		// 실행한다
 		Monster->SetActive(true);
+
+	
 	}
 	//쿨타임 랜덤하게 조절
 	float const RandCoolTime = FMath::RandRange(SpawnCoolTimeRandomMin,SpawnCoolTimeRandomMax);

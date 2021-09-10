@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/Actor.h"
 #include "Engine.h"
+#include "TowerMonsterActor.h"
 
 // Sets default values for this component's properties
 UObjectPoolComponent::UObjectPoolComponent()
@@ -43,6 +44,7 @@ void UObjectPoolComponent::Spawn()
 				Pool.Add(PoolableActor);
 				UE_LOG(LogTemp,Warning,TEXT("add object"));
 			}
+		
 		}
 	}
 	
