@@ -80,7 +80,10 @@ class REAL_API AMainPawn : public APawn
 
 	UPROPERTY()
 	int NumberOfShotBullet =1;
-	
+
+
+	int PlayerCoin =10000;
+
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
 
@@ -127,11 +130,11 @@ public:
 
 
 	// //위젯
-	 UPROPERTY(EditAnywhere)
+	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	  TSubclassOf<UUserWidget> PlayerHPWidgetClass;
 	//
 	//
-	 UPROPERTY(VisibleInstanceOnly)
+	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 class UMainInGameWidget* PlayerHPWidget;
 
 
@@ -164,6 +167,12 @@ public:
 
 
 void UpHp(float mUphp);
+
+void UpPlayerCoin(int mUpcoinNum);
+	void SetPlayerCoin(int mCoin);
+	//공격력 
+	FORCEINLINE	float Get() const {return BulletPower;};
+	
 	void SetNumberOfShotBullet (float mNumOfBullet);
 // 발사수
 	FORCEINLINE	float GetNumOfShotBullet() const {return NumberOfShotBullet;};
@@ -175,7 +184,7 @@ void UpHp(float mUphp);
 	//공속 
 	FORCEINLINE	float GetFireRate() const {return FireRate;};
 	//공격력 
-	FORCEINLINE	float Get() const {return BulletPower;};
+	FORCEINLINE	float GetCoin() const {return PlayerCoin;};
 	
 	//이속 
 	FORCEINLINE	float GetMoveSpeed() const {return MoveSpeed;};

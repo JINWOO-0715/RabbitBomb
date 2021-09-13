@@ -2,8 +2,9 @@
 
 #pragma once
 #include "MonsterActor.h"
-
+#include "TowerMonsterActor.h"
 #include "CoreMinimal.h"
+#include "BossMonsterActor.h"
 #include "Components/ActorComponent.h"
 #include "ObjectPoolComponent.generated.h"
 
@@ -18,6 +19,10 @@ public:
 	UObjectPoolComponent();
 	
 	AMonsterActor* GetPooledMonster();
+
+	class ATowerMonsterActor* GetPooledTowerMonster();
+
+	class ABossMonsterActor* GetPooledBossMonster();
 	
 protected:
 	// Called when the game starts
@@ -32,9 +37,23 @@ public:
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class AMonsterActor> PooledMonsterSubclass;
+
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ATowerMonsterActor> PooledTowerMonsterSubclass;
+	
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ABossMonsterActor> PooledBossMonsterSubclass;
+	
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int PoolSize =100;
 
-	TArray<AMonsterActor*> Pool;
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	int BossPoolSize =3;
+
+	TArray<AMonsterActor*> CommonMonsterPool;
+	
+	TArray<ATowerMonsterActor*> TowerMonsterPool;
+	
+	TArray<ABossMonsterActor*> BossMonsterPool;
 };

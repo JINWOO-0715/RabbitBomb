@@ -378,6 +378,16 @@ void AMainPawn::UpHp(float mUphp)
 
 }
 
+void AMainPawn::UpPlayerCoin(int mUpcoinNum)
+{
+	PlayerCoin =mUpcoinNum;
+}
+
+void AMainPawn::SetPlayerCoin(int mCoin)
+{
+	PlayerCoin=mCoin;
+}
+
 void AMainPawn::SetNumberOfShotBullet(float mNumOfBullet)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(NumberOfShotBullet));

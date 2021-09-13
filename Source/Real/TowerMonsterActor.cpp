@@ -6,10 +6,11 @@
 
 ATowerMonsterActor::ATowerMonsterActor()
 {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/TowerRabbit.TowerRabbit"));
-	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
-	AttackCount = 0;
-	FireRate = 2.0f;
+	// static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/TowerRabbit.TowerRabbit"));
+	// MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
+	// AttackCount = 0;
+	// FireRate = 2.0f;
+	
 }
 
 
@@ -18,6 +19,7 @@ void ATowerMonsterActor::Tick(float DeltaTime)
 {
 	//Super::Tick(DeltaTime);
 
+	
 	if (Active && !isStun)
 	{
 		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);

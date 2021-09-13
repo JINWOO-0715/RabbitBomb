@@ -36,6 +36,9 @@ class REAL_API UPlayerSaveGame : public USaveGame
 	UPROPERTY()
 	float MaxHP =100.f;
 
+	UPROPERTY()
+	int PlayerCoin =100;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
 	FString SaveSlotName;		// Save game data file name
 

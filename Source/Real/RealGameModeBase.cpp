@@ -7,8 +7,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
 #include "UObject/ConstructorHelpers.h"
-#include "ChooseSkillWidget.h" 
+#include "ChooseSkillWidget.h"
 #include "ItemActor.h"
+#include "TowerMonsterActor.h"
 
 
 ARealGameModeBase::ARealGameModeBase()
@@ -16,7 +17,7 @@ ARealGameModeBase::ARealGameModeBase()
 	//DefaultPawnClass = AMainPawn::StaticClass();
 
 	BulletPooler = CreateDefaultSubobject<UBulletPoolComopnent>(TEXT("BulletPoller"));
-	
+
 	MonsterPooler = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("MonsterPoller"));
 
 	ItemPooler = CreateDefaultSubobject<UItemPoolComponent>(TEXT("ItemPoller"));
@@ -26,7 +27,7 @@ ARealGameModeBase::ARealGameModeBase()
 	{
 		MonsterData = MonsterDataAsset.Object;
 	}
-	
+
 	static ConstructorHelpers::FObjectFinder<UDataTable> PlayerSkillDataAsset(TEXT("/Game/BP/PlayerSkillDT"));
 	if (PlayerSkillDataAsset.Succeeded())
 	{
@@ -41,13 +42,12 @@ void ARealGameModeBase::Tick(float DeltaTime)
 	//GetWorld()->GetRealTimeSeconds();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(GetWorld()->GetRealTimeSeconds()));
-	
 }
 
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 {
 	FMonsterRow* MonsterRowData = MonsterData->FindRow<FMonsterRow>(
-			FName(*(FString::FormatAsNumber(rowN))), FString(""));
+		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
 	return MonsterRowData;
 }
@@ -63,22 +63,23 @@ FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
 FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(int rowN)
 {
 	FPlayerSkillRow* PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
-			FName(*(FString::FormatAsNumber(rowN))), FString(""));
-	
-	 return PlayerKillRowData;
+		FName(*(FString::FormatAsNumber(rowN))), FString(""));
+
+	return PlayerKillRowData;
 }
 
 FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
 {
 	FPlayerSkillRow* PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
 		mSkillName, FString(""));
-	
+
 	return PlayerKillRowData;
 }
 
 void ARealGameModeBase::Save()
 {
-	UPlayerSaveGame* SaveGameInstance = Cast<UPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
+	UPlayerSaveGame* SaveGameInstance = Cast<UPlayerSaveGame>(
+		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
 
 	if (SaveGameInstance)
 	{
@@ -90,11 +91,12 @@ void ARealGameModeBase::Save()
 		SaveGameInstance->SaveName = "Player0";
 
 
-		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
+		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		SaveGameInstance->FireRate = player->GetFireRate();
 		SaveGameInstance->MoveSpeed = player->GetMoveSpeed();
-		SaveGameInstance->BulletPower =	player->GetBulletPower();
-		SaveGameInstance->MaxHP =player->GetMaxHp();
+		SaveGameInstance->BulletPower = player->GetBulletPower();
+		SaveGameInstance->MaxHP = player->GetMaxHp();
+		SaveGameInstance->PlayerCoin = player->GetCoin();
 	}
 	else
 	{
@@ -106,19 +108,21 @@ void ARealGameModeBase::Save()
 
 void ARealGameModeBase::Load()
 {
-	UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
+	UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
+		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
 
 	if (LoadGameInstance)
 	{
 		LoadGameInstance->SaveSlotName = "MySaveGame";
 		LoadGameInstance->SaveIndex = 0;
 
-		LoadGameInstance = Cast<UPlayerSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->SaveIndex));
+		LoadGameInstance = Cast<UPlayerSaveGame>(
+			UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->SaveIndex));
 
 
-		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
+		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
-		if(LoadGameInstance)
+		if (LoadGameInstance)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SaveName : %s"), *LoadGameInstance->SaveName.ToString());
 			UE_LOG(LogTemp, Warning, TEXT("SaveFloat : %f"), LoadGameInstance->BulletPower);
@@ -126,21 +130,20 @@ void ARealGameModeBase::Load()
 			player->SetMoveSpeed(LoadGameInstance->MoveSpeed);
 			player->SetMaxHp(LoadGameInstance->MaxHP);
 			player->SetBulletPower(LoadGameInstance->BulletPower);
+			player->SetPlayerCoin(LoadGameInstance->PlayerCoin);
 		}
-
 	}
 }
 
 
 void ARealGameModeBase::BeginPlay()
 {
-	StartTime=0.0f;
+	StartTime = 0.0f;
 	// 총알 스폰
 	BulletPooler->Spawn();
 	MonsterPooler->Spawn();
 	ItemPooler->Spawn();
-	
-
+	Load();
 
 
 	// //위젯 생성
@@ -156,64 +159,110 @@ void ARealGameModeBase::BeginPlay()
 	// 	// PlayerRightWidget->Player=this;
 	// 	// PlayerRightWidget->AddToViewport();
 	// }
-	
-	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
-	if (PlayerSkillChooseClass != nullptr)
-	{
-		
-		// PlayerSkillChooseWidget->Player=this;
-		// PlayerRightWidget->AddToViewport();
-	}
 
-	UWorld* const World = GetWorld();
-	World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime);
-	
+	if (GetWorld()->GetName() == "MainLevel")
+	{
+		PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
+		if (PlayerSkillChooseClass != nullptr)
+		{
+			// PlayerSkillChooseWidget->Player=this;
+			// PlayerRightWidget->AddToViewport();
+		}
+
+		UWorld* const World = GetWorld();
+		World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn,
+		                                  MonsterSpawnCoolTime);
+	}
 }
 
-void ARealGameModeBase:: MonsterSpawn()
+
+void ARealGameModeBase::MonsterSpawn()
 {
 	UWorld* const World = GetWorld();
-	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
-	
+	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
 	FVector result = FMath::VRand();
 
-	
-	// 몬스터 몇마리 도 랜덤하게 (최소 1마리 ~최대 몇마리)
-	int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin,SpawnMonsterRandomNumMax);
 
+	// 몬스터 몇마리 랜덤하게 (최소  ~최대 )
+	int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin, SpawnMonsterRandomNumMax);
+	AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
+	ATowerMonsterActor* TowerMonster = MonsterPooler->GetPooledTowerMonster();
+	ABossMonsterActor* BossMonster = MonsterPooler->GetPooledBossMonster();
+	
 	// 몬스터 생성
-	for(int i =0 ; i<(MonsterSpawnNum+randMonsterMun);i++)
+	for (int i = 0; i < (MonsterSpawnNum + randMonsterMun); i++)
 	{
-		AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
-		// 몬스터 범위  (SpawnRangeMin,SpawnRangeMax) 랜덤하게
+		MonsterType = FMath::RandRange(1, 3);
 		result = FMath::VRand();
-		result *= FMath::RandRange(SpawnRangeMin,SpawnRangeMax);
-		
-		if (Monster == nullptr)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
-			GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
-			return;
-		}
+		result *= FMath::RandRange(SpawnRangeMin, SpawnRangeMax);
+
+
+		// 단계 조절
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(result.X));
-		result *= FVector(1.f,1.f,0.f);
+		result *= FVector(1.f, 1.f, 0.f);
 		result += player->GetActorLocation();
-		Monster->SetActorLocation(result);
-
 		
-		// 몬스터 번호를 가져와 초기화한다 (랜덤하게???~?~?)
-		MonsterType= FMath::RandRange(1,4);
-		Monster->InitMonster(MonsterType);
-
-		Monster->SetActive(true);
-
-	
+		switch (MonsterType)
+		{
+		case 1:
+			Monster = MonsterPooler->GetPooledMonster();
+			Monster->SetActorLocation(result);
+			// 몬스터 번호를 가져와 초기화한다 
+			Monster->InitMonster(MonsterType);
+			Monster->SetActive(true);
+			if (Monster == nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+				GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
+				return;
+			}
+			break;
+		case 2:
+		case 3:
+			TowerMonster = MonsterPooler->GetPooledTowerMonster();
+			TowerMonster->SetActorLocation(result);
+			// 몬스터 번호를 가져와 초기화한다 
+			TowerMonster->InitMonster(MonsterType);
+			TowerMonster->SetActive(true);
+			if (TowerMonster == nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+				GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
+				return;
+			}
+			break;
+		case 4:
+			BossMonster = MonsterPooler->GetPooledBossMonster();
+			BossMonster->SetActorLocation(result);
+			// 몬스터 번호를 가져와 초기화한다 
+			BossMonster->InitMonster(MonsterType);
+			BossMonster->SetActive(true);
+			if (BossMonster == nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+				GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
+				return;
+			}
+			break;
+		default:
+			Monster = MonsterPooler->GetPooledMonster();
+			Monster->SetActorLocation(result);
+			// 몬스터 번호를 가져와 초기화한다 
+			Monster->InitMonster(MonsterType);
+			Monster->SetActive(true);
+			if (Monster == nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+				GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, false);
+				return;
+			}
+			break;
+		}
 	}
 	//쿨타임 랜덤하게 조절
-	float const RandCoolTime = FMath::RandRange(SpawnCoolTimeRandomMin,SpawnCoolTimeRandomMax);
-	MonsterSpawnCoolTime+=RandCoolTime;
+	float const RandCoolTime = FMath::RandRange(SpawnCoolTimeRandomMin, SpawnCoolTimeRandomMax);
+	MonsterSpawnCoolTime += RandCoolTime;
 	GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime);
 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
-
-	
 }

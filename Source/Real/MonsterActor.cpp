@@ -36,12 +36,12 @@ AMonsterActor::AMonsterActor()
 	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	MonsterMeshComponent->SetCollisionProfileName("Monster");
 
-	
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> HitedMTAsset(TEXT("/Game/Mesh/MonsterHitedMT.MonsterHitedMT"));
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> HitedMTAsset(
+		TEXT("/Game/Mesh/MonsterHitedMT.MonsterHitedMT"));
 	//MonsterHitedMT = CreateDefaultSubobject<UMaterialInterface>(TEXT("Mesh"));
 	MonsterHitedMT = HitedMTAsset.Object;
-	
-	
+
 
 	//충돌에대해 다시 해보기
 	//MonseterMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
@@ -51,7 +51,7 @@ AMonsterActor::AMonsterActor()
 	MonsterMeshComponent->SetGenerateOverlapEvents(false);
 	Tags.Add("Monster");
 
-	bCanFire=true;
+	bCanFire = true;
 	//OnTakeAnyDamage.AddDynamic(this, &AMonsterActor::TakeDamage);
 }
 
@@ -136,16 +136,14 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	ChangeHitedMTTimer();
 	if (MonsterHP < 0.f)
 	{
-		int rand = FMath::RandRange(0,9);
-		
-		if(rand==0)
+		int rand = FMath::RandRange(0, 9);
+
+		if (rand == 0)
 		{
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-			AItemActor* Item =gm->ItemPooler->GetPooledUItem();
+			AItemActor* Item = gm->ItemPooler->GetPooledUItem();
 			Item->SetActorLocation(GetActorLocation());
 			Item->SetActive(true);
-			
-			
 		}
 		// 아이템 스폰한다 10%!
 		Deactivate();
@@ -153,6 +151,7 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 	return Damage;
 }
+
 // 총쏘는 함수 
 void AMonsterActor::FireShot()
 {
@@ -169,19 +168,19 @@ void AMonsterActor::FireShot()
 		{
 			AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 			FVector Dir = player->GetActorLocation() - this->GetActorLocation();
-			 Dir.Normalize(); // 벡터
-			
-			 const FVector Movement = Dir * BulletSpeed; //
-			 // 가지고있는 액터 누구?
-			 monsterBullet->SetOwnerActor(this);
-			 // 가지고있는 총알위치
-			 monsterBullet->SetActorLocation(GetActorLocation());
-			 // 총알 속도
-			 monsterBullet->SetVelocity(Movement);
-			 // 알아서 살아지게하고
-			 monsterBullet->SetLifeSpan();
-			 // 활성화시킨다.
-			 monsterBullet->SetActive(true);
+			Dir.Normalize(); // 벡터
+
+			const FVector Movement = Dir * BulletSpeed; //
+			// 가지고있는 액터 누구?
+			monsterBullet->SetOwnerActor(this);
+			// 가지고있는 총알위치
+			monsterBullet->SetActorLocation(GetActorLocation());
+			// 총알 속도
+			monsterBullet->SetVelocity(Movement);
+			// 알아서 살아지게하고
+			monsterBullet->SetLifeSpan();
+			// 활성화시킨다.
+			monsterBullet->SetActive(true);
 		}
 
 		World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);
@@ -193,13 +192,13 @@ void AMonsterActor::InitMonster(int dataRowN)
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
-	MonsterMeshComponent->SetStaticMesh( MonsterData->MonsterMesh);
+	MonsterMeshComponent->SetStaticMesh(MonsterData->MonsterMesh);
 	BulletSpeed = MonsterData->BulletSpeed;
 	FireRate = MonsterData->FireRate;
 	Lifespan = MonsterData->Lifespan;
-	float const time =GetWorld()->GetAudioTimeSeconds();
-	MonsterHP = HPPowerfulNum*time*time+MonsterData->MonsterHP;
-	MonsterHP=MonsterData->MonsterHP;
+	float const time = GetWorld()->GetAudioTimeSeconds();
+	MonsterHP = HPPowerfulNum * time * time + MonsterData->MonsterHP;
+	MonsterHP = MonsterData->MonsterHP;
 	MoveSpeed = MonsterData->MoveSpeed;
 	//0.0008*x*x+100;
 }
@@ -222,37 +221,36 @@ void AMonsterActor::InitMonster(int dataRowN)
 void AMonsterActor::SetStunMonster(float mStunTime)
 {
 	// 스턴상태로 바꾼다
-	isStun =true;
+	isStun = true;
 	// 3초후 원래대로
 	GetWorldTimerManager().SetTimer(StunTimer, this
-		, &AMonsterActor::StunMonster, mStunTime, false);
+	                                , &AMonsterActor::StunMonster, mStunTime, false);
 }
 
 void AMonsterActor::StunMonster()
 {
-	isStun =false;
+	isStun = false;
 }
 
 void AMonsterActor::ChangeHitedMTTimer()
 {
 	UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
-	
+
 	MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
-	MonsterHitedMT=temp;
-	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color" ), FVector(1.f,0.f,0.f));
+	MonsterHitedMT = temp;
+	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color"), FVector(1.f, 0.f, 0.f));
 
 	GetWorldTimerManager().SetTimer(MTChangeTimer, this
-		, &AMonsterActor::ChangeHitMT, 0.2, false);
-	
+	                                , &AMonsterActor::ChangeHitMT, 0.2, false);
 }
 
 void AMonsterActor::ChangeHitMT()
 {
 	UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
-	
+
 	MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
-	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color" ), FVector(0.f,0.f,1.f));
-	MonsterHitedMT=temp;
+	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color"), FVector(0.f, 0.f, 1.f));
+	MonsterHitedMT = temp;
 	// 원상복귀시킨다.	
 }
 
@@ -260,7 +258,7 @@ void AMonsterActor::ChangeHitMT()
 void AMonsterActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//if 문을 지워도 괜찮은거 아닌가!
+
 	if (Active && !isStun)
 	{
 		const AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
@@ -270,23 +268,25 @@ void AMonsterActor::Tick(float DeltaTime)
 		const FVector Movement = Dir * MoveSpeed * DeltaTime; //
 		if (Movement.SizeSquared() > 0.0f)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
-			const FRotator NewRotation = FRotator(Movement.Rotation().Pitch,Movement.Rotation().Yaw,0.0f);
-			
-			FHitResult Hit(1.f);
-			RootComponent->MoveComponent(Movement, NewRotation, true, &Hit);
-			AddActorWorldOffset(Movement, true, nullptr);
-
-			if (Hit.IsValidBlockingHit())
+			if (FVector::Dist(GetActorLocation(), player->GetActorLocation()) > 800)
 			{
-				const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
-				const FVector Deflection = FVector::VectorPlaneProject(Movement, Normal2D) * (1.f - Hit.Time);
-				RootComponent->MoveComponent(Deflection, NewRotation, true);
-			}
-			//FTransform d (Movement,NewRotation,NULL;
-			//SetActorRotation(NewRotation);
-			//AddActorWorldOffset(Movement,true,nullptr);
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+				const FRotator NewRotation = FRotator(Movement.Rotation().Pitch, Movement.Rotation().Yaw, 0.0f);
 
+				FHitResult Hit(1.f);
+				RootComponent->MoveComponent(Movement, NewRotation, true, &Hit);
+				AddActorWorldOffset(Movement, true, nullptr);
+
+				if (Hit.IsValidBlockingHit())
+				{
+					const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
+					const FVector Deflection = FVector::VectorPlaneProject(Movement, Normal2D) * (1.f - Hit.Time);
+					RootComponent->MoveComponent(Deflection, NewRotation, true);
+				}
+				//FTransform d (Movement,NewRotation,NULL;
+				//SetActorRotation(NewRotation);
+				//AddActorWorldOffset(Movement,true,nullptr);
+			}
 			//MoveToTarget();
 		}
 		FireShot();
