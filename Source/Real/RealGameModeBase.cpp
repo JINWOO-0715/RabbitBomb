@@ -91,10 +91,7 @@ void ARealGameModeBase::Save()
 
 
 		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		SaveGameInstance->FireRate = player->GetFireRate();
-		SaveGameInstance->MoveSpeed = player->GetMoveSpeed();
-		SaveGameInstance->BulletPower = player->GetBulletPower();
-		SaveGameInstance->MaxHP = player->GetMaxHp();
+	
 		SaveGameInstance->PlayerCoin = player->GetCoin();
 		
 		SaveGameInstance->MaxHPlevel = player->GetMaxHPlevel();
@@ -130,10 +127,7 @@ void ARealGameModeBase::Load()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SaveName : %s"), *LoadGameInstance->SaveName.ToString());
 			UE_LOG(LogTemp, Warning, TEXT("SaveFloat : %f"), LoadGameInstance->BulletPower);
-			player->SetFireRate(LoadGameInstance->FireRate);
-			player->SetMoveSpeed(LoadGameInstance->MoveSpeed);
-			player->SetMaxHp(LoadGameInstance->MaxHP);
-			player->SetBulletPower(LoadGameInstance->BulletPower);
+			
 			player->SetPlayerCoin(LoadGameInstance->PlayerCoin);
 
 	
@@ -155,7 +149,11 @@ void ARealGameModeBase::BeginPlay()
 	BulletPooler->Spawn();
 	MonsterPooler->Spawn();
 	ItemPooler->Spawn();
-	//Load();
+	UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
+			UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
+
+	if (LoadGameInstance)
+		Load();
 
 
 	// //À§Á¬ »ý¼º

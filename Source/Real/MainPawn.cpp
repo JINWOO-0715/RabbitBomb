@@ -117,21 +117,25 @@ void AMainPawn::SetBulletPower(float mBulletPower)
 void AMainPawn::SetMoveSpeedLevel(int mMoveSpeedLevel)
 {
 	MoveSpeedlevel=mMoveSpeedLevel;
+	MoveSpeed = MoveSpeed + MoveSpeed*0.2;
 }
 
 void AMainPawn::SetMaxHpLevel(int mMaxHpLevel)
 {
-MaxHPlevel	=mMaxHpLevel;
+	MaxHPlevel	=mMaxHpLevel;
+	MaxHP = MaxHP + MaxHPlevel*200; 
 }
 
 void AMainPawn::SetFireRateLevel(int mFireRateLevel)
 {
-	FireRatelevel=mFireRateLevel;
+	FireRatelevel = mFireRateLevel;
+	FireRate = FireRate + FireRatelevel*0.01;
 }
 
 void AMainPawn::SetBulletPowerLevel(int mBulletPowerLevel)
 {
 	BulletPowerlevel=mBulletPowerLevel;
+	BulletPower = BulletPower + BulletPower*0.1;
 }
 
 
