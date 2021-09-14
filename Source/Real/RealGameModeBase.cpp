@@ -86,7 +86,6 @@ void ARealGameModeBase::Save()
 		/** Save file data **/
 		SaveGameInstance->SaveSlotName = "MySaveGame";
 		SaveGameInstance->SaveIndex = 0;
-
 		/** Save data **/
 		SaveGameInstance->SaveName = "Player0";
 
@@ -97,6 +96,11 @@ void ARealGameModeBase::Save()
 		SaveGameInstance->BulletPower = player->GetBulletPower();
 		SaveGameInstance->MaxHP = player->GetMaxHp();
 		SaveGameInstance->PlayerCoin = player->GetCoin();
+		
+		SaveGameInstance->MaxHPlevel = player->GetMaxHPlevel();
+		SaveGameInstance->FireRatelevel = player->GetFireRatelevel();
+		SaveGameInstance->MoveSpeedlevel = player->GetMoveSpeedlevel();
+		SaveGameInstance->BulletPowerlevel = player->GetBulletPowerlevel();
 	}
 	else
 	{
@@ -131,6 +135,14 @@ void ARealGameModeBase::Load()
 			player->SetMaxHp(LoadGameInstance->MaxHP);
 			player->SetBulletPower(LoadGameInstance->BulletPower);
 			player->SetPlayerCoin(LoadGameInstance->PlayerCoin);
+
+	
+			player->SetBulletPowerLevel(LoadGameInstance->BulletPowerlevel);
+			player->SetFireRateLevel(LoadGameInstance->FireRatelevel);
+			player->SetMaxHpLevel(LoadGameInstance->MaxHPlevel);
+			player->SetMoveSpeedLevel(LoadGameInstance->BulletPowerlevel);
+		
+			
 		}
 	}
 }
@@ -143,7 +155,7 @@ void ARealGameModeBase::BeginPlay()
 	BulletPooler->Spawn();
 	MonsterPooler->Spawn();
 	ItemPooler->Spawn();
-	Load();
+	//Load();
 
 
 	// //À§Á¬ »ý¼º

@@ -6,7 +6,7 @@
 UPlayerSaveGame::UPlayerSaveGame()
 {
 
-	 level =1;
+
 	
 	// 공격속도
 	 FireRate = 1.f;

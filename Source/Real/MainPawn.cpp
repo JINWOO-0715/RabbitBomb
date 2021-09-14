@@ -60,14 +60,13 @@ AMainPawn::AMainPawn()
 
 	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
 
-	
+
 	ItemGettingSphere = CreateDefaultSubobject<USphereComponent>(TEXT("GetItemCullusion"));
 	ItemGettingSphere->SetupAttachment(RootComponent);
 	ItemGettingSphere->InitSphereRadius(400.f);
 	ItemGettingSphere->OnComponentBeginOverlap.AddDynamic(this, &AMainPawn::OnOverlapBegin);
 
 
-	
 	Tags.Add("Player");
 
 	// Movement
@@ -115,22 +114,42 @@ void AMainPawn::SetBulletPower(float mBulletPower)
 	BulletPower = mBulletPower;
 }
 
+void AMainPawn::SetMoveSpeedLevel(int mMoveSpeedLevel)
+{
+	MoveSpeedlevel=mMoveSpeedLevel;
+}
+
+void AMainPawn::SetMaxHpLevel(int mMaxHpLevel)
+{
+MaxHPlevel	=mMaxHpLevel;
+}
+
+void AMainPawn::SetFireRateLevel(int mFireRateLevel)
+{
+	FireRatelevel=mFireRateLevel;
+}
+
+void AMainPawn::SetBulletPowerLevel(int mBulletPowerLevel)
+{
+	BulletPowerlevel=mBulletPowerLevel;
+}
+
 
 //// Called when the game starts or when spawned 비긴플레이 쓸일있으면 사용
 void AMainPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SkillComp->OwnerActor = this;
-	PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
-	if (PlayerHPWidget != nullptr)
+	if (GetWorld()->GetName() == "MainLevel")
 	{
-		PlayerHPWidget->AddToViewport();
-		// PlayerSkillChooseWidget->Player=this;
-		// PlayerRightWidget->AddToViewport();
+		PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
+		if (PlayerHPWidget != nullptr)
+		{
+			PlayerHPWidget->AddToViewport();
+			// PlayerSkillChooseWidget->Player=this;
+			// PlayerRightWidget->AddToViewport();
+		}
 	}
-
-
-	
 }
 
 // Called every frame
@@ -184,7 +203,7 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
 	NowHP -= Damage;
-	PlayerHPWidget->HPBar->SetPercent(NowHP/MaxHP);
+	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);
 	// 사망 죽음
 	// if (MonsterHP < 0.f)
 	// {
@@ -195,21 +214,18 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 }
 
 void AMainPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                               int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Line"));
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
-
-
 	}
-	if(OtherActor->ActorHasTag("Item"))
+	if (OtherActor->ActorHasTag("Item"))
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
 		AItemActor* ItemActor = Cast<AItemActor>(OtherActor);
-		ItemActor->isFollowing=true;
-
+		ItemActor->isFollowing = true;
 	}
 }
 
@@ -231,7 +247,7 @@ void AMainPawn::FireShot(FVector FireDir)
 			ABullet* PlayerBullet = gm->BulletPooler->GetPooledBullet();
 			if (NumberOfShotBullet == 1)
 			{
-				if (World != nullptr&& PlayerBullet)
+				if (World != nullptr && PlayerBullet)
 				{
 					PlayerBullet->SetOwnerActor(this);
 					PlayerBullet->SetActorLocation(SpawnLocation);
@@ -246,43 +262,40 @@ void AMainPawn::FireShot(FVector FireDir)
 			else if (NumberOfShotBullet == 3)
 			{
 				float parameter = -0.3f;
-				
+
 				for (int i = 0; i < 3; i++)
 				{
-					
 					PlayerBullet = gm->BulletPooler->GetPooledBullet();
-					if(PlayerBullet)
+					if (PlayerBullet)
 					{
 						PlayerBullet->SetActive(true);
 						PlayerBullet->SetOwnerActor(this);
 						PlayerBullet->SetActorLocation(SpawnLocation);
 						PlayerBullet->SetActorRotation(FireRotation.GetInverse());
-	
+
 						FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
-											FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
+						                       FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
 						RotationVector.Normalize();
 						parameter += 0.3f;
 						const FVector Movement = RotationVector * 1000.f; // 
 						PlayerBullet->SetVelocity(Movement);
 						PlayerBullet->SetLifeSpan();
-						
 					}
-				
 				}
 			}
 			else if (NumberOfShotBullet == 5)
 			{
 				float parameter = -0.4f;
-				
+
 				for (int i = 0; i < 5; i++)
 				{
 					PlayerBullet = gm->BulletPooler->GetPooledBullet();
 					PlayerBullet->SetOwnerActor(this);
 					PlayerBullet->SetActorLocation(SpawnLocation);
 					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
-	
+
 					FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
-										FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
+					                       FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
 					RotationVector.Normalize();
 					parameter += 0.2f;
 					const FVector Movement = RotationVector * 1000.f; // 
@@ -292,7 +305,7 @@ void AMainPawn::FireShot(FVector FireDir)
 				}
 			}
 
-			
+
 			bCanFire = false; // 끊고
 
 			// 타이머 작동
@@ -332,9 +345,9 @@ void AMainPawn::GetExperience(float Exp)
 
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("LevelUp"));
 		NowEXP = 0.f;
-		MaxEXP = 1.2*MaxEXP;
-		
-		
+		MaxEXP = 1.2 * MaxEXP;
+
+
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::SanitizeFloat(MaxEXP));
 		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 		if (MyPlayer != NULL)
@@ -372,21 +385,67 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(FireRightBinding);
 }
 
+void AMainPawn::MaxHpUP(float mUpMaxHp)
+{
+
+	MaxHP *=mUpMaxHp;
+	PlayerCoin-=200*MaxHPlevel;
+	MaxHPlevel++;
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->Save();
+	
+}
+
+void AMainPawn::PowerUP(float mPowerUp)
+{
+
+	MaxHP *=mPowerUp;
+	PlayerCoin-=200*BulletPowerlevel;
+	BulletPowerlevel++;
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->Save();
+	
+}
+
+
+void AMainPawn::SpeedUP(float mSpeedUp)
+{
+
+	MaxHP *=mSpeedUp;
+	PlayerCoin-=200*MoveSpeedlevel;
+	MoveSpeedlevel++;
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->Save();
+	
+}
+
+
+void AMainPawn::FireRateUP(float mFireRate)
+{
+
+	MaxHP *=mFireRate;
+	PlayerCoin-=200*FireRatelevel;
+	FireRatelevel++;
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->Save();
+	
+}
+
 void AMainPawn::UpHp(float mUphp)
 {
-	NowHP+=mUphp;
+	NowHP += mUphp;
+	
 	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);
-
 }
 
 void AMainPawn::UpPlayerCoin(int mUpcoinNum)
 {
-	PlayerCoin =mUpcoinNum;
+	PlayerCoin = mUpcoinNum;
 }
 
 void AMainPawn::SetPlayerCoin(int mCoin)
 {
-	PlayerCoin=mCoin;
+	PlayerCoin = mCoin;
 }
 
 void AMainPawn::SetNumberOfShotBullet(float mNumOfBullet)

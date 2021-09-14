@@ -17,7 +17,9 @@ UCLASS()
 class REAL_API UShopWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+
+	virtual void NativeConstruct() override;
 	protected:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* HPUptext;
@@ -50,14 +52,22 @@ class REAL_API UShopWidget : public UUserWidget
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* BackText;
 
+	
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* RemainCoinText;
+
 	public:
 
+	
 	UFUNCTION(BlueprintCallable)
-		void SetHPUptext();
+		void HpUpFun();
+
 	UFUNCTION(BlueprintCallable)
-	void SetPowerUpText();
+	void PowerUpFun();
 	UFUNCTION(BlueprintCallable)
-	void SetSpeedUpText();
+	void SpeedUpFun();
 	UFUNCTION(BlueprintCallable)
-	void SetFireRateUpText();
+	void FireRateUpFun();
+
+
 };

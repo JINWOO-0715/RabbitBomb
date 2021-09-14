@@ -20,46 +20,61 @@ class REAL_API AMainPawn : public APawn
 	GENERATED_BODY()
 
 	UFUNCTION()
-			virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	                         class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//스테틱 메쉬 컴포넌트
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* ShipMeshComponent;
+	class UStaticMeshComponent* ShipMeshComponent;
 
 	// 카메라 컴포넌트
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* CameraComponent;
+	class UCameraComponent* CameraComponent;
 
 	//카메라 스프링 컴포넌트
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
+	class USpringArmComponent* CameraBoom;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class USphereComponent* ItemGettingSphere;
+	class USphereComponent* ItemGettingSphere;
 
 	UFUNCTION()
 
-	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	                    class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                    const FHitResult& SweepResult);
 
-	
 
-	UPROPERTY(EditAnywhere,Category="Spawner")
+	UPROPERTY(EditAnywhere, Category="Spawner")
 	class UBulletPoolComopnent* ObjectPooler;
-	
+
 	UPROPERTY(EditAnywhere)
 	class USkillComponent* SkillContainer;
 
 
+
 	UPROPERTY()
-	int level =1;
+	int FireRatelevel = 1;
+
+
+	UPROPERTY()
+	int MoveSpeedlevel = 1;
+
 	
+	UPROPERTY()
+	int BulletPowerlevel = 1;
+
+
+	UPROPERTY()
+	int MaxHPlevel = 1;
+
 	// 플레이어 최대경험치
 	UPROPERTY()
-	float MaxEXP =100.f;
+	float MaxEXP = 100.f;
 	// 플레이어 현재경험치
 	UPROPERTY()
-	float NowEXP =0.f;
-	
+	float NowEXP = 0.f;
+
 	// 공격속도
 	UPROPERTY(EditAnywhere)
 	float FireRate = 1.f;
@@ -67,22 +82,22 @@ class REAL_API AMainPawn : public APawn
 	// 이동속도 스피드
 	UPROPERTY()
 	float MoveSpeed;
-	
+
 	// 공격력
 	UPROPERTY()
-	float BulletPower=50.f;
+	float BulletPower = 50.f;
 	//HP
 	UPROPERTY()
-	float MaxHP =100.f;
+	float MaxHP = 100.f;
 
 	UPROPERTY()
-	float NowHP =100.f;
+	float NowHP = 100.f;
 
 	UPROPERTY()
-	int NumberOfShotBullet =1;
+	int NumberOfShotBullet = 1;
 
 
-	int PlayerCoin =10000;
+	int PlayerCoin = 10000;
 
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
@@ -91,7 +106,6 @@ class REAL_API AMainPawn : public APawn
 	FTimerHandle TimerHandle_ShotTimerExpired;
 
 
-	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -100,15 +114,16 @@ public:
 	// Sets default values for this pawn's properties
 	AMainPawn();
 
-	UPROPERTY(EditAnywhere,Category="Spawner")
-		class USkillComponent* SkillComp;
-	
+	UPROPERTY(EditAnywhere, Category="Spawner")
+	class USkillComponent* SkillComp;
+
 	// 총알 발사 위치 벡터
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		FVector GunOffset;
-	
+	FVector GunOffset;
+
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		bool PressedFireButton;
+	bool PressedFireButton;
+
 
 	// 이속설정
 	UFUNCTION(BlueprintCallable)
@@ -119,26 +134,34 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetFireRate(float mFireRate);
-	
+
 	UFUNCTION(BlueprintCallable)
 	void SetBulletPower(float mBulletPower);
+
 	
+	UFUNCTION(BlueprintCallable)
+	void SetMoveSpeedLevel(int mMoveSpeedLevel);
+	UFUNCTION(BlueprintCallable)
+	void SetMaxHpLevel(int mMaxHpLevel);
+	UFUNCTION(BlueprintCallable)
+	void SetFireRateLevel(int mFireRateLevel);
+	UFUNCTION(BlueprintCallable)
+	void SetBulletPowerLevel(int mBulletPowerLevel);
 	
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
-		class USoundBase* FireSound;
+	class USoundBase* FireSound;
 
 
 	// //위젯
-	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  TSubclassOf<UUserWidget> PlayerHPWidgetClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> PlayerHPWidgetClass;
 	//
 	//
-	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 class UMainInGameWidget* PlayerHPWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMainInGameWidget* PlayerHPWidget;
 
 
-	
 	// 움직임 총알방향 static const 이런건 배워야함
 	static const FName MoveForwardBinding;
 	static const FName MoveRightBinding;
@@ -148,7 +171,7 @@ public:
 	// 발사
 	UFUNCTION(BlueprintCallable)
 	void FireShot(FVector FireDir);
-	
+
 	//경험치 획득
 	UFUNCTION(BlueprintCallable)
 	void GetExperience(float Exp);
@@ -165,36 +188,47 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-
-void UpHp(float mUphp);
-
-void UpPlayerCoin(int mUpcoinNum);
+	// 스텟 레벨업
+	void MaxHpUP(float mUpMaxHp);
+	void UpHp(float mUphp);
+	void PowerUP(float mPowerUp);
+	void SpeedUP(float mSpeedUp);
+	void FireRateUP(float mFireRate);
+	void UpPlayerCoin(int mUpcoinNum);
 	void SetPlayerCoin(int mCoin);
 	//공격력 
-	FORCEINLINE	float Get() const {return BulletPower;};
-	
-	void SetNumberOfShotBullet (float mNumOfBullet);
-// 발사수
-	FORCEINLINE	float GetNumOfShotBullet() const {return NumberOfShotBullet;};
+	FORCEINLINE float Get() const { return BulletPower; };
+
+	void SetNumberOfShotBullet(float mNumOfBullet);
+
+
+
+	FORCEINLINE int GetFireRatelevel() const { return FireRatelevel; };
+	FORCEINLINE int GetMoveSpeedlevel() const { return MoveSpeedlevel; };
+	FORCEINLINE int GetBulletPowerlevel() const { return BulletPowerlevel; };
+	FORCEINLINE int GetMaxHPlevel() const { return MaxHPlevel; };
+
+
+	// 발사수
+	FORCEINLINE float GetNumOfShotBullet() const { return NumberOfShotBullet; };
 	//HP 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE	float GetNowHp() const {return NowHP;};
+	FORCEINLINE float GetNowHp() const { return NowHP; };
 	//HP 
-	FORCEINLINE	float GetMaxHp() const {return MaxHP;};
+	FORCEINLINE float GetMaxHp() const { return MaxHP; };
 	//공속 
-	FORCEINLINE	float GetFireRate() const {return FireRate;};
+	FORCEINLINE float GetFireRate() const { return FireRate; };
 	//공격력 
-	FORCEINLINE	float GetCoin() const {return PlayerCoin;};
-	
+	FORCEINLINE int GetCoin() const { return PlayerCoin; };
+
 	//이속 
-	FORCEINLINE	float GetMoveSpeed() const {return MoveSpeed;};
+	FORCEINLINE float GetMoveSpeed() const { return MoveSpeed; };
 	// 총알 공격력 리턴
-	FORCEINLINE	float GetBulletPower() const {return BulletPower;};
+	FORCEINLINE float GetBulletPower() const { return BulletPower; };
 	// 메시 리턴
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }
 	// 카메라 리턴
 	FORCEINLINE class UCameraComponent* GetCameraComponent() const { return CameraComponent; }
 	// 스프링암 리턴
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
 };
