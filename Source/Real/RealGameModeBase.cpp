@@ -196,23 +196,24 @@ void ARealGameModeBase::MonsterSpawn()
 	ABossMonsterActor* BossMonster = MonsterPooler->GetPooledBossMonster();
 	float const time = GetWorld()->GetAudioTimeSeconds();
 
-	if(time <600.f)
+	if(time <=60.f)
 	{
 		SpawnMonsterRandomNumMin =1;
 		SpawnMonsterRandomNumMax =2;
-		SpawnCoolTimeRandomMin = 3.5f;
+		SpawnCoolTimeRandomMin = 3.f;
 		SpawnCoolTimeRandomMax = 4.f;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage1"));
 	}
-	else if(time <1800.f)
+	else if(time <=180.f)
 	{
-		SpawnMonsterRandomNumMin =3;
-		SpawnMonsterRandomNumMax =7;
+		SpawnMonsterRandomNumMin =7;
+		SpawnMonsterRandomNumMax =12;
 		SpawnCoolTimeRandomMin = 3.f;
 		SpawnCoolTimeRandomMax = 3.5f;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage2"));
+		
 	}
-	else if(time<3000.f)
+	else if(time<=300.f)
 	{
 		SpawnMonsterRandomNumMin =12;
 		SpawnMonsterRandomNumMax =18;
@@ -220,7 +221,7 @@ void ARealGameModeBase::MonsterSpawn()
 		SpawnCoolTimeRandomMax = 3.f;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage3"));
 	}
-	else if(time<4800.f)
+	else if(time<=480.f)
 	{
 		SpawnMonsterRandomNumMin =15;
 		SpawnMonsterRandomNumMax =20;
@@ -228,7 +229,7 @@ void ARealGameModeBase::MonsterSpawn()
 		SpawnCoolTimeRandomMax = 5.f;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage4"));
 	}
-	else if(time <6180.f)
+	else if(time <=610.f)
 	{
 		SpawnMonsterRandomNumMin =18;
 		SpawnMonsterRandomNumMax =30;
@@ -254,10 +255,10 @@ void ARealGameModeBase::MonsterSpawn()
 		int32 RandomRange =FMath::RandRange(SpawnRangeMin, SpawnRangeMax);
 	
 		result *= FMath::RandRange(SpawnRangeMin, SpawnRangeMax);
-
+		
 	
 		// 단계 조절
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(result.X));
+		
 		result *= FVector(1.f, 1.f, 0.f);
 		result += player->GetActorLocation();
 		
@@ -266,23 +267,33 @@ void ARealGameModeBase::MonsterSpawn()
 			result.X = FMath::RandRange(-2500, 2500);
 			result.Y = FMath::RandRange(-2500, 2500);
 		}
-		MonsterType = FMath::RandRange(1, 3);
-		if(time <600.f)
+		//MonsterType = FMath::RandRange(1, 3);
+
+
+		if(time <60.f)
 		{ 
 			MonsterType =1;
 
+
+
 		}
-		else if(time <1800.f)
+		else if(time <180.f)
 		{
 			MonsterType =1;
-			if(i<2)
+			
+			if(i<3)
 			{
 				MonsterType =2;
 				
 			}
-		
+			if(!isBossSpawn)
+			{
+				isBossSpawn=true;
+				MonsterType=4;
+	
+			}
 		}
-		else if(time<3000.f)
+		else if(time<300.f)
 		{
 			MonsterType =1;
 			if(i<4)
@@ -291,7 +302,7 @@ void ARealGameModeBase::MonsterSpawn()
 				
 			}
 		}
-		else if(time<4800.f)
+		else if(time<480.f)
 		{
 			MonsterType =1;
 			if(i<7)
@@ -300,7 +311,7 @@ void ARealGameModeBase::MonsterSpawn()
 				
 			}
 		}
-		else if(time <6180.f)
+		else if(time <610.f)
 		{
 			MonsterType =1;
 			if(i<10)
@@ -313,6 +324,8 @@ void ARealGameModeBase::MonsterSpawn()
 		{
 
 		}
+		
+		
 		switch (MonsterType)
 		{
 		case 1:
@@ -371,8 +384,9 @@ void ARealGameModeBase::MonsterSpawn()
 		}
 	}
 	//쿨타임 랜덤하게 조절
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(time));
 	float const RandCoolTime = FMath::RandRange(SpawnCoolTimeRandomMin, SpawnCoolTimeRandomMax);
-	MonsterSpawnCoolTime += RandCoolTime;
-	GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime);
+	
+	GetWorldTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn, MonsterSpawnCoolTime + RandCoolTime);
 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
 }

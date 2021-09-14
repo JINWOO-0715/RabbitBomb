@@ -132,5 +132,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Load();
+
+	bool isBossSpawn=false;
+	
 };
 

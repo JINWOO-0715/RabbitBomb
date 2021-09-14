@@ -43,8 +43,14 @@ AMainPawn::AMainPawn()
 	static ConstructorHelpers::FClassFinder<UMainInGameWidget> HPBarAsset(
 		TEXT("/Game/BP/HPBar"));
 	PlayerHPWidgetClass = HPBarAsset.Class;
+	
+	static ConstructorHelpers::FClassFinder<UScoreWidget> ScoreAsset(
+			TEXT("/Game/BP/ScoreWidget"));
+	ScoreWidgetClass = ScoreAsset.Class;
 
 
+
+	
 	//카메라 스프링
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -148,9 +154,11 @@ void AMainPawn::BeginPlay()
 	if (GetWorld()->GetName() == "MainLevel")
 	{
 		PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
+		PlayerScoreWidget = Cast<UScoreWidget>(CreateWidget(GetWorld(), ScoreWidgetClass));
 		if (PlayerHPWidget != nullptr)
 		{
 			PlayerHPWidget->AddToViewport();
+			PlayerScoreWidget->AddToViewport();
 			// PlayerSkillChooseWidget->Player=this;
 			// PlayerRightWidget->AddToViewport();
 		}
@@ -163,9 +171,25 @@ void AMainPawn::Tick(float DeltaTime)
 	//Super::Tick(DeltaTime);
 
 	// 움직일 방향 찾기
-	const float ForwardValue = GetInputAxisValue(MoveForwardBinding); // 앞 +1.0 뒤 -1.0
-	const float RightValue = GetInputAxisValue(MoveRightBinding); //오 1.0 왼-1.0
+	float ForwardValue = GetInputAxisValue(MoveForwardBinding); // 앞 +1.0 뒤 -1.0
+	if(ForwardValue<0.f)
+	{
+		ForwardValue=-1.0f;
+	}
+	if(ForwardValue>0.f)
+	{
+		ForwardValue=1.0f;
+	}
+	float RightValue = GetInputAxisValue(MoveRightBinding); //오 1.0 왼-1.0
 
+	if(RightValue<0.f)
+	{
+		RightValue=-1.0f;
+	}
+	if(RightValue>0.f)
+	{
+		RightValue=1.0f;
+	}
 	// 움직일 벡터 만듬.
 	const FVector MoveDirection = FVector(ForwardValue, RightValue, 0.f).GetClampedToMaxSize(1.0f);
 
@@ -352,7 +376,7 @@ void AMainPawn::GetExperience(float Exp)
 
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("LevelUp"));
 		NowEXP = 0.f;
-		MaxEXP = 1.2 * MaxEXP;
+		MaxEXP = 2 * MaxEXP;
 
 
 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::SanitizeFloat(MaxEXP));

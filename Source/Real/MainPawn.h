@@ -10,6 +10,7 @@
 // #include "BulletPoolComopnent.h"
 #include "Components/WidgetComponent.h"
 #include "Bullet.h"
+#include "ScoreWidget.h"
 
 #include "Engine/Classes/Components/SphereComponent.h"
 
@@ -163,6 +164,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UMainInGameWidget* PlayerHPWidget;
 
+
+	// //위젯
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> ScoreWidgetClass;
+	//
+	//
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UScoreWidget* PlayerScoreWidget;
+	
 
 	// 움직임 총알방향 static const 이런건 배워야함
 	static const FName MoveForwardBinding;
