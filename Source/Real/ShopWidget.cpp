@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
 #include "ShopWidget.h"
 
 void UShopWidget::NativeConstruct()

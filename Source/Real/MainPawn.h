@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "BulletPoolComopnent.h"
+
+// #include "RightWidget.h"
+// #include "ItemActor.h"
+// #include "BulletPoolComopnent.h"
 #include "Components/WidgetComponent.h"
-#include "RightWidget.h"
 #include "Bullet.h"
-#include "ItemActor.h"
+
 #include "Engine/Classes/Components/SphereComponent.h"
 
 #include "SkillComponent.h"
@@ -97,7 +99,7 @@ class REAL_API AMainPawn : public APawn
 	int NumberOfShotBullet = 1;
 
 
-	int PlayerCoin = 10000;
+	int PlayerCoin = 1000000;
 
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;

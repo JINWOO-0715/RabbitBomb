@@ -123,7 +123,8 @@ void AMainPawn::SetMoveSpeedLevel(int mMoveSpeedLevel)
 void AMainPawn::SetMaxHpLevel(int mMaxHpLevel)
 {
 	MaxHPlevel	=mMaxHpLevel;
-	MaxHP = MaxHP + MaxHPlevel*200; 
+	MaxHP = MaxHP + MaxHPlevel*200;
+	NowHP = MaxHP + MaxHPlevel*200; 
 }
 
 void AMainPawn::SetFireRateLevel(int mFireRateLevel)
@@ -205,6 +206,8 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
                             AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(NowHP));
 	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
 	NowHP -= Damage;
 	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);

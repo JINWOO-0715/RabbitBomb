@@ -8,6 +8,7 @@
 #include "Components/Button.h"
 #include "MainPawn.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "ShopWidget.generated.h"
 
 /**

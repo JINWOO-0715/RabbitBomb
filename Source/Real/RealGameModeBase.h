@@ -10,8 +10,15 @@
 #include "PlayerSkillDataTable.h"
 #include "ItemPoolComponent.h"
 #include "MonsterDataTable.h"
+
+#include "Kismet/GameplayStatics.h"
+#include "MonsterDataTable.h"
+#include "UObject/ConstructorHelpers.h"
 #include "MainPawn.h"
 #include "PlayerSaveGame.h"
+#include "BossMonsterActor.h"
+#include "ItemActor.h"
+#include "ChooseSkillWidget.h"
 #include "RealGameModeBase.generated.h"
 
 /**

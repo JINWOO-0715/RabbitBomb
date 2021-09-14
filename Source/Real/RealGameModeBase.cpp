@@ -3,12 +3,6 @@
 
 #include "RealGameModeBase.h"
 
-#include "BossMonsterActor.h"
-#include "Kismet/GameplayStatics.h"
-#include "MonsterDataTable.h"
-#include "UObject/ConstructorHelpers.h"
-#include "ChooseSkillWidget.h"
-#include "ItemActor.h"
 #include "TowerMonsterActor.h"
 
 
@@ -144,11 +138,7 @@ void ARealGameModeBase::Load()
 
 void ARealGameModeBase::BeginPlay()
 {
-	StartTime = 0.0f;
-	// ÃÑ¾Ë ½ºÆù
-	BulletPooler->Spawn();
-	MonsterPooler->Spawn();
-	ItemPooler->Spawn();
+	
 	UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
 			UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
 
@@ -172,6 +162,11 @@ void ARealGameModeBase::BeginPlay()
 
 	if (GetWorld()->GetName() == "MainLevel")
 	{
+		StartTime = 0.0f;
+		// ÃÑ¾Ë ½ºÆù
+		BulletPooler->Spawn();
+		MonsterPooler->Spawn();
+		ItemPooler->Spawn();
 		PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
 		if (PlayerSkillChooseClass != nullptr)
 		{
