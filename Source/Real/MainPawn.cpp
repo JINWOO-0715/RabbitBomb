@@ -315,6 +315,7 @@ void AMainPawn::GetExperience(float Exp)
 {
 	NowEXP += Exp;
 	float persent = (NowEXP / MaxEXP);
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::SanitizeFloat(MaxEXP));
 	if (persent >= 1.f)
 	{
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
@@ -329,12 +330,12 @@ void AMainPawn::GetExperience(float Exp)
 		// 스킬 선택
 		//
 
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("LevelUp"));
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("LevelUp"));
 		NowEXP = 0.f;
-		level+=1;
-		MaxEXP *= 0.1*level*level;
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::FromInt(level));
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(MaxEXP));
+		MaxEXP = 1.2*MaxEXP;
+		
+		
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::SanitizeFloat(MaxEXP));
 		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 		if (MyPlayer != NULL)
 		{

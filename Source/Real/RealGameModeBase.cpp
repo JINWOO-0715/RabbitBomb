@@ -184,25 +184,130 @@ void ARealGameModeBase::MonsterSpawn()
 	FVector result = FMath::VRand();
 
 
-	// 몬스터 몇마리 랜덤하게 (최소  ~최대 )
-	int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin, SpawnMonsterRandomNumMax);
+	
+	
 	AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
 	ATowerMonsterActor* TowerMonster = MonsterPooler->GetPooledTowerMonster();
 	ABossMonsterActor* BossMonster = MonsterPooler->GetPooledBossMonster();
-	
+	float const time = GetWorld()->GetAudioTimeSeconds();
+
+	if(time <600.f)
+	{
+		SpawnMonsterRandomNumMin =1;
+		SpawnMonsterRandomNumMax =2;
+		SpawnCoolTimeRandomMin = 3.5f;
+		SpawnCoolTimeRandomMax = 4.f;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage1"));
+	}
+	else if(time <1800.f)
+	{
+		SpawnMonsterRandomNumMin =3;
+		SpawnMonsterRandomNumMax =7;
+		SpawnCoolTimeRandomMin = 3.f;
+		SpawnCoolTimeRandomMax = 3.5f;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage2"));
+	}
+	else if(time<3000.f)
+	{
+		SpawnMonsterRandomNumMin =12;
+		SpawnMonsterRandomNumMax =18;
+		SpawnCoolTimeRandomMin = 2.f;
+		SpawnCoolTimeRandomMax = 3.f;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage3"));
+	}
+	else if(time<4800.f)
+	{
+		SpawnMonsterRandomNumMin =15;
+		SpawnMonsterRandomNumMax =20;
+		SpawnCoolTimeRandomMin = 3.f;
+		SpawnCoolTimeRandomMax = 5.f;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage4"));
+	}
+	else if(time <6180.f)
+	{
+		SpawnMonsterRandomNumMin =18;
+		SpawnMonsterRandomNumMax =30;
+		SpawnCoolTimeRandomMin = 4.f;
+		SpawnCoolTimeRandomMax = 5.f;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage5"));
+	}
+	else
+	{
+		SpawnMonsterRandomNumMin =25;
+		SpawnMonsterRandomNumMax =40;
+		SpawnCoolTimeRandomMin = 6.f;
+		SpawnCoolTimeRandomMax = 8.f;
+	}
+	// 몬스터 몇마리 랜덤하게 (최소  ~최대 )
+	int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin, SpawnMonsterRandomNumMax);
+
 	// 몬스터 생성
 	for (int i = 0; i < (MonsterSpawnNum + randMonsterMun); i++)
 	{
-		MonsterType = FMath::RandRange(1, 3);
+	
 		result = FMath::VRand();
+		int32 RandomRange =FMath::RandRange(SpawnRangeMin, SpawnRangeMax);
+	
 		result *= FMath::RandRange(SpawnRangeMin, SpawnRangeMax);
 
-
+	
 		// 단계 조절
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(result.X));
 		result *= FVector(1.f, 1.f, 0.f);
 		result += player->GetActorLocation();
 		
+		if((result.X>3000) || (result.X<-3000) || (result.Y>3000)||  (result.Y<-3000))
+		{
+			result.X = FMath::RandRange(-2500, 2500);
+			result.Y = FMath::RandRange(-2500, 2500);
+		}
+		MonsterType = FMath::RandRange(1, 3);
+		if(time <600.f)
+		{ 
+			MonsterType =1;
+
+		}
+		else if(time <1800.f)
+		{
+			MonsterType =1;
+			if(i<2)
+			{
+				MonsterType =2;
+				
+			}
+		
+		}
+		else if(time<3000.f)
+		{
+			MonsterType =1;
+			if(i<4)
+			{
+				MonsterType =2;
+				
+			}
+		}
+		else if(time<4800.f)
+		{
+			MonsterType =1;
+			if(i<7)
+			{
+				MonsterType =2;
+				
+			}
+		}
+		else if(time <6180.f)
+		{
+			MonsterType =1;
+			if(i<10)
+			{
+				MonsterType =2;
+				
+			}
+		}
+		else
+		{
+
+		}
 		switch (MonsterType)
 		{
 		case 1:

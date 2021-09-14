@@ -55,6 +55,9 @@ public:
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	int MonsterType =2;
 
+	UPROPERTY(EditAnywhere,Category="Spawner")
+	float CheatTime =0.f;
+
 	
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	int SpawnRangeMin =800;

@@ -136,7 +136,7 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	ChangeHitedMTTimer();
 	if (MonsterHP < 0.f)
 	{
-		int rand = FMath::RandRange(0, 9);
+		int rand = FMath::RandRange(0, 1);
 
 		if (rand == 0)
 		{
@@ -145,7 +145,7 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 			Item->SetActorLocation(GetActorLocation());
 			Item->SetActive(true);
 		}
-		// 아이템 스폰한다 10%!
+		// 경치구슬 획득 확률 40%
 		Deactivate();
 	}
 
@@ -178,7 +178,7 @@ void AMonsterActor::FireShot()
 			// 총알 속도
 			monsterBullet->SetVelocity(Movement);
 			// 알아서 살아지게하고
-			monsterBullet->SetLifeSpan();
+			monsterBullet->SetLifeSpan(BulletLifeSpan);
 			// 활성화시킨다.
 			monsterBullet->SetActive(true);
 		}
@@ -190,6 +190,7 @@ void AMonsterActor::FireShot()
 void AMonsterActor::InitMonster(int dataRowN)
 {
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	
 	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
 	MonsterMeshComponent->SetStaticMesh(MonsterData->MonsterMesh);
@@ -200,6 +201,7 @@ void AMonsterActor::InitMonster(int dataRowN)
 	MonsterHP = HPPowerfulNum * time * time + MonsterData->MonsterHP;
 	MonsterHP = MonsterData->MonsterHP;
 	MoveSpeed = MonsterData->MoveSpeed;
+	BulletLifeSpan = MonsterData->BulletLifeSpan;
 	//0.0008*x*x+100;
 }
 

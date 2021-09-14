@@ -90,7 +90,7 @@ void ATowerMonsterActor::FireCircleShot()
 			//총알 속도
 			monsterBullet->SetVelocity(FMovement);
 			// 알아서 살아지게하고
-			monsterBullet->SetLifeSpan();
+			monsterBullet->SetLifeSpan(	BulletLifeSpan);
 			// 활성화시킨다.
 			monsterBullet->SetActive(true);
 
