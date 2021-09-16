@@ -18,18 +18,33 @@ AMonsterManager::AMonsterManager()
 	SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("spawnVolume"));
 
 	RootComponent = SpawnVolume;
+
+	
 	//ObjectPooler = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("ObjectPoller"));
 	//
 	//데이터 테이블.
 	
 }
 
+void AMonsterManager::ResetCount()
+{
+	NowSpawnMosterCount.eCommomMonster =0;
+	NowSpawnMosterCount.eBossMonster =0;
+	NowSpawnMosterCount.eTowerMonster =0;
+	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+}
+
+
 // Called when the game starts or when spawned
 void AMonsterManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, false);
+	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+	gm->SetMonsterManager(this);
+	
 }
 
 
@@ -43,21 +58,17 @@ void AMonsterManager::Spawn()
 
 
 	// 몬스터가 다죽었다
-	if (NowMosterCount.eBossMonster < 1 && NowMosterCount.eCommomMonster < 1 && NowMosterCount.eTowerMonster < 1)
+
+	// 스테이지를 늘리냐 웨비를 늘리냐 체크한다
+	// 몬스터가 잘 소환됐는지 확인한다.
+
+	// 소환해야할때 이걸 키고 해야할때 = 스테이지로 넘어갈때!
+	// 다되면 꺼지는데
+
+	// 목표만큼 
+	if(NowSpawnMosterCount.eCommomMonster < gm->GetGoalCommonMonsterCount())
 	{
-		if(NowWave < gm->GetGoalWave())
-		{
-			NowWave++;
-			
-		}
-		else
-		{
-			gm->ChangeStage();
-		}
-		 // 이거 함수로 ㄱㄱ
-	}
-	if(NowMosterCount.eCommomMonster < gm->GetGoalCommonMonsterCount())
-	{
+		
 		if (Monster == nullptr)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
@@ -70,54 +81,20 @@ void AMonsterManager::Spawn()
 		Monster->InitMonster(1);
 		// 활성화 ㄱㄱ
 		Monster->SetActive(true);
-		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, false);
 		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
-		NowMosterCount.eCommomMonster++;
-
+		//목표수치 ++
+		NowSpawnMosterCount.eCommomMonster++;
+		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::FromInt(NowSpawnMosterCount.eCommomMonster));
 	}
-	// if(몬스터 가 다죽었으면 레벨업)
-	// {
-	//		gm->stage levelUp 
-	// }
-	// if( 내 common < gm의 goalcommon보다)
-	// { 
-	//	일반몹 스폰 (위치는 벡터 순회로)	 
-	//
-	//  // 이런식으로 티워 / 보스/ 싹다 한다.!
-	//  }
-	// 
-	//
-
+	else
+	{
+		//꺼버린다.
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("PULL"));
 	
-	
+	}
 
-	// 
 
-	//위치 가져와서 쭉 한번에 스폰!
-	//
-	// if(gm->isSpawnAble())
-	// {
-	// 	//가능하다면 스폰해라! 뭘스폰하라고!
-	// 	// 그냥 너가 스폰가능한지 알아서봐
-	// 	// 스폰할꺼면해
-	// 	// 그다음 수관리해
-	// 	// 그다음 다죽었으면 stage 레벨업해
-	// 	// 반복해
-	// 	if (Monster == nullptr)
-	// 	{
-	// 		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
-	// 		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, false);
-	// 		return;
-	// 	}
-	//
-	// 	Monster->SetActorLocation(SpawnLocation[0]);
-	// 	gm->UpCommomMonsterCount();
-	// 	Monster->InitMonster(MonsterNum);
-	// 	Monster->SetActive(true);
-	// 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, false);
-	// 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
-	//
-	// }
 		
 
 }

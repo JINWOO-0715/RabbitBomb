@@ -3,7 +3,9 @@
 
 #include "RealGameModeBase.h"
 
+#include "MonsterManager.h"
 #include "TowerMonsterActor.h"
+
 
 
 ARealGameModeBase::ARealGameModeBase()
@@ -33,6 +35,11 @@ ARealGameModeBase::ARealGameModeBase()
 	{
 		GameStageData = GameDataAsset.Object;
 	}
+}
+
+void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)
+{
+	WorldMonsterManger = mMonsterManager;
 }
 
 
@@ -122,7 +129,7 @@ void ARealGameModeBase::Load()
 
 int ARealGameModeBase::GetGoalCommonMonsterCount()
 {
-	
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::FromInt(GoalGameStage->MonsterWave[NowWave].eCommomMonster));
 	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
 }
 
@@ -131,57 +138,38 @@ int ARealGameModeBase::GetGoalWave()
 	return GoalGameStage->MonsterWave.Num();
 }
 
-void ARealGameModeBase::ChangeStage()
+void ARealGameModeBase::DecreaseCommomMonsterCount()
 {
-	NowStage++;
-	GoalGameStage = GetGameStateRowData(NowStage);
-
+	NowMosterCount.eCommomMonster--;
+	
+	CheckStage();
 }
 
-// void ARealGameModeBase::UpCommomMonsterCount()
-// {
-// 	WaveMonsterCount.eCommomMonster ++;
-// }
-//
-//
-// void ARealGameModeBase::UpTowerMonsterCount()
-// {
-// 	WaveMonsterCount.eTowerMonster++;
-// }
-//
-// void ARealGameModeBase::UpBossMonsterCount()
-// {
-// 	WaveMonsterCount.eBossMonster++;
-// }
-//
-// void ARealGameModeBase::SetStage(int mStage)
-// {
-// 	NowStage = mStage;
-// 	WaveMonsterCount.eBossMonster =0;
-// 	WaveMonsterCount.eCommomMonster =0;
-// 	WaveMonsterCount.eTowerMonster =0;
-// 	
-// }
-//
-// bool ARealGameModeBase::isSpawnAble()
-// {
-// 	if(GoalGameStage->MonsterWave[NowStage].eCommomMonster > WaveMonsterCount.eCommomMonster)
-// 	{
-// 		return true;
-// 	}
-// 	if(GoalGameStage->MonsterWave[NowStage].eTowerMonster > WaveMonsterCount.eTowerMonster)
-// 	{
-// 		return true;
-// 	}
-// 	if(GoalGameStage->MonsterWave[NowStage].eBossMonster > WaveMonsterCount.eBossMonster)
-// 	{
-// 		return true;
-// 	}
-//
-// 	return false;
-// }
 
 
+void ARealGameModeBase::CheckStage()
+{
+	
+	// 다죽었으면
+	if (NowMosterCount.eBossMonster < 1 && NowMosterCount.eCommomMonster < 1 && NowMosterCount.eTowerMonster < 1)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("ClearWave!!"));
+		// 웨이브를 늘려야하면 늘리고
+		if(NowWave < GetGoalWave())
+		{
+			NowWave++;
+			NowMosterCount = GoalGameStage->MonsterWave[NowWave];
+			WorldMonsterManger->ResetCount();
+			// 리셋해서 다시 스폰하슈
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("StageClear!!"));
+		}
+
+		
+	}
+}
 void ARealGameModeBase::BeginPlay()
 {
 	
@@ -202,8 +190,8 @@ void ARealGameModeBase::BeginPlay()
 		//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
 		// 목표 스테이지 설정
 		GoalGameStage = GetGameStateRowData(NowStage);
-		
 		NowWave =1;
+		NowMosterCount = GoalGameStage->MonsterWave[NowWave];
 		// 스테이지의 1wave부터 시작
 		
 		UWorld* const World = GetWorld();
@@ -255,29 +243,33 @@ FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
 
 void ARealGameModeBase::MonsterSpawn()
 {
-	UWorld* const World = GetWorld();
-	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-	// 
-	FVector result = FMath::VRand();
+	// 목표만큼
 
-	AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
-	ATowerMonsterActor* TowerMonster = MonsterPooler->GetPooledTowerMonster();
-	ABossMonsterActor* BossMonster = MonsterPooler->GetPooledBossMonster();
-	float const time = GetWorld()->GetAudioTimeSeconds();
-
-	if(time <=60.f)
-	{
-		SpawnMonsterRandomNumMin =1;
-		SpawnMonsterRandomNumMax =2;
-		SpawnCoolTimeRandomMin = 3.f;
-		SpawnCoolTimeRandomMax = 4.f;
-		
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage1"));
-	}
-
-	// 몬스터 몇마리 랜덤하게 (최소  ~최대 )
-	int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin, SpawnMonsterRandomNumMax);
+	
+	 UWorld* const World = GetWorld();
+	// AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	//
+	// // 
+	// FVector result = FMath::VRand();
+	//
+	// AMonsterActor* Monster = MonsterPooler->GetPooledMonster();
+	// ATowerMonsterActor* TowerMonster = MonsterPooler->GetPooledTowerMonster();
+	// ABossMonsterActor* BossMonster = MonsterPooler->GetPooledBossMonster();
+	// float const time = GetWorld()->GetAudioTimeSeconds();
+	//
+	// if(time <=60.f)
+	// {
+	// 	SpawnMonsterRandomNumMin =1;
+	// 	SpawnMonsterRandomNumMax =2;
+	// 	SpawnCoolTimeRandomMin = 3.f;
+	// 	SpawnCoolTimeRandomMax = 4.f;
+	// 	
+	// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("stage1"));
+	// }
+	//
+	// // 몬스터 몇마리 랜덤하게 (최소  ~최대 )
+	// int const randMonsterMun = FMath::RandRange(SpawnMonsterRandomNumMin, SpawnMonsterRandomNumMax);
 
 	// // 몬스터 생성
 	// for (int i = 0; i < (MonsterSpawnNum + randMonsterMun); i++)

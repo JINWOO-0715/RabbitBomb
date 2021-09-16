@@ -239,7 +239,7 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(NowHP));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(NowHP));
 	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
 	NowHP -= Damage;
 	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);

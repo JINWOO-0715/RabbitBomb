@@ -16,7 +16,6 @@ class REAL_API AMonsterManager : public AActor
 	
 	class UBoxComponent* SpawnVolume;
 
-	FWaveType NowMosterCount ;
 	// UPROPERTY(EditAnywhere,Category="Spawner")
 	// UObjectPoolComponent* ObjectPooler;
 
@@ -31,14 +30,18 @@ class REAL_API AMonsterManager : public AActor
 	FTimerHandle SpawnCooldownTimer;
 
 
-	
-	
+	bool isActive;
 	void Spawn();
+
+	FWaveType NowSpawnMosterCount;
+
+	
 public:	
 	// Sets default values for this actor's properties
 	AMonsterManager();
 
-
+	void ResetCount();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -21,6 +21,7 @@
 #include "ItemActor.h"
 #include "ChooseSkillWidget.h"
 #include "GameStateDataTable.h"
+#include "MonsterManager.h"
 #include "RealGameModeBase.generated.h"
 
 /**
@@ -42,6 +43,12 @@ class ARealGameModeBase : public AGameModeBase
 	class UDataTable* MonsterData;
 	class UDataTable* PlayerSkillData;
 	class UDataTable* GameStageData;
+
+	
+	class AMonsterManager* WorldMonsterManger;
+
+	FWaveType NowMosterCount; 
+	 
 	// FWaveType WaveMonsterCount;
 	//float StartTime =0.0f;
 
@@ -50,9 +57,15 @@ protected:
 	
 public:
 	ARealGameModeBase();
+
+
+	void SetMonsterManager(AMonsterManager* mMonsterManager);
+		
+	void CheckStage();
 	
 	//¸Þ½¬
 
+	void DecreaseCommomMonsterCount();
 	
 	virtual void Tick(float DeltaTime) override;
 
@@ -150,7 +163,7 @@ public:
 	
 	int GetGoalWave();
 
-	void ChangeStage();
+
 	//
 	// void UpCommomMonsterCount();
 	// void UpTowerMonsterCount();
