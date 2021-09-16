@@ -30,7 +30,7 @@ void UChooseSkillWidget::ChooseSkillOne()
 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
 
-	PlayerPawn->SkillComp->AddSkill(0); //추가
+	PlayerPawn->SkillComp->AddSkill(SkillName[0]); //추가
 
 	//PlayerPawn->SkillComp->HasSkill.Add(PlayerSkillRowData.SKillName,*PlayerSkillRowData.SkillActive);
 	//

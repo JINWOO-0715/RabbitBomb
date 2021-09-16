@@ -14,10 +14,22 @@ UCLASS()
 class REAL_API UScoreWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	virtual void NativeConstruct() override;
 
 	protected:
+
+	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ScoreText;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ExitGameButton;
+public:
+	UFUNCTION()
+	void ShowButton();
+
+	UFUNCTION()
+	void GotoTitle();
 	
+	int count =0;
 };

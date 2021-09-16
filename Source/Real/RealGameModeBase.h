@@ -9,6 +9,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "PlayerSkillDataTable.h"
 #include "ItemPoolComponent.h"
+#include "GameStateDataTable.h"
 #include "MonsterDataTable.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -19,6 +20,7 @@
 #include "BossMonsterActor.h"
 #include "ItemActor.h"
 #include "ChooseSkillWidget.h"
+#include "GameStateDataTable.h"
 #include "RealGameModeBase.generated.h"
 
 /**
@@ -39,7 +41,9 @@ class ARealGameModeBase : public AGameModeBase
 
 	class UDataTable* MonsterData;
 	class UDataTable* PlayerSkillData;
-	float StartTime =0.0f;
+	class UDataTable* GameStageData;
+	// FWaveType WaveMonsterCount;
+	//float StartTime =0.0f;
 
 protected:
 	virtual void BeginPlay() override;
@@ -51,6 +55,11 @@ public:
 
 	
 	virtual void Tick(float DeltaTime) override;
+
+	
+	FGameStateRow* GoalGameStage;
+	int NowStage = 1;
+	int NowWave	= 1;
 	
 	// 몬스터 생성 주기
 	UPROPERTY(EditAnywhere,Category="Spawner")
@@ -105,6 +114,9 @@ public:
 	FPlayerSkillRow* GetPlayerSkillRowDataToNum(int rowN);
 	FPlayerSkillRow* GetPlayerSkillRowDataToNum(FName mSkillName);
 	
+	//스테이지 정보 가져오기
+	FGameStateRow* GetGameStateRowData(int rowN);
+	
 	// //플레이어 스킬 초기화
 	// FPlayerSkillRow* GetPlayerSkillRowDataToName(FName mSkillName);
 
@@ -125,7 +137,7 @@ public:
 	UPROPERTY(VisibleInstanceOnly)
 	class UChooseSkillWidget* PlayerSkillChooseWidget;
 
-	FORCEINLINE	float GetPlayTime() const {return StartTime;};
+	//FORCEINLINE	float GetPlayTime() const {return StartTime;};
 
 	UFUNCTION(BlueprintCallable)
 	void Save();
@@ -133,7 +145,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Load();
 
-	bool isBossSpawn=false;
+	int GetGoalCommonMonsterCount();
 	
+	
+	int GetGoalWave();
+
+	void ChangeStage();
+	//
+	// void UpCommomMonsterCount();
+	// void UpTowerMonsterCount();
+	// void UpBossMonsterCount();
+	//
+	// // void SetStage(int mStage);
+	//
+	// FORCEINLINE int GetStage() const { return NowStage;};
+
+	// bool isSpawnAble();
 };
+
+
 

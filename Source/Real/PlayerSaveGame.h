@@ -46,6 +46,10 @@ public:
 	UPROPERTY()
 	int PlayerCoin = 100;
 
+	UPROPERTY()
+	int PlayerStage =1;;
+
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
 	FString SaveSlotName; // Save game data file name
 
@@ -59,4 +63,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
 	float SaveFloat;
+
+
+	
 };

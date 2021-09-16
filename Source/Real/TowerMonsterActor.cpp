@@ -72,7 +72,7 @@ void ATowerMonsterActor::FireCircleShot()
 			FVector Location = GetActorLocation();
 			// 원 (x,y)
 			FVector Circledir(cos((2 * PI * i) / 36), sin((2 * PI * i) / 36), 0.f);
-			// 반지금이 100인 원(x,y)
+			// 반지름이 100인 원(x,y)
 			Circledir *= 100;
 			// 내위치에 그 위치를 더해서
 			Location += Circledir;

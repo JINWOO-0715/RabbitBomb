@@ -71,7 +71,8 @@ AMainPawn::AMainPawn()
 	ItemGettingSphere->SetupAttachment(RootComponent);
 	ItemGettingSphere->InitSphereRadius(400.f);
 	ItemGettingSphere->OnComponentBeginOverlap.AddDynamic(this, &AMainPawn::OnOverlapBegin);
-
+	
+	
 
 	Tags.Add("Player");
 
@@ -95,6 +96,7 @@ AMainPawn::AMainPawn()
 	FireRate = 1.f;
 	bCanFire = true;
 }
+
 
 
 void AMainPawn::SetMoveSpeed(float mMoveSpeed)
@@ -145,6 +147,12 @@ void AMainPawn::SetBulletPowerLevel(int mBulletPowerLevel)
 	BulletPower = BulletPower + BulletPower*0.1;
 }
 
+
+void AMainPawn::BackButton()
+{
+	PlayerScoreWidget->ShowButton();
+	
+}
 
 //// Called when the game starts or when spawned 비긴플레이 쓸일있으면 사용
 void AMainPawn::BeginPlay()
@@ -247,7 +255,7 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 void AMainPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                                int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Line"));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Line"));
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
@@ -414,6 +422,7 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(MoveRightBinding);
 	PlayerInputComponent->BindAxis(FireForwardBinding);
 	PlayerInputComponent->BindAxis(FireRightBinding);
+	InputComponent->BindAction("Back", EInputEvent::IE_Released, this, &AMainPawn::BackButton);
 }
 
 void AMainPawn::MaxHpUP(float mUpMaxHp)
@@ -471,7 +480,7 @@ void AMainPawn::UpHp(float mUphp)
 
 void AMainPawn::UpPlayerCoin(int mUpcoinNum)
 {
-	PlayerCoin = mUpcoinNum;
+	PlayerCoin += mUpcoinNum;
 }
 
 void AMainPawn::SetPlayerCoin(int mCoin)

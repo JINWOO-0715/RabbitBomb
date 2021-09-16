@@ -104,7 +104,7 @@ class REAL_API AMainPawn : public APawn
 
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
-
+    void BackButton();
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
 

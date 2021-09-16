@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameStateDataTable.h"
 #include "MonsterManager.generated.h"
 
 UCLASS()
@@ -14,24 +15,24 @@ class REAL_API AMonsterManager : public AActor
 	//float GetLifeSpan();
 	
 	class UBoxComponent* SpawnVolume;
-	
+
+	FWaveType NowMosterCount ;
 	// UPROPERTY(EditAnywhere,Category="Spawner")
 	// UObjectPoolComponent* ObjectPooler;
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	bool trigger;
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	int MonsterNum = 5;
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float SpawnCooldown  = 1.2f;
+	int NowWave =1;
 	
-
-
+	
+	UPROPERTY(EditAnywhere,Category="Spawner", Meta = (MakeEditWidget = true))
+	FVector SpawnLocation[9];
 	
 	FTimerHandle SpawnCooldownTimer;
 
+
+	
+	
 	void Spawn();
 public:	
 	// Sets default values for this actor's properties

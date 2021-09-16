@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
+
 #include "Components/Button.h"
 #include "TitleWidget.generated.h"
 
@@ -17,6 +20,7 @@ class REAL_API UTitleWidget : public UUserWidget
 	GENERATED_BODY()
 	//virtual void NativeConstruct() override;
 
+	virtual void NativeConstruct() override;
 
 	protected:
 	UPROPERTY(meta = (BindWidget))
@@ -46,6 +50,12 @@ class REAL_API UTitleWidget : public UUserWidget
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* FowardMapNameButton;
+
 	public:
+
 	
+	UFUNCTION(BlueprintCallable)
+		void Quitgame();
+	UFUNCTION(BlueprintCallable)
+		void GameStart();
 };

@@ -25,6 +25,7 @@ private:
 public:
 	ATowerMonsterActor();
 
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void FireShot() override;

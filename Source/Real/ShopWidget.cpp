@@ -44,7 +44,7 @@ void UShopWidget::PowerUpFun()
 
 	if(player->GetCoin() >= player->GetBulletPowerlevel()*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetMaxHPlevel()));
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetBulletPowerlevel()));
 		player->PowerUP(1.2f);	
 	}
 	// 1.2배씩 상승한다 hp가
@@ -58,7 +58,7 @@ void UShopWidget::SpeedUpFun()
 
 	if(player->GetCoin() >= player->GetMoveSpeedlevel()*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetMaxHPlevel()));
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetMoveSpeedlevel()));
 		player->SpeedUP(1.2f);	
 	}
 	// 1.2배씩 상승한다 hp가
@@ -72,7 +72,7 @@ void UShopWidget::FireRateUpFun()
 
 	if(player->GetCoin() >= player->GetFireRatelevel()*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetMaxHPlevel()));
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetFireRatelevel()));
 		player->FireRateUP(1.2f);	
 	}
 	// 1.2배씩 상승한다 hp가

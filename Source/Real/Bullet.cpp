@@ -63,7 +63,6 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 
 		
 	}
-	//UE_LOG(LogTemp,Warning,TEXT("HIT"));
 	// 몬스터 처리 
 	if (OtherActor->ActorHasTag("Monster"))
 	{
@@ -75,7 +74,6 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		}
 
 	}
-
 	if (OtherActor->ActorHasTag("Player"))
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, BulletDamage,nullptr, nullptr, nullptr);
