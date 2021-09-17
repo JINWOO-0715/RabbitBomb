@@ -15,6 +15,14 @@ class REAL_API URabbitBombGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 	public:
-	int NowStage; 
+	int NowStage;
+
+	float PlayerFireRateLevel;
+
+	float PlayerPowerLevel;
+	float PlayerSpeedLevel;
+	float PlayerHPLevel;
+
+	int PlayerHasCoin;
 	
 };

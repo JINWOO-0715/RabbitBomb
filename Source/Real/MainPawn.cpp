@@ -138,7 +138,7 @@ void AMainPawn::SetMaxHpLevel(int mMaxHpLevel)
 void AMainPawn::SetFireRateLevel(int mFireRateLevel)
 {
 	FireRatelevel = mFireRateLevel;
-	FireRate = FireRate + FireRatelevel*0.01;
+	FireRate = FireRate - FireRatelevel*0.01;
 }
 
 void AMainPawn::SetBulletPowerLevel(int mBulletPowerLevel)

@@ -85,27 +85,6 @@ public:
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	int MonsterType =2;
 
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	float CheatTime =0.f;
-
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	int SpawnRangeMin =800;
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	int SpawnRangeMax =1500;
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	float SpawnCoolTimeRandomMin =0.f;
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	float SpawnCoolTimeRandomMax =2.0f;
-	
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	int SpawnMonsterRandomNumMin=0;
-
-	UPROPERTY(EditAnywhere,Category="Spawner")
-	int SpawnMonsterRandomNumMax=5;
 	
 	
 	//ÃÑ¾Ë ´ã±â
