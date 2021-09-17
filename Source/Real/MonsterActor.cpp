@@ -193,16 +193,19 @@ void AMonsterActor::InitMonster(int dataRowN)
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	
 	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
+	;
+	
+	
 	MonsterMeshComponent->SetStaticMesh(MonsterData->MonsterMesh);
 	BulletSpeed = MonsterData->BulletSpeed;
-	FireRate = MonsterData->FireRate;
+	FireRate = MonsterData->FireRate *gm->GoalGameStage->FireRateUPCount;
 	Lifespan = MonsterData->Lifespan;
 	float const time = GetWorld()->GetAudioTimeSeconds();
-	MonsterHP = HPPowerfulNum * time * time + MonsterData->MonsterHP;
-	MonsterHP = MonsterData->MonsterHP;
+	MonsterHP =  MonsterData->MonsterHP*gm->GoalGameStage->HpUPCount;
+	BulletPower = MonsterData->BulletPower*gm->GoalGameStage->BulletPowerUPCount;
 	MoveSpeed = MonsterData->MoveSpeed;
 	BulletLifeSpan = MonsterData->BulletLifeSpan;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
 	//0.0008*x*x+100;
 }
 

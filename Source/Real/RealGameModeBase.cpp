@@ -3,6 +3,7 @@
 
 #include "RealGameModeBase.h"
 
+#include "RabbitBombGameInstance.h"
 #include "MonsterManager.h"
 #include "TowerMonsterActor.h"
 
@@ -138,6 +139,11 @@ int ARealGameModeBase::GetGoalWave()
 	return GoalGameStage->MonsterWave.Num();
 }
 
+void ARealGameModeBase::SetNowStage(int mStage)
+{
+	NowStage=mStage;
+}
+
 void ARealGameModeBase::DecreaseCommomMonsterCount()
 {
 	NowMosterCount.eCommomMonster--;
@@ -183,6 +189,10 @@ void ARealGameModeBase::BeginPlay()
 	{
 		//StartTime = 0.0f;
 		// 총알 스폰
+
+
+		
+		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		BulletPooler->Spawn();
 		MonsterPooler->Spawn();
 		ItemPooler->Spawn();
@@ -190,7 +200,7 @@ void ARealGameModeBase::BeginPlay()
 		//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
 		// 목표 스테이지 설정
 		GoalGameStage = GetGameStateRowData(NowStage);
-		NowWave =1;
+		NowWave =GameInstanceRef->NowStage;
 		NowMosterCount = GoalGameStage->MonsterWave[NowWave];
 		// 스테이지의 1wave부터 시작
 		
@@ -203,15 +213,15 @@ void ARealGameModeBase::BeginPlay()
 }
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 {
-	FMonsterRow* MonsterRowData = MonsterData->FindRow<FMonsterRow>(
+	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
-	return MonsterRowData;
+	return  MonsterRowData;
 }
 
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
 {
-	FMonsterRow* MonsterRowData = MonsterData->FindRow<FMonsterRow>(
+	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
 		mSkillName, FString(""));
 
 	return MonsterRowData;
@@ -219,14 +229,14 @@ FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
 
 FGameStateRow* ARealGameModeBase::GetGameStateRowData(int rowN=1)
 {
-	FGameStateRow* GameStateRowData = GameStageData->FindRow<FGameStateRow>(
+	FGameStateRow* const GameStateRowData = GameStageData->FindRow<FGameStateRow>(
 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
 	return GameStateRowData;
 }
 FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(int rowN)
 {
-	FPlayerSkillRow* PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
+	FPlayerSkillRow* const PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
 	return PlayerKillRowData;
@@ -234,7 +244,7 @@ FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(int rowN)
 
 FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
 {
-	FPlayerSkillRow* PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
+	FPlayerSkillRow* const PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
 		mSkillName, FString(""));
 
 	return PlayerKillRowData;

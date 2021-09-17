@@ -71,6 +71,7 @@ public:
 
 	
 	FGameStateRow* GoalGameStage;
+	
 	int NowStage = 1;
 	int NowWave	= 1;
 	
@@ -164,6 +165,7 @@ public:
 	int GetGoalWave();
 
 
+	void SetNowStage(int mStage);
 	//
 	// void UpCommomMonsterCount();
 	// void UpTowerMonsterCount();

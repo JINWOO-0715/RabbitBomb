@@ -45,13 +45,29 @@ public:
     int Stage;
    
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int WaveMonsterCount;
+    int CommonMonsterType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int WaveCount;
+    int TowerMonsterType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int BossMonsterType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float BulletPowerUPCount =1.f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float FireRateUPCount =1.f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float HpUPCount =1.f;
+
+
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<int,FWaveType> MonsterWave;
+
+    
 
 };
 

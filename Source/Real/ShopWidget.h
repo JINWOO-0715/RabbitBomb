@@ -56,6 +56,7 @@ class REAL_API UShopWidget : public UUserWidget
 	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* RemainCoinText;
+	
 
 	public:
 

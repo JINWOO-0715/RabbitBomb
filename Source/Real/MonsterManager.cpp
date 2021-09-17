@@ -78,6 +78,8 @@ void AMonsterManager::Spawn()
 		// 스폰 위치
 		Monster->SetActorLocation(SpawnLocation[0]);
 		//몬스터 종류
+		// 몬스터 종류도 받아와서 하면 좋겠다.
+		
 		Monster->InitMonster(1);
 		// 활성화 ㄱㄱ
 		Monster->SetActive(true);
