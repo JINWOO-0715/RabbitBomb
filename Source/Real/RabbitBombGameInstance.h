@@ -17,12 +17,11 @@ class REAL_API URabbitBombGameInstance : public UGameInstance
 	public:
 	int NowStage;
 
-	float PlayerFireRateLevel;
+	int PlayerFireRateLevel =1;
+	int PlayerPowerLevel =1;
+	int PlayerSpeedLevel =1;
+	int PlayerHPLevel=1;
 
-	float PlayerPowerLevel;
-	float PlayerSpeedLevel;
-	float PlayerHPLevel;
-
-	int PlayerHasCoin;
+	int PlayerHasCoin =100000;
 	
 };

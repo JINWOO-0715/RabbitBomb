@@ -54,26 +54,12 @@ class REAL_API AMainPawn : public APawn
 	UPROPERTY(EditAnywhere)
 	class USkillComponent* SkillContainer;
 
-
-
-	UPROPERTY()
-	int FireRatelevel = 1;
-
-
-	UPROPERTY()
-	int MoveSpeedlevel = 1;
-
 	
-	UPROPERTY()
-	int BulletPowerlevel = 1;
-
-
-	UPROPERTY()
-	int MaxHPlevel = 1;
 
 	// 플레이어 최대경험치
 	UPROPERTY()
 	float MaxEXP = 100.f;
+	
 	// 플레이어 현재경험치
 	UPROPERTY()
 	float NowEXP = 0.f;
@@ -98,7 +84,6 @@ class REAL_API AMainPawn : public APawn
 
 	UPROPERTY()
 	int NumberOfShotBullet = 1;
-
 
 	int PlayerCoin = 1000000;
 
@@ -127,8 +112,18 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	bool PressedFireButton;
 
-
-	// 이속설정
+	// 초기 셋팅을 위한 setter
+	// 레벨에 따른 스텟 설정
+	void SetMaxHPToLevel(int HpLevel);
+	void SetPowerToLevel(int PowerLevel);
+	void SetSpeedUPToLevel(int SpeedLevel);
+	void SetFireRateToLevel(int FireRateLevel);
+	
+	// 코인 획득시 
+	void UpPlayerCoin(int mUpcoinNum);
+	
+	
+	// 스킬사용을 위한 단순 세터
 	UFUNCTION(BlueprintCallable)
 	void SetMoveSpeed(float mMoveSpeed);
 
@@ -140,17 +135,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetBulletPower(float mBulletPower);
+	
 
-	
-	UFUNCTION(BlueprintCallable)
-	void SetMoveSpeedLevel(int mMoveSpeedLevel);
-	UFUNCTION(BlueprintCallable)
-	void SetMaxHpLevel(int mMaxHpLevel);
-	UFUNCTION(BlueprintCallable)
-	void SetFireRateLevel(int mFireRateLevel);
-	UFUNCTION(BlueprintCallable)
-	void SetBulletPowerLevel(int mBulletPowerLevel);
-	
 	// 발사 사운드
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 	class USoundBase* FireSound;
@@ -199,26 +185,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
-	// 스텟 레벨업
-	void MaxHpUP(float mUpMaxHp);
+	// 힐
 	void UpHp(float mUphp);
-	void PowerUP(float mPowerUp);
-	void SpeedUP(float mSpeedUp);
-	void FireRateUP(float mFireRate);
-	void UpPlayerCoin(int mUpcoinNum);
-	void SetPlayerCoin(int mCoin);
+
 	//공격력 
 	FORCEINLINE float Get() const { return BulletPower; };
 
 	void SetNumberOfShotBullet(float mNumOfBullet);
 
 
-
-	FORCEINLINE int GetFireRatelevel() const { return FireRatelevel; };
-	FORCEINLINE int GetMoveSpeedlevel() const { return MoveSpeedlevel; };
-	FORCEINLINE int GetBulletPowerlevel() const { return BulletPowerlevel; };
-	FORCEINLINE int GetMaxHPlevel() const { return MaxHPlevel; };
 
 
 	// 발사수
@@ -244,3 +219,5 @@ public:
 	// 스프링암 리턴
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 };
+
+

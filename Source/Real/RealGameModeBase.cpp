@@ -66,14 +66,14 @@ void ARealGameModeBase::Save()
 		/** Save data **/
 		SaveGameInstance->SaveName = "Player0";
 
-
+		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	
-		SaveGameInstance->PlayerCoin = player->GetCoin();
-		SaveGameInstance->MaxHPlevel = player->GetMaxHPlevel();
-		SaveGameInstance->FireRatelevel = player->GetFireRatelevel();
-		SaveGameInstance->MoveSpeedlevel = player->GetMoveSpeedlevel();
-		SaveGameInstance->BulletPowerlevel = player->GetBulletPowerlevel();
+		SaveGameInstance->PlayerCoin = GameInstanceRef->PlayerHasCoin;
+		SaveGameInstance->MaxHPlevel = GameInstanceRef->PlayerHPLevel;
+		SaveGameInstance->FireRatelevel = GameInstanceRef->PlayerFireRateLevel;
+		SaveGameInstance->MoveSpeedlevel = GameInstanceRef->PlayerSpeedLevel;
+		SaveGameInstance->BulletPowerlevel =GameInstanceRef->PlayerPowerLevel;
 		
 		//SaveGameInstance->PlayerStage =  GetStage();
 		
@@ -117,11 +117,7 @@ void ARealGameModeBase::Load()
 			GameInstanceRef->PlayerSpeedLevel=LoadGameInstance->MoveSpeedlevel;
 			GameInstanceRef->PlayerHasCoin = LoadGameInstance->PlayerCoin;
 			// 
-			player->SetPlayerCoin(GameInstanceRef->PlayerHasCoin);
-			player->SetBulletPowerLevel(GameInstanceRef->PlayerPowerLevel);
-			player->SetFireRateLevel(GameInstanceRef->PlayerFireRateLevel);
-			player->SetMaxHpLevel(GameInstanceRef->PlayerHPLevel);
-			player->SetMoveSpeedLevel(GameInstanceRef->PlayerSpeedLevel);
+
 			//SetStage(LoadGameInstance->PlayerStage);
 			NowStage = LoadGameInstance->PlayerStage;
 			
@@ -140,7 +136,7 @@ void ARealGameModeBase::Load()
 
 int ARealGameModeBase::GetGoalCommonMonsterCount()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::FromInt(GoalGameStage->MonsterWave[NowWave].eCommomMonster));
+
 	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
 }
 

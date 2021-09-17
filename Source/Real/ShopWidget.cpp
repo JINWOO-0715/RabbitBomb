@@ -12,71 +12,81 @@ void UShopWidget::NativeConstruct()
 	SpeedUpButton->OnPressed.AddDynamic(this, &UShopWidget::SpeedUpFun);
 
 	
-	AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), player->GetCoin())));
+	//AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), GameInstanceRef->PlayerHasCoin)));
 
 	
-	HPUptext->SetText(FText::FromString( FString::Printf(TEXT("HP\nNow Level : %d \nNeed Coin : %d"),player->GetMaxHPlevel(), player->GetMaxHPlevel()*200)));
-	PowerUpText->SetText(FText::FromString( FString::Printf(TEXT("Power\nNow Level : %d \nNeed Coin : %d"),player->GetBulletPowerlevel(), player->GetBulletPowerlevel()*200)));
-	SpeedUpText->SetText(FText::FromString( FString::Printf(TEXT("Speed\nNow Level : %d \nNeed Coin : %d"),player->GetMoveSpeedlevel(), player->GetMoveSpeedlevel()*200)));
-	FireRateUpText->SetText(FText::FromString( FString::Printf(TEXT("FireRate\nNow Level : %d \nNeed Coin : %d"),player->GetFireRatelevel(), player->GetFireRatelevel()*200)));
+	HPUptext->SetText(FText::FromString( FString::Printf(TEXT("HP\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerHPLevel, GameInstanceRef->PlayerHPLevel*200)));
+	PowerUpText->SetText(FText::FromString( FString::Printf(TEXT("Power\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerPowerLevel, GameInstanceRef->PlayerPowerLevel*200)));
+	SpeedUpText->SetText(FText::FromString( FString::Printf(TEXT("Speed\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerSpeedLevel, GameInstanceRef->PlayerSpeedLevel*200)));
+	FireRateUpText->SetText(FText::FromString( FString::Printf(TEXT("FireRate\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerFireRateLevel, GameInstanceRef->PlayerFireRateLevel*200)));
 }
 
 
 void UShopWidget::HpUpFun()
 {
 	
-	AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-
-	if(player->GetCoin() >= player->GetMaxHPlevel()*200)
+	//AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	if(GameInstanceRef->PlayerHasCoin >= GameInstanceRef->PlayerHPLevel*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetMaxHPlevel()));
-		player->MaxHpUP(1.2f);	
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(GameInstanceRef->PlayerHPLevel));
+		GameInstanceRef->PlayerHasCoin-=200*GameInstanceRef->PlayerHPLevel;
+		GameInstanceRef->PlayerHPLevel++;
+	
+			
 	}
 	// 1.2배씩 상승한다 hp가
-	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), player->GetCoin())));
-	HPUptext->SetText(FText::FromString( FString::Printf(TEXT("HP\nNow Level : %d \nNeed Coin : %d"),player->GetMaxHPlevel(), player->GetMaxHPlevel()*200)));
+	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"),GameInstanceRef->PlayerHasCoin)));
+	HPUptext->SetText(FText::FromString( FString::Printf(TEXT("HP\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerHPLevel,GameInstanceRef->PlayerHPLevel*200)));
 }
 
 void UShopWidget::PowerUpFun()
 {
-	AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-
-	if(player->GetCoin() >= player->GetBulletPowerlevel()*200)
+	//AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	if(GameInstanceRef->PlayerHasCoin >= GameInstanceRef->PlayerPowerLevel*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetBulletPowerlevel()));
-		player->PowerUP(1.2f);	
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(GameInstanceRef->PlayerPowerLevel));
+		GameInstanceRef->PlayerHasCoin-=200*GameInstanceRef->PlayerPowerLevel;
+		GameInstanceRef->PlayerPowerLevel++;
 	}
-	// 1.2배씩 상승한다 hp가
-	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), player->GetCoin())));
-	PowerUpText->SetText(FText::FromString( FString::Printf(TEXT("Power\nNow Level : %d \nNeed Coin : %d"),player->GetBulletPowerlevel(), player->GetBulletPowerlevel()*200)));
+	
+	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"),GameInstanceRef->PlayerHasCoin)));
+	PowerUpText->SetText(FText::FromString( FString::Printf(TEXT("Power\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerPowerLevel, GameInstanceRef->PlayerPowerLevel*200)));
 }
 
 void UShopWidget::SpeedUpFun()
 {
-	AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-
-	if(player->GetCoin() >= player->GetMoveSpeedlevel()*200)
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	if(GameInstanceRef->PlayerHasCoin >= GameInstanceRef->PlayerSpeedLevel*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetMoveSpeedlevel()));
-		player->SpeedUP(1.2f);	
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(GameInstanceRef->PlayerSpeedLevel));
+		GameInstanceRef->PlayerHasCoin-=200*GameInstanceRef->PlayerSpeedLevel;
+		GameInstanceRef->PlayerSpeedLevel++;
 	}
-	// 1.2배씩 상승한다 hp가
-	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), player->GetCoin())));
-	SpeedUpText->SetText(FText::FromString( FString::Printf(TEXT("Speed\nNow Level : %d \nNeed Coin : %d"),player->GetMoveSpeedlevel(), player->GetMoveSpeedlevel()*200)));
+
+	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), GameInstanceRef->PlayerHasCoin)));
+	SpeedUpText->SetText(FText::FromString( FString::Printf(TEXT("Speed\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerSpeedLevel ,GameInstanceRef->PlayerSpeedLevel*200)));
 }
 
 void UShopWidget::FireRateUpFun()
 {
-	AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-
-	if(player->GetCoin() >= player->GetFireRatelevel()*200)
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	if(GameInstanceRef->PlayerHasCoin >= GameInstanceRef->PlayerFireRateLevel*200)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(player->GetFireRatelevel()));
-		player->FireRateUP(1.2f);	
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(GameInstanceRef->PlayerPowerLevel));
+		GameInstanceRef->PlayerHasCoin-=200*GameInstanceRef->PlayerFireRateLevel;
+		GameInstanceRef->PlayerFireRateLevel++;
 	}
 	// 1.2배씩 상승한다 hp가
-	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), player->GetCoin())));
-	FireRateUpText->SetText(FText::FromString( FString::Printf(TEXT("FireRate\nNow Level : %d \nNeed Coin : %d"),player->GetFireRatelevel(), player->GetFireRatelevel()*200)));
+	RemainCoinText->SetText(FText::FromString( FString::Printf(TEXT("RemainCoin : %d"), GameInstanceRef->PlayerHasCoin)));
+	FireRateUpText->SetText(FText::FromString( FString::Printf(TEXT("FireRate\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerFireRateLevel, GameInstanceRef->PlayerFireRateLevel*200)));
 }
 

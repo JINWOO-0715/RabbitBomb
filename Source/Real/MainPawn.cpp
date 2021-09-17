@@ -122,36 +122,10 @@ void AMainPawn::SetBulletPower(float mBulletPower)
 	BulletPower = mBulletPower;
 }
 
-void AMainPawn::SetMoveSpeedLevel(int mMoveSpeedLevel)
-{
-	MoveSpeedlevel=mMoveSpeedLevel;
-	MoveSpeed = MoveSpeed + MoveSpeed*0.2;
-}
-
-void AMainPawn::SetMaxHpLevel(int mMaxHpLevel)
-{
-	MaxHPlevel	=mMaxHpLevel;
-	MaxHP = MaxHP + MaxHPlevel*200;
-	NowHP = MaxHP + MaxHPlevel*200; 
-}
-
-void AMainPawn::SetFireRateLevel(int mFireRateLevel)
-{
-	FireRatelevel = mFireRateLevel;
-	FireRate = FireRate - FireRatelevel*0.01;
-}
-
-void AMainPawn::SetBulletPowerLevel(int mBulletPowerLevel)
-{
-	BulletPowerlevel=mBulletPowerLevel;
-	BulletPower = BulletPower + BulletPower*0.1;
-}
-
 
 void AMainPawn::BackButton()
 {
 	PlayerScoreWidget->ShowButton();
-	
 }
 
 //// Called when the game starts or when spawned 비긴플레이 쓸일있으면 사용
@@ -159,6 +133,7 @@ void AMainPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SkillComp->OwnerActor = this;
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GetWorld()->GetName() == "MainLevel")
 	{
 		PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
@@ -170,6 +145,14 @@ void AMainPawn::BeginPlay()
 			// PlayerSkillChooseWidget->Player=this;
 			// PlayerRightWidget->AddToViewport();
 		}
+		// 레벨에따라 설정
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::SanitizeFloat(FireRate));
+		SetMaxHPToLevel(GameInstanceRef->PlayerHPLevel);
+		SetPowerToLevel(GameInstanceRef->PlayerPowerLevel);
+		SetSpeedUPToLevel(GameInstanceRef->PlayerSpeedLevel);
+		SetFireRate(GameInstanceRef->PlayerFireRateLevel);
+		SetFireRateToLevel(GameInstanceRef->PlayerFireRateLevel);
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::SanitizeFloat(FireRate));
 	}
 }
 
@@ -425,51 +408,44 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("Back", EInputEvent::IE_Released, this, &AMainPawn::BackButton);
 }
 
-void AMainPawn::MaxHpUP(float mUpMaxHp)
+void AMainPawn::SetMaxHPToLevel(int HpLevel)
 {
 
-	MaxHP *=mUpMaxHp;
-	PlayerCoin-=200*MaxHPlevel;
-	MaxHPlevel++;
+	//100 -> 120->140
+	// 100 -> 100*1*1.2
+	// 1 2 3 4 5 6
+    MaxHP = MaxHP+(MaxHP*0.3*HpLevel);
+	NowHP = MaxHP;
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->Save();
+	
+}
+void AMainPawn::SetFireRateToLevel(int FireRateLevel)
+{
+	FireRate = FireRate-(FireRate*0.2*FireRateLevel);
+	if(FireRate<0.1)
+	{
+		FireRate=0.1f;
+	}
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	gm->Save();
+}
+
+void AMainPawn::SetPowerToLevel(int PowerLevel)
+{
+	BulletPower = BulletPower+(BulletPower*0.2*PowerLevel);
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	gm->Save();
 	
 }
 
-void AMainPawn::PowerUP(float mPowerUp)
+void AMainPawn::SetSpeedUPToLevel(int mSpeedUp)
 {
-
-	MaxHP *=mPowerUp;
-	PlayerCoin-=200*BulletPowerlevel;
-	BulletPowerlevel++;
+	MoveSpeed = MoveSpeed+(MoveSpeed*0.1*mSpeedUp);
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	gm->Save();
-	
 }
 
-
-void AMainPawn::SpeedUP(float mSpeedUp)
-{
-
-	MaxHP *=mSpeedUp;
-	PlayerCoin-=200*MoveSpeedlevel;
-	MoveSpeedlevel++;
-	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	gm->Save();
-	
-}
-
-
-void AMainPawn::FireRateUP(float mFireRate)
-{
-
-	MaxHP *=mFireRate;
-	PlayerCoin-=200*FireRatelevel;
-	FireRatelevel++;
-	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	gm->Save();
-	
-}
 
 void AMainPawn::UpHp(float mUphp)
 {
@@ -483,10 +459,6 @@ void AMainPawn::UpPlayerCoin(int mUpcoinNum)
 	PlayerCoin += mUpcoinNum;
 }
 
-void AMainPawn::SetPlayerCoin(int mCoin)
-{
-	PlayerCoin = mCoin;
-}
 
 void AMainPawn::SetNumberOfShotBullet(float mNumOfBullet)
 {
