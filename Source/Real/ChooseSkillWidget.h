@@ -9,7 +9,7 @@
 #include "Components/TextBlock.h"
 #include "PlayerSkillDataTable.h"
 #include "Components/Button.h"
-
+#include "Kismet/KismetArrayLibrary.h"
 #include "ChooseSkillWidget.generated.h"
 
 /**
@@ -61,17 +61,19 @@ public:
 	UFUNCTION()
 	void SetRandomSkill();
 
-
+	const int skillSize =4;
+	
 	UPROPERTY()
 	int SkillName[4];
-
 	
 	UPROPERTY()
 	int32 SkillSize=4;
 
+	
+	UPROPERTY()
+	FName SkillFName[4];
 
-
-
+	TArray<int> skillInt;
 	// UPROPERTY()
 	// FPlayerSkillRow PlayerSkillRowData;
 

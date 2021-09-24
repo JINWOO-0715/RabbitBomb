@@ -26,7 +26,7 @@ struct FPlayerSkillRow: public FTableRowBase
 	float IncreaseCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float DecreaseCount;
+	int MaxLevel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName TargetName;

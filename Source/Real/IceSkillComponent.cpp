@@ -49,8 +49,6 @@ void UIceSkillComponent::IceCircleAttack()
 
 		// 얼음 소환해서 공격하기
 		float parameter = -2.2f;
-
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(3));
 		for (int i = 0; i < 4; i++)
 		{
 			IceTypeBullet->BulletType = FName("Ice");

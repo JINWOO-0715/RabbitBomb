@@ -51,8 +51,6 @@ class REAL_API AMainPawn : public APawn
 	UPROPERTY(EditAnywhere, Category="Spawner")
 	class UBulletPoolComopnent* ObjectPooler;
 
-	UPROPERTY(EditAnywhere)
-	class USkillComponent* SkillContainer;
 
 	
 
@@ -101,6 +99,9 @@ protected:
 public:
 	// Sets default values for this pawn's properties
 	AMainPawn();
+	//
+	// UPROPERTY(EditAnywhere)
+	// class USkillComponent* SkillContainer;
 
 	UPROPERTY(EditAnywhere, Category="Spawner")
 	class USkillComponent* SkillComp;

@@ -11,9 +11,9 @@ void UScoreWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	ExitGameButton->OnPressed.AddDynamic(this, &UScoreWidget::GotoTitle);
-
+	ReturnGameButton->OnPressed.AddDynamic(this, &UScoreWidget::ShowButton);
 	ExitGameButton->SetVisibility(ESlateVisibility::Hidden);
-
+	ReturnGameButton->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UScoreWidget::ShowButton()
@@ -22,10 +22,12 @@ void UScoreWidget::ShowButton()
 	if(count%2==1)
 	{
 		ExitGameButton->SetVisibility(ESlateVisibility::Visible);
+		ReturnGameButton->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{
 		ExitGameButton->SetVisibility(ESlateVisibility::Hidden);
+		ReturnGameButton->SetVisibility(ESlateVisibility::Hidden);
 	}
 	
 }

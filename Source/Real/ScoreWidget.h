@@ -25,6 +25,10 @@ class REAL_API UScoreWidget : public UUserWidget
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ExitGameButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ReturnGameButton;
+	
 public:
 	UFUNCTION()
 	void ShowButton();
