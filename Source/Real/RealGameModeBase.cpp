@@ -65,7 +65,7 @@ void ARealGameModeBase::Save()
 		SaveGameInstance->SaveIndex = 0;
 		/** Save data **/
 		SaveGameInstance->SaveName = "Player0";
-
+		
 		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	
@@ -134,11 +134,6 @@ void ARealGameModeBase::Load()
 	}
 }
 
-int ARealGameModeBase::GetGoalCommonMonsterCount()
-{
-
-	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
-}
 
 int ARealGameModeBase::GetGoalWave()
 {
@@ -155,9 +150,35 @@ void ARealGameModeBase::DecreaseCommomMonsterCount()
 	NowMosterCount.eCommomMonster--;
 	
 	CheckStage();
+}	
+void ARealGameModeBase::DecreaseTowerMonsterCount()
+{
+	NowMosterCount.eTowerMonster--;
+	
+	CheckStage();
 }
 
+void ARealGameModeBase::DecreaseBossMonsterCount()
+{
+	NowMosterCount.eBossMonster--;
+	
+	CheckStage();
+}
 
+int ARealGameModeBase::GetGoalCommonMonsterCount()
+{
+	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
+}
+
+int ARealGameModeBase::GetGoalTowerMonsterCount()
+{
+	return GoalGameStage->MonsterWave[NowWave].eTowerMonster; 
+}
+
+int ARealGameModeBase::GetGoalBossMonsterCount()
+{
+	return GoalGameStage->MonsterWave[NowWave].eBossMonster; 
+}
 
 void ARealGameModeBase::CheckStage()
 {
@@ -201,11 +222,17 @@ void ARealGameModeBase::BeginPlay()
 		ItemPooler->Spawn();
 		PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
 		//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
+
+
+		
 		// 목표 스테이지 설정
 		SetNowStage(GameInstanceRef->NowStage);
 		GoalGameStage = GetGameStateRowData(NowStage);
 		NowWave =1;
-		NowMosterCount = GoalGameStage->MonsterWave[NowWave];
+		NowMosterCount.eCommomMonster = GoalGameStage->MonsterWave[NowWave].eCommomMonster;
+		NowMosterCount.eTowerMonster = GoalGameStage->MonsterWave[NowWave].eTowerMonster;
+		NowMosterCount.eBossMonster = GoalGameStage->MonsterWave[NowWave].eBossMonster;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, FString::FromInt(NowMosterCount.eTowerMonster));
 		// 스테이지의 1wave부터 시작
 		
 		UWorld* const World = GetWorld();
@@ -219,7 +246,7 @@ FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 {
 	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
-
+	
 	return  MonsterRowData;
 }
 

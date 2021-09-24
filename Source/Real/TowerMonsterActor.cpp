@@ -4,6 +4,23 @@
 #include "TowerMonsterActor.h"
 
 
+float ATowerMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	MonsterHP -= Damage;
+	ChangeHitedMTTimer();
+	if (MonsterHP < 0.f)
+	{
+		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	
+		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
+		Deactivate();
+		gm->DecreaseTowerMonsterCount();
+	}
+
+	return Damage;	
+}
 ATowerMonsterActor::ATowerMonsterActor()
 {
 	// static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/TowerRabbit.TowerRabbit"));

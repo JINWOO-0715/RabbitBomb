@@ -21,6 +21,8 @@ private:
 	int BossBulletPattern;
 
 
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	int AttackCount = 0;
 public:
 	ATowerMonsterActor();

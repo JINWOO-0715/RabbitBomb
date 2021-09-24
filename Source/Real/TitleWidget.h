@@ -98,6 +98,10 @@ protected:
 	// 고른 스테이지
 	int ChooseStage = 1;
 
+	// 구현한 끝 스테이지
+	int EndStage =10;
+	
+
 
 public:
 	// 버튼 반응

@@ -20,7 +20,9 @@ class REAL_API ABossMonsterActor : public AMonsterActor
 	
 	FTimerHandle BossAttackTimer;
 	int BossBulletPattern;
-	
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 
 	int AttackCount =0;
 	public:

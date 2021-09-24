@@ -1,0 +1,312 @@
+[
+	{
+		"Name": "1",
+		"Stage": 1,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 2,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 3,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "2",
+		"Stage": 2,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "3",
+		"Stage": 3,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "4",
+		"Stage": 4,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 1,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 8,
+				"eTowerMonster": 2,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "5",
+		"Stage": 5,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 1,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 0,
+				"eTowerMonster": 0,
+				"eBossMonster": 1
+			}
+		}
+	},
+	{
+		"Name": "6",
+		"Stage": 6,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "7",
+		"Stage": 7,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "8",
+		"Stage": 8,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "9",
+		"Stage": 9,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			}
+		}
+	},
+	{
+		"Name": "10",
+		"Stage": 10,
+		"CommonMonsterType": 1,
+		"TowerMonsterType": 2,
+		"BossMonsterType": 4,
+		"BulletPowerUPCount": 1,
+		"FireRateUPCount": 1,
+		"HpUPCount": 1,
+		"MonsterWave":
+		{
+			"1":
+			{
+				"eCommomMonster": 4,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"2":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 0
+			},
+			"3":
+			{
+				"eCommomMonster": 5,
+				"eTowerMonster": 0,
+				"eBossMonster": 1
+			}
+		}
+	}
+]

@@ -7,7 +7,7 @@
 #include "Components/VerticalBox.h"
 
 
-// add to 뷰포트시 출력
+
 void UTitleWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -34,7 +34,6 @@ void UTitleWidget::NativeConstruct()
 
 void UTitleWidget::ClickStageOneButton()
 {
-
 	EnterMapNameText->SetText(FText::FromString( FString::Printf(TEXT("Enter Stage %d ?"),Stage[0])));
 	ChooseStage=Stage[0];
 	ShowEnterBox();
@@ -103,7 +102,6 @@ void UTitleWidget::ShowEnterBox()
 
 void UTitleWidget::IncreasePage()
 {
-
 	// ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	// int AddPage = gm->NowStage/5;
 	// NowPage+=AddPage;
@@ -113,12 +111,53 @@ void UTitleWidget::IncreasePage()
 	for(int i = 0 ; i <5;i++)
 	{
 		Stage[i] = (i+1)+(NowPage*5);
+		
 	}
 	StageOneEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[0])));
 	StageTwoEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[1])));
-	StageTirEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[2])));
-	StageFourEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[3])));
-	StageFiveEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[4])));
+	StageTirEnterText->SetText(FText::FromString(FString::Printf(TEXT("Stage %d"), Stage[2])));
+	StageFourEnterText->SetText(FText::FromString(FString::Printf(TEXT("Stage %d"), Stage[3])));
+	StageFiveEnterText->SetText(FText::FromString(FString::Printf(TEXT("Stage %d"), Stage[4])));
+
+
+	if (Stage[0] > EndStage)
+	{
+		StageOneEnterButton->SetIsEnabled(false);
+	}
+	else
+	{
+		StageOneEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[1] > EndStage)
+	{
+		StageTwoEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageTwoEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[2] > EndStage)
+	{
+		StageTirEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageTirEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[3] > EndStage)
+	{
+		StageOFourEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageOFourEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[4] > EndStage)
+	{
+		StageFiveEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageFiveEnterButton->SetIsEnabled(true);
+	}
+	
+	
 }
 
 void UTitleWidget::DecreasePage()
@@ -138,4 +177,43 @@ void UTitleWidget::DecreasePage()
 	StageTirEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[2])));
 	StageFourEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[3])));
 	StageFiveEnterText->SetText(FText::FromString( FString::Printf(TEXT("Stage %d"),Stage[4])));
+	
+
+	if (Stage[0] > EndStage)
+	{
+		StageOneEnterButton->SetIsEnabled(false);
+	}
+	else
+	{
+		StageOneEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[1] > EndStage)
+	{
+		StageTwoEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageTwoEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[2] > EndStage)
+	{
+		StageTirEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageTirEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[3] > EndStage)
+	{
+		StageOFourEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageOFourEnterButton->SetIsEnabled(true);
+	}
+	if (Stage[4] > EndStage)
+	{
+		StageFiveEnterButton->SetIsEnabled(false);
+	}else
+	{
+		StageFiveEnterButton->SetIsEnabled(true);
+	}
+	
 }

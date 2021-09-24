@@ -67,6 +67,10 @@ public:
 
 	void DecreaseCommomMonsterCount();
 	
+	void DecreaseTowerMonsterCount();
+	
+	void DecreaseBossMonsterCount();
+	
 	virtual void Tick(float DeltaTime) override;
 
 	
@@ -139,8 +143,8 @@ public:
 	void Load();
 
 	int GetGoalCommonMonsterCount();
-	
-	
+	int GetGoalTowerMonsterCount();
+	int GetGoalBossMonsterCount();
 	int GetGoalWave();
 
 

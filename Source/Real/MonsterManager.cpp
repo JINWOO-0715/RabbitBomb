@@ -55,8 +55,8 @@ void AMonsterManager::Spawn()
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	AMonsterActor* Monster = gm->MonsterPooler->GetPooledMonster();
-
-
+	ATowerMonsterActor* TowerMonster = gm->MonsterPooler->GetPooledTowerMonster();
+	ABossMonsterActor* BossMonster = gm->MonsterPooler->GetPooledBossMonster();
 	// 몬스터가 다죽었다
 
 	// 스테이지를 늘리냐 웨비를 늘리냐 체크한다
@@ -68,7 +68,6 @@ void AMonsterManager::Spawn()
 	// 목표만큼 
 	if(NowSpawnMosterCount.eCommomMonster < gm->GetGoalCommonMonsterCount())
 	{
-		
 		if (Monster == nullptr)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
@@ -78,9 +77,7 @@ void AMonsterManager::Spawn()
 		// 스폰 위치
 		Monster->SetActorLocation(SpawnLocation[0]);
 		//몬스터 종류
-		// 몬스터 종류도 받아와서 하면 좋겠다.
-		
-		Monster->InitMonster(1);
+		Monster->InitMonster(gm->GoalGameStage->CommonMonsterType);
 		// 활성화 ㄱㄱ
 		Monster->SetActive(true);
 		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
@@ -88,6 +85,35 @@ void AMonsterManager::Spawn()
 		NowSpawnMosterCount.eCommomMonster++;
 		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::FromInt(NowSpawnMosterCount.eCommomMonster));
+	}
+	if(NowSpawnMosterCount.eTowerMonster <  gm->GetGoalTowerMonsterCount())
+	{
+		TowerMonster->SetActorLocation(SpawnLocation[0]);
+		//몬스터 종류
+		TowerMonster->InitMonster(gm->GoalGameStage->TowerMonsterType);
+		// 활성화 ㄱㄱ
+		TowerMonster->SetActive(true);
+		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
+		//목표수치 ++
+		NowSpawnMosterCount.eTowerMonster++;
+		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+		
+
+		
+	}
+	if(NowSpawnMosterCount.eBossMonster<gm->GetGoalBossMonsterCount())
+	{
+		BossMonster->SetActorLocation(SpawnLocation[1]);
+		//몬스터 종류
+		BossMonster->InitMonster(gm->GoalGameStage->BossMonsterType);
+		// 활성화 ㄱㄱ
+		BossMonster->SetActive(true);
+		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
+		//목표수치 ++
+		NowSpawnMosterCount.eBossMonster++;
+		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+		
+
 	}
 	else
 	{
