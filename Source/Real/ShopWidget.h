@@ -70,6 +70,9 @@ class REAL_API UShopWidget : public UUserWidget
 	void SpeedUpFun();
 	UFUNCTION(BlueprintCallable)
 	void FireRateUpFun();
+	
+	UFUNCTION(BlueprintCallable)
+	void SetText();
 
 
 };

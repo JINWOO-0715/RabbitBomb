@@ -90,3 +90,13 @@ void UShopWidget::FireRateUpFun()
 	FireRateUpText->SetText(FText::FromString( FString::Printf(TEXT("FireRate\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerFireRateLevel, GameInstanceRef->PlayerFireRateLevel*200)));
 }
 
+void UShopWidget::SetText()
+{
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	HPUptext->SetText(FText::FromString( FString::Printf(TEXT("HP\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerHPLevel, GameInstanceRef->PlayerHPLevel*200)));
+	PowerUpText->SetText(FText::FromString( FString::Printf(TEXT("Power\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerPowerLevel, GameInstanceRef->PlayerPowerLevel*200)));
+	SpeedUpText->SetText(FText::FromString( FString::Printf(TEXT("Speed\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerSpeedLevel, GameInstanceRef->PlayerSpeedLevel*200)));
+	FireRateUpText->SetText(FText::FromString( FString::Printf(TEXT("FireRate\nNow Level : %d \nNeed Coin : %d"),GameInstanceRef->PlayerFireRateLevel, GameInstanceRef->PlayerFireRateLevel*200)));
+
+}

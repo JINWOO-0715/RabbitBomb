@@ -21,11 +21,22 @@ void UScoreWidget::ShowButton()
 	count++;
 	if(count%2==1)
 	{
+		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+		if (MyPlayer != NULL)
+		{
+			MyPlayer->SetPause(true);
+		}
 		ExitGameButton->SetVisibility(ESlateVisibility::Visible);
 		ReturnGameButton->SetVisibility(ESlateVisibility::Visible);
+		
 	}
 	else
 	{
+		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+		if (MyPlayer != NULL)
+		{
+			MyPlayer->SetPause(false);
+		}
 		ExitGameButton->SetVisibility(ESlateVisibility::Hidden);
 		ReturnGameButton->SetVisibility(ESlateVisibility::Hidden);
 	}
