@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ItemActor.h"
+
 #include "Components/ActorComponent.h"
 #include "ItemPoolComponent.generated.h"
 
@@ -19,7 +20,7 @@ public:
 
 	// 들어간거 가져오는거
 	class AItemActor* GetPooledUItem();
-
+	class ACoinItem* GetPooledCoinItem();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -32,11 +33,15 @@ public:
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class AItemActor> PooledItemSubClass;
+
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ACoinItem> PooledCoinItemSubClass;
+
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int Poolsize = 100;
 
 	TArray<AItemActor*> Pool;
-	
+	TArray<ACoinItem*> Coin;
 		
 };

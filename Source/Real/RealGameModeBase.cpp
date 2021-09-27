@@ -67,6 +67,8 @@ void ARealGameModeBase::Save()
 		SaveGameInstance->SaveName = "Player0";
 		
 		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+		
 		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	
 		SaveGameInstance->PlayerCoin = GameInstanceRef->PlayerHasCoin;

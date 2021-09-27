@@ -75,7 +75,8 @@ void AMonsterManager::Spawn()
 			return;
 		}
 		// 스폰 위치
-		Monster->SetActorLocation(SpawnLocation[0]);
+		int randompoint = FMath::RandRange(0,8);
+		Monster->SetActorLocation(SpawnLocation[randompoint]);
 		//몬스터 종류
 		Monster->InitMonster(gm->GoalGameStage->CommonMonsterType);
 		// 활성화 ㄱㄱ
@@ -88,7 +89,8 @@ void AMonsterManager::Spawn()
 	}
 	if(NowSpawnMosterCount.eTowerMonster <  gm->GetGoalTowerMonsterCount())
 	{
-		TowerMonster->SetActorLocation(SpawnLocation[0]);
+		int randompoint = FMath::RandRange(0,8);
+		TowerMonster->SetActorLocation(SpawnLocation[randompoint]);
 		//몬스터 종류
 		TowerMonster->InitMonster(gm->GoalGameStage->TowerMonsterType);
 		// 활성화 ㄱㄱ
@@ -103,7 +105,7 @@ void AMonsterManager::Spawn()
 	}
 	if(NowSpawnMosterCount.eBossMonster<gm->GetGoalBossMonsterCount())
 	{
-		BossMonster->SetActorLocation(SpawnLocation[1]);
+		BossMonster->SetActorLocation(FVector(0.0f,0.0f,5.0f));
 		//몬스터 종류
 		BossMonster->InitMonster(gm->GoalGameStage->BossMonsterType);
 		// 활성화 ㄱㄱ

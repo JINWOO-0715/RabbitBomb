@@ -457,7 +457,12 @@ void AMainPawn::UpHp(float mUphp)
 
 void AMainPawn::UpPlayerCoin(int mUpcoinNum)
 {
-	PlayerCoin += mUpcoinNum;
+
+	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	GameInstanceRef->PlayerHasCoin += mUpcoinNum;
+	gm->Save();
 }
 
 

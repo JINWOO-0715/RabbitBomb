@@ -2,7 +2,7 @@
 
 
 #include "ItemPoolComponent.h"
-
+#include "CoinItem.h"
 // Sets default values for this component's properties
 UItemPoolComponent::UItemPoolComponent()
 {
@@ -34,6 +34,18 @@ AItemActor* UItemPoolComponent::GetPooledUItem()
 	return nullptr;
 }
 
+ACoinItem* UItemPoolComponent::GetPooledCoinItem()
+{
+	for(ACoinItem* PoolableActor : Coin)
+	{
+		if(!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+}
+
 
 void UItemPoolComponent::Spawn()
 {
@@ -49,6 +61,21 @@ void UItemPoolComponent::Spawn()
 				AItemActor* PoolableActor = GetWorld()->SpawnActor<AItemActor>(PooledItemSubClass,FVector().ZeroVector,FRotator().ZeroRotator);
 				PoolableActor->SetActive(false);
 				Pool.Add(PoolableActor);
+				UE_LOG(LogTemp,Warning,TEXT("add object"));
+			}
+		}
+	}
+	
+	if(PooledCoinItemSubClass !=NULL)
+	{
+		UWorld* const world = GetWorld();
+		if(world)
+		{
+			for(int i = 0 ; i <Poolsize ; i++)
+			{
+				ACoinItem* PoolableCoinActor = GetWorld()->SpawnActor<ACoinItem>(PooledCoinItemSubClass,FVector().ZeroVector,FRotator().ZeroRotator);
+				PoolableCoinActor->SetActive(false);
+				Coin.Add(PoolableCoinActor);
 				UE_LOG(LogTemp,Warning,TEXT("add object"));
 			}
 		}

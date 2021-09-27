@@ -6,6 +6,7 @@
 //#include <concrt.h>
 
 #include "Bullet.h"
+#include "CoinItem.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/CollisionProfile.h"
@@ -145,6 +146,17 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 			Item->SetActorLocation(GetActorLocation());
 			Item->SetActive(true);
 		}
+		
+		rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			
+			ACoinItem* Coin = gm->ItemPooler->GetPooledCoinItem();
+			
+			Coin->SetActorLocation(GetActorLocation()+FVector(50.f,0.f,0.f));
+			Coin->SetActive(true);
+		}
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
 		gm->DecreaseCommomMonsterCount();
@@ -193,9 +205,9 @@ void AMonsterActor::InitMonster(int dataRowN)
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	
 	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
-	;
 	
 	
+	ChangeHitMT();
 	MonsterMeshComponent->SetStaticMesh(MonsterData->MonsterMesh);
 	BulletSpeed = MonsterData->BulletSpeed;
 	FireRate = MonsterData->FireRate *gm->GoalGameStage->FireRateUPCount;
@@ -240,10 +252,10 @@ void AMonsterActor::StunMonster()
 
 void AMonsterActor::ChangeHitedMTTimer()
 {
-	UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
+	//UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
 
-	MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
-	MonsterHitedMT = temp;
+	//MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
+	//MonsterHitedMT = temp;
 	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color"), FVector(1.f, 0.f, 0.f));
 
 	GetWorldTimerManager().SetTimer(MTChangeTimer, this
@@ -252,11 +264,11 @@ void AMonsterActor::ChangeHitedMTTimer()
 
 void AMonsterActor::ChangeHitMT()
 {
-	UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
+	//UMaterialInterface* temp = MonsterMeshComponent->GetMaterial(2);
 
-	MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
-	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color"), FVector(0.f, 0.f, 1.f));
-	MonsterHitedMT = temp;
+	//MonsterMeshComponent->SetMaterial(2, MonsterHitedMT);
+	MonsterMeshComponent->SetVectorParameterValueOnMaterials(FName("Color"), FVector(0.994792f, 0.f, 0.146117f));
+	//MonsterHitedMT = temp;
 	// ¿ø»óº¹±Í½ÃÅ²´Ù.	
 }
 
@@ -274,7 +286,7 @@ void AMonsterActor::Tick(float DeltaTime)
 		const FVector Movement = Dir * MoveSpeed * DeltaTime; //
 		if (Movement.SizeSquared() > 0.0f)
 		{
-			if (FVector::Dist(GetActorLocation(), player->GetActorLocation()) > 800)
+			if (FVector::Dist(GetActorLocation(), player->GetActorLocation()) > 500)
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 				const FRotator NewRotation = FRotator(Movement.Rotation().Pitch, Movement.Rotation().Yaw, 0.0f);
