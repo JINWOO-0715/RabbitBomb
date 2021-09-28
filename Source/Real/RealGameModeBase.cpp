@@ -36,7 +36,12 @@ ARealGameModeBase::ARealGameModeBase()
 	{
 		GameStageData = GameDataAsset.Object;
 	}
-
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> ClickSoundAsset(TEXT("/Game/Sound/ClickSound.ClickSound"));
+	ClickSound = ClickSoundAsset.Object;
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> UpSoundAsset(TEXT("/Game/Sound/UpStat.UpStat"));
+	StatUpSound = UpSoundAsset.Object;
 }
 
 void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)

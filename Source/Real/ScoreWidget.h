@@ -58,8 +58,6 @@ public:
 	int count =0;
 	int remainNum=1;
 	
-	//클릭효과음
-	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
-	class USoundBase* ClickSound;
+
 	
 };

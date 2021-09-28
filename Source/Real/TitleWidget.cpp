@@ -34,6 +34,8 @@ void UTitleWidget::NativeConstruct()
 
 void UTitleWidget::ClickStageOneButton()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	EnterMapNameText->SetText(FText::FromString( FString::Printf(TEXT("Enter Stage %d ?"),Stage[0])));
 	ChooseStage=Stage[0];
 	ShowEnterBox();
@@ -41,6 +43,8 @@ void UTitleWidget::ClickStageOneButton()
 
 void UTitleWidget::ClickStageTwoButton()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	EnterMapNameText->SetText(FText::FromString( FString::Printf(TEXT("Enter Stage %d ?"),Stage[1])));
 	ChooseStage=Stage[1];
 	ShowEnterBox();
@@ -48,6 +52,8 @@ void UTitleWidget::ClickStageTwoButton()
 
 void UTitleWidget::ClickStageTirButton()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	EnterMapNameText->SetText(FText::FromString( FString::Printf(TEXT("Enter Stage %d ?"),Stage[2])));
 	ChooseStage=Stage[2];
 	ShowEnterBox();		
@@ -56,13 +62,16 @@ void UTitleWidget::ClickStageTirButton()
 
 void UTitleWidget::ClickStageFourButton()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	EnterMapNameText->SetText(FText::FromString( FString::Printf(TEXT("Enter Stage %d ?"),Stage[3])));
 	ChooseStage=Stage[3];
 	ShowEnterBox();
 }
 
 void UTitleWidget::ClickStageFiveButton()
-{
+{	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	EnterMapNameText->SetText(FText::FromString( FString::Printf(TEXT("Enter Stage %d ?"),Stage[4])));
 	ChooseStage=Stage[4];
 	ShowEnterBox();
@@ -76,6 +85,8 @@ void UTitleWidget::Quitgame()
 }
 void UTitleWidget::GameStart()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if(GameInstanceRef)
 	{
@@ -86,6 +97,8 @@ void UTitleWidget::GameStart()
 
 void UTitleWidget::ShowEnterBox()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	if(isShowEnterBox)
 	{
 		EnterVerticalBox->SetVisibility(ESlateVisibility::Visible);
@@ -106,7 +119,8 @@ void UTitleWidget::IncreasePage()
 	// int AddPage = gm->NowStage/5;
 	// NowPage+=AddPage;
 	// 22´Ü°è / 5 4
-
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	NowPage++;
 	for(int i = 0 ; i <5;i++)
 	{
@@ -161,7 +175,8 @@ void UTitleWidget::IncreasePage()
 }
 
 void UTitleWidget::DecreasePage()
-{
+{	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->ClickSound);
 	if(NowPage>0)
 	{
 		NowPage--;

@@ -15,14 +15,11 @@ void UScoreWidget::NativeConstruct()
 	ExitGameButton->SetVisibility(ESlateVisibility::Hidden);
 	ReturnGameButton->SetVisibility(ESlateVisibility::Hidden);
 	StageClearbox->SetVisibility(ESlateVisibility::Hidden);
-	
-	static ConstructorHelpers::FObjectFinder<USoundBase> ClickSoundAsset(TEXT("/Game/Sound/ClickSound.ClickSound"));
-	ClickSound = ClickSoundAsset.Object;
 }
 
 void UScoreWidget::ShowButton()
 {
-	UGameplayStatics::PlaySound2D(this, ClickSound);
+	
 	count++;
 	if(count%2==1)
 	{
@@ -51,10 +48,12 @@ void UScoreWidget::ShowButton()
 void UScoreWidget::GotoTitle()
 {
 	UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
+
 }
 
 void UScoreWidget::SetRemainMonsterText(int remainMonsterNum)
 {
+	
 	remainNum=remainMonsterNum;
 	RemainMonsterTextBlock->SetText(FText::FromString( FString::Printf(TEXT("Remain Monster: %d"),remainMonsterNum)));
 }

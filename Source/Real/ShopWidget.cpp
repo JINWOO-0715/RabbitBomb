@@ -27,6 +27,8 @@ void UShopWidget::NativeConstruct()
 
 void UShopWidget::HpUpFun()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->StatUpSound);
 	
 	//AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -46,6 +48,9 @@ void UShopWidget::HpUpFun()
 
 void UShopWidget::PowerUpFun()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->StatUpSound);
+	
 	//AMainPawn* player =Cast<AMainPawn>( UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	
@@ -62,6 +67,9 @@ void UShopWidget::PowerUpFun()
 
 void UShopWidget::SpeedUpFun()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->StatUpSound);
+	
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	
 	if(GameInstanceRef->PlayerHasCoin >= GameInstanceRef->PlayerSpeedLevel*200)
@@ -77,6 +85,9 @@ void UShopWidget::SpeedUpFun()
 
 void UShopWidget::FireRateUpFun()
 {
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::PlaySound2D(this, gm->StatUpSound);
+	
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	
 	if(GameInstanceRef->PlayerHasCoin >= GameInstanceRef->PlayerFireRateLevel*200)

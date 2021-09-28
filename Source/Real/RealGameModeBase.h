@@ -117,9 +117,17 @@ public:
 	
 	//스테이지 정보 가져오기
 	FGameStateRow* GetGameStateRowData(int rowN);
+
+	//클릭효과음
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* ClickSound;
+
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* StatUpSound;
+
+	
 	
 
-	//
 	// // 플레이어 오른쪽아래 위젯
 	// UPROPERTY(EditAnywhere)
 	// TSubclassOf<UUserWidget> PlayerRightWidgetClass;
