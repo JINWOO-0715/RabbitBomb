@@ -23,5 +23,9 @@ class REAL_API URabbitBombGameInstance : public UGameInstance
 	int PlayerHPLevel=1;
 
 	int PlayerHasCoin =100000;
+
+	int MonsterCount=0;
+	int NowWave=1;
+	int GoalWave=1;
 	
 };

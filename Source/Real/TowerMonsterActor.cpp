@@ -13,7 +13,8 @@ float ATowerMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent con
 	if (MonsterHP < 0.f)
 	{
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	
+		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		player->PlayerScoreWidget->DereaseMonsterText();
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
 		gm->DecreaseTowerMonsterCount();

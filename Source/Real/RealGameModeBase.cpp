@@ -36,6 +36,7 @@ ARealGameModeBase::ARealGameModeBase()
 	{
 		GameStageData = GameDataAsset.Object;
 	}
+
 }
 
 void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)
@@ -50,6 +51,11 @@ void ARealGameModeBase::Tick(float DeltaTime)
 	//GetWorld()->GetRealTimeSeconds();
 
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(GetWorld()->GetRealTimeSeconds()));
+}
+
+void ARealGameModeBase::ReturnToTitle()
+{
+	UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
 }
 
 
@@ -118,8 +124,6 @@ void ARealGameModeBase::Load()
 			GameInstanceRef->PlayerHPLevel =LoadGameInstance->MaxHPlevel;
 			GameInstanceRef->PlayerSpeedLevel=LoadGameInstance->MoveSpeedlevel;
 			GameInstanceRef->PlayerHasCoin = LoadGameInstance->PlayerCoin;
-			// 
-
 			//SetStage(LoadGameInstance->PlayerStage);
 			NowStage = LoadGameInstance->PlayerStage;
 			
@@ -184,10 +188,12 @@ int ARealGameModeBase::GetGoalBossMonsterCount()
 
 void ARealGameModeBase::CheckStage()
 {
-	
+	// 플레이어안의 몬스터 정보 처리해준다.
+	 
 	// 다죽었으면
 	if (NowMosterCount.eBossMonster < 1 && NowMosterCount.eCommomMonster < 1 && NowMosterCount.eTowerMonster < 1)
 	{
+		
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("ClearWave!!"));
 		// 웨이브를 늘려야하면 늘리고
 		if(NowWave < GetGoalWave())
@@ -196,10 +202,19 @@ void ARealGameModeBase::CheckStage()
 			NowMosterCount = GoalGameStage->MonsterWave[NowWave];
 			WorldMonsterManger->ResetCount();
 			// 리셋해서 다시 스폰하슈
+			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+			player->PlayerScoreWidget->SetRemainMonsterText(NowMosterCount.eBossMonster+NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster);
+			auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+			player->PlayerScoreWidget->SetNowWaveText(NowWave,GameInstanceRef->GoalWave);
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("StageClear!!"));
+			//스테이지 클리어 메시지를 띄운다
+			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+			player->PlayerScoreWidget->ShowStageClearBox(true);
+			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,2);
+					
+		
 		}
 
 		
@@ -218,6 +233,7 @@ void ARealGameModeBase::BeginPlay()
 	{
 		//StartTime = 0.0f;
 		// 총알 스폰
+		
 		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		BulletPooler->Spawn();
 		MonsterPooler->Spawn();
@@ -234,9 +250,15 @@ void ARealGameModeBase::BeginPlay()
 		NowMosterCount.eCommomMonster = GoalGameStage->MonsterWave[NowWave].eCommomMonster;
 		NowMosterCount.eTowerMonster = GoalGameStage->MonsterWave[NowWave].eTowerMonster;
 		NowMosterCount.eBossMonster = GoalGameStage->MonsterWave[NowWave].eBossMonster;
+		// 몬스터 수 UI의 몬스터 수 설정
+		
+		int MonsterNum = NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster+NowMosterCount.eBossMonster;
+		GameInstanceRef->MonsterCount= MonsterNum;
+		// 
+		GameInstanceRef->GoalWave = GoalGameStage->MonsterWave.Num();
+		GameInstanceRef->NowWave =1; 
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, FString::FromInt(NowMosterCount.eTowerMonster));
 		// 스테이지의 1wave부터 시작
-		
 		UWorld* const World = GetWorld();
 	
 		

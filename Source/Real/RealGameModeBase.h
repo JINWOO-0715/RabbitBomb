@@ -39,6 +39,8 @@ class ARealGameModeBase : public AGameModeBase
 	
 	//타이머 핸들
 	FTimerHandle MonsterSpawnTimer;
+	// 메인으로 돌아가기 핸들
+	FTimerHandle ReturnToTitleTimerHandle;
 
 	class UDataTable* MonsterData;
 	class UDataTable* PlayerSkillData;
@@ -58,13 +60,15 @@ protected:
 public:
 	ARealGameModeBase();
 
-
+	// 몬스터 매니저에게 일시키기
 	void SetMonsterManager(AMonsterManager* mMonsterManager);
-		
+
+	// 스테이지 통과인지 검사
 	void CheckStage();
 	
 	//메쉬
 
+	// 몬스터 수를 줄여 웨이브 관리
 	void DecreaseCommomMonsterCount();
 	
 	void DecreaseTowerMonsterCount();
@@ -73,6 +77,7 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
+	void ReturnToTitle();
 	
 	FGameStateRow* GoalGameStage;
 	
@@ -89,8 +94,7 @@ public:
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	int MonsterType =2;
 
-	
-	
+
 	//총알 담기
 	UPROPERTY(EditAnywhere,Category="Spawner")
 		class 	UBulletPoolComopnent* BulletPooler;
@@ -114,17 +118,15 @@ public:
 	//스테이지 정보 가져오기
 	FGameStateRow* GetGameStateRowData(int rowN);
 	
-	// //플레이어 스킬 초기화
-	// FPlayerSkillRow* GetPlayerSkillRowDataToName(FName mSkillName);
 
-	
-	// 플레이어 오른쪽아래 위젯
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> PlayerRightWidgetClass;
-
-	// 플레이어 오른쪽아래 위젯
-	UPROPERTY(VisibleInstanceOnly)
-	class URightWidget* PlayerRightWidget;
+	//
+	// // 플레이어 오른쪽아래 위젯
+	// UPROPERTY(EditAnywhere)
+	// TSubclassOf<UUserWidget> PlayerRightWidgetClass;
+	//
+	// // 플레이어 오른쪽아래 위젯
+	// UPROPERTY(VisibleInstanceOnly)
+	// class URightWidget* PlayerRightWidget;
 
 	// 플레이어 스킬선택
 	UPROPERTY(EditAnywhere)
@@ -136,12 +138,15 @@ public:
 
 	//FORCEINLINE	float GetPlayTime() const {return StartTime;};
 
+	//게임저장
 	UFUNCTION(BlueprintCallable)
 	void Save();
 
+	//게임 불러오기
 	UFUNCTION(BlueprintCallable)
 	void Load();
 
+	// 몇마리 잡아야하는지 가져오기
 	int GetGoalCommonMonsterCount();
 	int GetGoalTowerMonsterCount();
 	int GetGoalBossMonsterCount();
@@ -149,16 +154,7 @@ public:
 
 
 	void SetNowStage(int mStage);
-	//
-	// void UpCommomMonsterCount();
-	// void UpTowerMonsterCount();
-	// void UpBossMonsterCount();
-	//
-	// // void SetStage(int mStage);
-	//
-	// FORCEINLINE int GetStage() const { return NowStage;};
 
-	// bool isSpawnAble();
 };
 
 

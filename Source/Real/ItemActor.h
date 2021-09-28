@@ -24,7 +24,11 @@ public:
 		virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	//void SetUpExp();
-	
+	//
+	// 발사 사운드
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* GetItemSound;
+
 protected:
 	// Called when the game starts or when spawned
 	

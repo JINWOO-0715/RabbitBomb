@@ -137,6 +137,9 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	ChangeHitedMTTimer();
 	if (MonsterHP < 0.f)
 	{
+		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		player->PlayerScoreWidget->DereaseMonsterText();
+		
 		int rand = FMath::RandRange(0, 1);
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 		if (rand == 0)

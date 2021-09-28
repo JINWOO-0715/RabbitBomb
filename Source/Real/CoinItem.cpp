@@ -9,6 +9,9 @@ ACoinItem::ACoinItem()
 	ItemMesh->SetStaticMesh(MeshAsset.Object);
 
 	UPExp =200.f;
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> GettingAudio(TEXT("/Game/Sound/coin.coin"));
+	GetItemSound =GettingAudio.Object;
 }
 
 void ACoinItem::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -16,6 +19,7 @@ void ACoinItem::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimiti
 {
 	if (OtherActor->ActorHasTag("Player"))
 	{
+		UGameplayStatics::PlaySoundAtLocation(this, GetItemSound, GetActorLocation());
 		isFollowing=false;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("COllision BoxItem"));
 		AMainPawn* Player = Cast<AMainPawn>(OtherActor);

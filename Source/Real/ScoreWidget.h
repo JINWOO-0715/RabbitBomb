@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "RabbitBombGameInstance.h"
+#include "Components/VerticalBox.h"
 #include "ScoreWidget.generated.h"
 
 /**
@@ -21,13 +22,19 @@ class REAL_API UScoreWidget : public UUserWidget
 
 	
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* ScoreText;
+	class UTextBlock* NowWaveText;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* RemainMonsterTextBlock;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ExitGameButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ReturnGameButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UVerticalBox* StageClearbox;
 	
 public:
 	UFUNCTION()
@@ -36,5 +43,23 @@ public:
 	UFUNCTION()
 	void GotoTitle();
 	
+	UFUNCTION()
+	void SetRemainMonsterText(int remainMonsterNum);
+
+	UFUNCTION()
+	void DereaseMonsterText();
+	
+	UFUNCTION()
+	void SetNowWaveText(int mNowWave , int mGoal);
+
+	UFUNCTION()
+	void ShowStageClearBox(bool isShow);
+	
 	int count =0;
+	int remainNum=1;
+	
+	//클릭효과음
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* ClickSound;
+	
 };

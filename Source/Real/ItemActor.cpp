@@ -20,7 +20,8 @@ AItemActor::AItemActor()
 	ItemMesh->OnComponentHit.AddDynamic(this, &AItemActor::OnHit);
 	ItemMesh->SetNotifyRigidBodyCollision(true);
 	Tags.Add("Item");
-	
+	static ConstructorHelpers::FObjectFinder<USoundBase> GettingAudio(TEXT("/Game/Sound/get_item_.get_item_"));
+	GetItemSound =GettingAudio.Object;
 }
 
 // Called when the game starts or when spawned
@@ -62,6 +63,7 @@ void AItemActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 {
 	if (OtherActor->ActorHasTag("Player"))
 	{
+		UGameplayStatics::PlaySoundAtLocation(this, GetItemSound, GetActorLocation());
 		isFollowing=false;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("COllision BoxItem"));
 		AMainPawn* Player = Cast<AMainPawn>(OtherActor);

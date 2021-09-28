@@ -11,6 +11,8 @@ float ABossMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent cons
 	ChangeHitedMTTimer();
 	if (MonsterHP < 0.f)
 	{
+		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		player->PlayerScoreWidget->DereaseMonsterText();
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%

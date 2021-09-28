@@ -49,7 +49,9 @@ AMainPawn::AMainPawn()
 	ScoreWidgetClass = ScoreAsset.Class;
 
 
-
+	//사운드
+	static ConstructorHelpers::FObjectFinder<USoundBase> FireAudio(TEXT("/Game/Sound/TwinStickFire.TwinStickFire"));
+	FireSound = FireAudio.Object;
 	
 	//카메라 스프링
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -142,6 +144,8 @@ void AMainPawn::BeginPlay()
 		{
 			PlayerHPWidget->AddToViewport();
 			PlayerScoreWidget->AddToViewport();
+			PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
+			PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
 			// PlayerSkillChooseWidget->Player=this;
 			// PlayerRightWidget->AddToViewport();
 		}
