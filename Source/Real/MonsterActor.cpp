@@ -147,8 +147,8 @@ void AMonsterActor::Deactivate()
 float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
                                 AActor* DamageCauser)
 {
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
+	//float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float Damage =DamageAmount;
 	MonsterHP -= Damage;
 	ChangeHitedMTTimer();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
@@ -247,7 +247,7 @@ void AMonsterActor::InitMonster(int dataRowN)
 	BulletPower = MonsterData->BulletPower*gm->GoalGameStage->BulletPowerUPCount;
 	MoveSpeed = MonsterData->MoveSpeed;
 	BulletLifeSpan = MonsterData->BulletLifeSpan;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(MonsterData->FireRate));
+	
 	//0.0008*x*x+100;
 }
 

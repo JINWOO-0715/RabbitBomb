@@ -59,7 +59,13 @@ ARealGameModeBase::ARealGameModeBase()
 	
 	static ConstructorHelpers::FObjectFinder<USoundBase> DeadSoundAsset2(TEXT("/Game/Sound/POP.POP"));
 	MonsterHitSound = DeadSoundAsset2.Object;
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> LoseSoundAsset(TEXT("/Game/Sound/endgame.endgame"));
+	LoseSound = LoseSoundAsset.Object;
 
+	static ConstructorHelpers::FObjectFinder<USoundBase> LoseSoundAsset2(TEXT("/Game/Sound/hited.hited"));
+	LoseSound2 = LoseSoundAsset2.Object;
+	
 	static ConstructorHelpers::FObjectFinder<USoundBase> DeadSoundAsset3(TEXT("/Game/Sound/GameClear.GameClear"));
 	GameClearSound = DeadSoundAsset3.Object;
 }
@@ -107,7 +113,7 @@ void ARealGameModeBase::Save()
 		SaveGameInstance->FireRatelevel = GameInstanceRef->PlayerFireRateLevel;
 		SaveGameInstance->MoveSpeedlevel = GameInstanceRef->PlayerSpeedLevel;
 		SaveGameInstance->BulletPowerlevel =GameInstanceRef->PlayerPowerLevel;
-		
+		SaveGameInstance->PlayerStorySaw = GameInstanceRef->isStroySaw;
 		//SaveGameInstance->PlayerStage =  GetStage();
 		
 		
@@ -149,6 +155,7 @@ void ARealGameModeBase::Load()
 			GameInstanceRef->PlayerHPLevel =LoadGameInstance->MaxHPlevel;
 			GameInstanceRef->PlayerSpeedLevel=LoadGameInstance->MoveSpeedlevel;
 			GameInstanceRef->PlayerHasCoin = LoadGameInstance->PlayerCoin;
+			GameInstanceRef->isStroySaw = LoadGameInstance->PlayerStorySaw; 
 			//SetStage(LoadGameInstance->PlayerStage);
 			NowStage = LoadGameInstance->PlayerStage;
 			
@@ -219,7 +226,6 @@ void ARealGameModeBase::CheckStage()
 	if (NowMosterCount.eBossMonster < 1 && NowMosterCount.eCommomMonster < 1 && NowMosterCount.eTowerMonster < 1)
 	{
 		
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("ClearWave!!"));
 		// 웨이브를 늘려야하면 늘리고
 		if(NowWave < GetGoalWave())
 		{
@@ -239,7 +245,7 @@ void ARealGameModeBase::CheckStage()
 			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 			player->PlayerScoreWidget->ShowStageClearBox(true);
 			
-			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,5);
+			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,4);
 					
 		
 		}
@@ -256,6 +262,16 @@ void ARealGameModeBase::BeginPlay()
 	if (LoadGameInstance)
 		Load();
 
+	if(GetWorld()->GetName() == FString("StoryLevel"))
+	{
+		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if(GameInstanceRef->isStroySaw)
+		{
+			UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
+		}
+		GameInstanceRef->isStroySaw = true;
+		Save();
+	}
 	if (GetWorld()->GetName() == FString("MainLevel"))
 	{
 		//StartTime = 0.0f;
@@ -268,7 +284,9 @@ void ARealGameModeBase::BeginPlay()
 		PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
 		//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
 
-
+		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		
+		
 		
 		// 목표 스테이지 설정
 		SetNowStage(GameInstanceRef->NowStage);
@@ -284,10 +302,11 @@ void ARealGameModeBase::BeginPlay()
 		// 
 		GameInstanceRef->GoalWave = GoalGameStage->MonsterWave.Num();
 		GameInstanceRef->NowWave =1; 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, FString::FromInt(NowMosterCount.eTowerMonster));
+		
 		// 스테이지의 1wave부터 시작
 		UWorld* const World = GetWorld();
-	
+		player->SetScoreText();
+		Save();
 		
 		// World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn,
 		//                                   MonsterSpawnCoolTime);

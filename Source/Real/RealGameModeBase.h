@@ -136,6 +136,12 @@ public:
 
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 	class USoundBase* GameClearSound;
+
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* LoseSound;
+
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* LoseSound2;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	class UParticleSystem* HitedParticle;

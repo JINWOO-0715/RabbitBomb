@@ -64,7 +64,7 @@ class REAL_API AMainPawn : public APawn
 
 	// 공격속도
 	UPROPERTY(EditAnywhere)
-	float FireRate = 1.f;
+	float FireRate = 0.5f;
 
 	// 이동속도 스피드
 	UPROPERTY()
@@ -90,7 +90,7 @@ class REAL_API AMainPawn : public APawn
     void BackButton();
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
-
+	FTimerHandle ReturnToTitleTimer;
 
 protected:
 	// Called when the game starts or when spawned
@@ -112,6 +112,7 @@ public:
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	bool PressedFireButton;
+	
 
 	// 초기 셋팅을 위한 setter
 	// 레벨에 따른 스텟 설정
@@ -119,6 +120,7 @@ public:
 	void SetPowerToLevel(int PowerLevel);
 	void SetSpeedUPToLevel(int SpeedLevel);
 	void SetFireRateToLevel(int FireRateLevel);
+	void ReturnToTitle();
 	
 	// 코인 획득시 
 	void UpPlayerCoin(int mUpcoinNum);
@@ -159,7 +161,8 @@ public:
 	//
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UScoreWidget* PlayerScoreWidget;
-	
+
+	void SetScoreText();
 
 	// 움직임 총알방향 static const 이런건 배워야함
 	static const FName MoveForwardBinding;

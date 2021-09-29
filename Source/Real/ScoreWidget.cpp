@@ -15,6 +15,10 @@ void UScoreWidget::NativeConstruct()
 	ExitGameButton->SetVisibility(ESlateVisibility::Hidden);
 	ReturnGameButton->SetVisibility(ESlateVisibility::Hidden);
 	StageClearbox->SetVisibility(ESlateVisibility::Hidden);
+	
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	SetRemainMonsterText(GameInstanceRef->MonsterCount);
+	SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
 }
 
 void UScoreWidget::ShowButton()

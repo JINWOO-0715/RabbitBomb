@@ -85,7 +85,7 @@ void AMonsterManager::Spawn()
 		//목표수치 ++
 		NowSpawnMosterCount.eCommomMonster++;
 		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::FromInt(NowSpawnMosterCount.eCommomMonster));
+		
 	}
 	if(NowSpawnMosterCount.eTowerMonster <  gm->GetGoalTowerMonsterCount())
 	{
@@ -120,7 +120,7 @@ void AMonsterManager::Spawn()
 	else
 	{
 		//꺼버린다.
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("PULL"));
+	
 	
 	}
 

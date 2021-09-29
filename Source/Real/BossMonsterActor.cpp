@@ -2,22 +2,50 @@
 
 
 #include "BossMonsterActor.h"
+#include "CoinItem.h"
 
 float ABossMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float Damage =DamageAmount;//= Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	MonsterHP -= Damage;
 	ChangeHitedMTTimer();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	if (MonsterHP < 0.f)
 	{
+		UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+
 		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		player->PlayerScoreWidget->DereaseMonsterText();
-		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	
+		int rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			
+			AItemActor* Item = gm->ItemPooler->GetPooledUItem();
+			Item->SetActorLocation(GetActorLocation());
+			Item->SetActive(true);
+		}
+		
+		rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			
+			ACoinItem* Coin = gm->ItemPooler->GetPooledCoinItem();
+			Coin->SetActorLocation(GetActorLocation()+FVector(50.f,0.f,0.f));
+			Coin->SetActive(true);
+		}
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
 		gm->DecreaseBossMonsterCount();
+	}
+	else
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+		UGameplayStatics::PlaySound2D(this, gm->MonsterHitSound);
 	}
 
 	return Damage;	
@@ -28,7 +56,7 @@ ABossMonsterActor::ABossMonsterActor()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/Boss.Boss"));
 	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	AttackCount=0;
-
+	
 	Imoge->SetRelativeLocation(FVector(0.f,0.f,730.f));
 	Imoge->SetRelativeRotation(FRotator(0.f,-90.f,0.f));
 	Imoge->SetRelativeScale3D(FVector(10.0f,10.f,10.f));

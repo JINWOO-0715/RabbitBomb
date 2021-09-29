@@ -103,7 +103,7 @@ void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkil
 		 if (OwnerActor->ActorHasTag("Player"))
 		 {
 // iceSkill 1렙 2렙 3렙  추가하면됌!
-		 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, mSkillRow->SKillName.ToString());
+		 	
 		
 
 		 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
@@ -136,8 +136,7 @@ void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (mSkillRow->SKillName == FName("FasterRabbit"))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(mSkillLevel));
-
+		
 		float TempSpeed = PlayerPawn->GetMoveSpeed();
 		// 레벨 값을 가져와서 적용한다.
 
@@ -167,8 +166,7 @@ void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 		//if(ownerac)
 		if (OwnerActor->ActorHasTag("Player"))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
-			                                 FString::FromInt(PlayerPawn->GetNumOfShotBullet()));
+	
 			PlayerPawn->SetNumberOfShotBullet(mSkillRow->SkillLevelMap[mSkillLevel]);
 			// 등록하면 알아서 진행되는건 파이어볼 같은 액티브고
 			// 아래는 페시브라고 생각하는게 맞는??
@@ -193,14 +191,14 @@ void USkillComponent::ActiveSkill(FPlayerSkillRow* mSkillRow, FName mSkillName)
 	if (!mSkillRow->IsActiveSkill)
 	{
 		//스킬이 있으면 스킬 레벨업
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Into activeskill"));
+		
 		SkillLevelUp(mSkillName);
 		SetPlayerBuff(mSkillRow, HasSkill[mSkillName]);
 	}
 	// 액티브
 	if (mSkillRow->IsActiveSkill)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Into activeskill"));
+	
 		//스킬이 있으면 스킬 레벨업
 		SkillLevelUp(mSkillName);
 		SetPlayerActiveSkill(mSkillRow, HasSkill[mSkillName]);

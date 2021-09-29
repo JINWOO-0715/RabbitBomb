@@ -43,7 +43,7 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
+				"eCommomMonster": 3,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			},
@@ -55,7 +55,7 @@
 			},
 			"3":
 			{
-				"eCommomMonster": 5,
+				"eCommomMonster": 6,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			}
@@ -74,19 +74,19 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
+				"eCommomMonster": 5,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
+				"eCommomMonster": 7,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 5,
+				"eCommomMonster": 9,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			}
@@ -105,20 +105,20 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
+				"eCommomMonster": 7,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 1,
+				"eCommomMonster": 9,
+				"eTowerMonster": 0,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 8,
-				"eTowerMonster": 2,
+				"eCommomMonster": 12,
+				"eTowerMonster": 0,
 				"eBossMonster": 0
 			}
 		}
@@ -136,21 +136,21 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
-				"eTowerMonster": 0,
+				"eCommomMonster": 8,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
+				"eCommomMonster": 10,
 				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 0,
-				"eTowerMonster": 0,
-				"eBossMonster": 1
+				"eCommomMonster": 12,
+				"eTowerMonster": 1,
+				"eBossMonster": 0
 			}
 		}
 	},
@@ -167,20 +167,20 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
-				"eTowerMonster": 0,
+				"eCommomMonster": 10,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 12,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 12,
+				"eTowerMonster": 2,
 				"eBossMonster": 0
 			}
 		}
@@ -198,20 +198,20 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
-				"eTowerMonster": 0,
+				"eCommomMonster": 10,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 12,
+				"eTowerMonster": 2,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 14,
+				"eTowerMonster": 2,
 				"eBossMonster": 0
 			}
 		}
@@ -229,20 +229,20 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
-				"eTowerMonster": 0,
+				"eCommomMonster": 12,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 14,
+				"eTowerMonster": 2,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 16,
+				"eTowerMonster": 2,
 				"eBossMonster": 0
 			}
 		}
@@ -260,20 +260,20 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
-				"eTowerMonster": 0,
+				"eCommomMonster": 14,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"2":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 16,
+				"eTowerMonster": 2,
 				"eBossMonster": 0
 			},
 			"3":
 			{
-				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eCommomMonster": 18,
+				"eTowerMonster": 3,
 				"eBossMonster": 0
 			}
 		}
@@ -291,14 +291,14 @@
 		{
 			"1":
 			{
-				"eCommomMonster": 4,
+				"eCommomMonster": 10,
 				"eTowerMonster": 0,
 				"eBossMonster": 0
 			},
 			"2":
 			{
 				"eCommomMonster": 5,
-				"eTowerMonster": 0,
+				"eTowerMonster": 1,
 				"eBossMonster": 0
 			},
 			"3":

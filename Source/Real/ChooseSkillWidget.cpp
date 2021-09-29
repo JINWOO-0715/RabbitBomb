@@ -153,7 +153,7 @@ void UChooseSkillWidget::SetRandomSkill()
 		FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(skillInt[0]);
 		if(PlayerSkillRowData)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("enter skill2"));
+			
 			SkillOneButton->SetVisibility(ESlateVisibility::Visible);
 			SkillTwoButton->SetVisibility(ESlateVisibility::Visible);
 			SkillOneText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
@@ -182,7 +182,7 @@ void UChooseSkillWidget::SetRandomSkill()
 		FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(skillInt[0]);
 		if(PlayerSkillRowData)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("enter skill1"));
+			
 			SkillOneButton->SetVisibility(ESlateVisibility::Visible);
 
 			SkillOneText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
@@ -198,7 +198,7 @@ void UChooseSkillWidget::SetRandomSkill()
 			SkillTwoButton->SetVisibility(ESlateVisibility::Visible);
 			SkillTrdButton->SetVisibility(ESlateVisibility::Visible);
 			
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::FromInt(skillInt.Num()));
+			
 
 			SkillOneText->SetText(FText::FromName(PlayerSkillRowData->SKillName));
 			

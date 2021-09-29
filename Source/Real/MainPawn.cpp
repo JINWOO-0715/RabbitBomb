@@ -83,7 +83,7 @@ AMainPawn::AMainPawn()
 
 
 	//경험치
-	NowEXP = 0.f;
+	NowEXP = 100.f;
 	MaxEXP = 100.f;
 
 	//스텟 (HP 공격력)
@@ -95,7 +95,7 @@ AMainPawn::AMainPawn()
 
 	NumberOfShotBullet = 1;
 	GunOffset = FVector(80.f, 0.f, 0.f);
-	FireRate = 1.f;
+	FireRate = 0.5f;
 	bCanFire = true;
 }
 
@@ -113,7 +113,7 @@ void AMainPawn::SetMaxHp(float mMaxHP)
 
 void AMainPawn::SetFireRate(float mFireRate)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::SanitizeFloat(FireRate));
+
 
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("sucess"));
 	FireRate = mFireRate;
@@ -130,33 +130,48 @@ void AMainPawn::BackButton()
 	PlayerScoreWidget->ShowButton();
 }
 
+void AMainPawn::SetScoreText()
+{
+	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	if(PlayerScoreWidget!=nullptr)
+	{
+		PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
+		PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
+	}
+}
+
 //// Called when the game starts or when spawned 비긴플레이 쓸일있으면 사용
 void AMainPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SkillComp->OwnerActor = this;
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GetWorld()->GetName() == "MainLevel")
+	if (GetWorld()->GetName() == FString("MainLevel"))
 	{
 		PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
 		PlayerScoreWidget = Cast<UScoreWidget>(CreateWidget(GetWorld(), ScoreWidgetClass));
 		if (PlayerHPWidget != nullptr)
 		{
 			PlayerHPWidget->AddToViewport();
-			PlayerScoreWidget->AddToViewport();
-			PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
-			PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
+			
 			// PlayerSkillChooseWidget->Player=this;
 			// PlayerRightWidget->AddToViewport();
 		}
+		if(PlayerScoreWidget!=nullptr)
+		{
+			PlayerScoreWidget->AddToViewport();
+			// PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
+			// PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
+		}
 		// 레벨에따라 설정
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::SanitizeFloat(FireRate));
+		
 		SetMaxHPToLevel(GameInstanceRef->PlayerHPLevel);
 		SetPowerToLevel(GameInstanceRef->PlayerPowerLevel);
 		SetSpeedUPToLevel(GameInstanceRef->PlayerSpeedLevel);
 		SetFireRate(GameInstanceRef->PlayerFireRateLevel);
 		SetFireRateToLevel(GameInstanceRef->PlayerFireRateLevel);
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::SanitizeFloat(FireRate));
+		
 	}
 }
 
@@ -232,13 +247,19 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+	//gm->LoseSound
 	// 사망 죽음
-	// if (MonsterHP < 0.f)
-	// {
-	// 	Deactivate();
-	// }
+	UGameplayStatics::PlaySoundAtLocation(this, gm->LoseSound2, GetActorLocation());
+	if (NowHP < 0.f)
+	{
+		ReturnToTitle();
+	}
 
 	return Damage;
+}
+void AMainPawn::ReturnToTitle()
+{
+	UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
 }
 
 void AMainPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -247,11 +268,11 @@ void AMainPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Line"));
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
+		
 	}
 	if (OtherActor->ActorHasTag("Item"))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
+		
 		AItemActor* ItemActor = Cast<AItemActor>(OtherActor);
 		ItemActor->isFollowing = true;
 	}
@@ -343,6 +364,7 @@ void AMainPawn::FireShot(FVector FireDir)
 			// 소리재생
 			if (FireSound != nullptr)
 			{
+				
 				UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 			}
 
@@ -356,7 +378,7 @@ void AMainPawn::GetExperience(float Exp)
 {
 	NowEXP += Exp;
 	float persent = (NowEXP / MaxEXP);
-	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::SanitizeFloat(MaxEXP));
+
 	if (persent >= 1.f)
 	{
 		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
@@ -372,12 +394,12 @@ void AMainPawn::GetExperience(float Exp)
 		// 스킬 선택
 		//
 
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("LevelUp"));
+		
 		NowEXP = 0.f;
 		MaxEXP = 2 * MaxEXP;
 
 
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::SanitizeFloat(MaxEXP));
+	
 		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 		if (MyPlayer != NULL)
 		{
@@ -474,6 +496,6 @@ void AMainPawn::UpPlayerCoin(int mUpcoinNum)
 
 void AMainPawn::SetNumberOfShotBullet(float mNumOfBullet)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::FromInt(NumberOfShotBullet));
+
 	NumberOfShotBullet = int(mNumOfBullet);
 }

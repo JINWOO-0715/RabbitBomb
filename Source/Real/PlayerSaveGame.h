@@ -21,17 +21,17 @@ public:
 	UPROPERTY()
 	int FireRatelevel = 1;
 
-	// 공격속도
+	// ??????
 	UPROPERTY(EditAnywhere)
 	float FireRate = 1.f;
 
 	UPROPERTY()
 	int MoveSpeedlevel = 1;
-	// 이동속도 스피드
+	// ?????? ?????
 	UPROPERTY()
 	float MoveSpeed;
 
-	// 공격력
+	// ?????
 	UPROPERTY()
 	float BulletPower = 50.f;
 	UPROPERTY()
@@ -48,6 +48,9 @@ public:
 
 	UPROPERTY()
 	int PlayerStage =1;;
+
+	UPROPERTY()
+	bool PlayerStorySaw =false;
 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")

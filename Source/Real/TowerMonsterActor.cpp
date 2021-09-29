@@ -2,24 +2,52 @@
 
 
 #include "TowerMonsterActor.h"
-
+#include "CoinItem.h"
 
 float ATowerMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float Damage = DamageAmount;//Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	MonsterHP -= Damage;
 	ChangeHitedMTTimer();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
 	if (MonsterHP < 0.f)
 	{
-		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+		UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+
 		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		player->PlayerScoreWidget->DereaseMonsterText();
+		
+		int rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			
+			AItemActor* Item = gm->ItemPooler->GetPooledUItem();
+			Item->SetActorLocation(GetActorLocation());
+			Item->SetActive(true);
+		}
+		
+		rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			
+			ACoinItem* Coin = gm->ItemPooler->GetPooledCoinItem();
+			Coin->SetActorLocation(GetActorLocation()+FVector(50.f,0.f,0.f));
+			Coin->SetActive(true);
+		}
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
 		gm->DecreaseTowerMonsterCount();
 	}
-
+	else
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+		UGameplayStatics::PlaySound2D(this, gm->MonsterHitSound);
+	}
 	return Damage;	
 }
 ATowerMonsterActor::ATowerMonsterActor()
@@ -29,6 +57,7 @@ ATowerMonsterActor::ATowerMonsterActor()
 	// AttackCount = 0;
 	// FireRate = 2.0f;
 	Imoge->SetRelativeLocation(FVector(0.f,0.f,600.f));
+	
 }
 
 

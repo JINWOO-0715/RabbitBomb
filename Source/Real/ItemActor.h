@@ -37,7 +37,7 @@ protected:
 
 
 	//올려주는 경험치
-	float UPExp = 10100.0f;
+	float UPExp = 100.0f;
 	bool Active;
 public:	
 	// Called every frame
