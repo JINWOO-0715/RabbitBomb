@@ -69,6 +69,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		UGameplayStatics::ApplyDamage(OtherActor, BulletDamage,nullptr, nullptr, nullptr);
 		if(BulletType==FName("Ice"))
 		{
+
 			AMonsterActor* TempMonster = Cast<AMonsterActor>(OtherActor);
 			TempMonster->SetStunMonster(2.f);
 		}

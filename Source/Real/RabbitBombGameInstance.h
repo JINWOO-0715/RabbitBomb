@@ -27,5 +27,7 @@ class REAL_API URabbitBombGameInstance : public UGameInstance
 	int MonsterCount=0;
 	int NowWave=1;
 	int GoalWave=1;
+
+	bool isStroySaw=false;
 	
 };

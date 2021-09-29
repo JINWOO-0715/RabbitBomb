@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MonsterDataTable.h"
+#include "PaperSpriteComponent.h"
+#include "PaperFlipbook.h"
+
+#include "PaperSprite.h"
 #include "MonsterActor.generated.h"
 
 UCLASS()
@@ -16,6 +20,9 @@ protected:
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* MonsterMeshComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprites")
+	class UPaperSpriteComponent* Imoge;
+	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float MonsterHP = 50.f;
 

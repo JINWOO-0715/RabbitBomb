@@ -28,6 +28,10 @@ ABossMonsterActor::ABossMonsterActor()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/Boss.Boss"));
 	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	AttackCount=0;
+
+	Imoge->SetRelativeLocation(FVector(0.f,0.f,730.f));
+	Imoge->SetRelativeRotation(FRotator(0.f,-90.f,0.f));
+	Imoge->SetRelativeScale3D(FVector(10.0f,10.f,10.f));
 }
 
 void ABossMonsterActor::Tick(float DeltaTime)
@@ -53,7 +57,7 @@ void ABossMonsterActor::FireShot()
 	if (bCanFire)
 	{
 		
-		BossBulletPattern =4;//FMath::RandRange(0, 4);
+		BossBulletPattern = FMath::RandRange(0, 4);
 		FireRate = FMath::RandRange(1.f, 2.5f);
 		switch (BossBulletPattern)
 		{

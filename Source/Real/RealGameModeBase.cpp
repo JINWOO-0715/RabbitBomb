@@ -8,6 +8,8 @@
 #include "TowerMonsterActor.h"
 
 
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 
 ARealGameModeBase::ARealGameModeBase()
 {
@@ -37,11 +39,29 @@ ARealGameModeBase::ARealGameModeBase()
 		GameStageData = GameDataAsset.Object;
 	}
 	
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> Particle(TEXT("/Game/Particle/P_Impact_Shield_Ice.P_Impact_Shield_Ice"));
+	HitedParticle = Particle.Object;
+	
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> Particle2(TEXT("/Game/Particle/P_YoYo_Blast_Axe_00.P_YoYo_Blast_Axe_00"));
+	DeadParticle = Particle2.Object;
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> Particle3(TEXT("/Game/Particle/P_TraceMagic_AreaIce_02.P_TraceMagic_AreaIce_02"));
+	DeadParticle2 = Particle3.Object;
+	
 	static ConstructorHelpers::FObjectFinder<USoundBase> ClickSoundAsset(TEXT("/Game/Sound/ClickSound.ClickSound"));
 	ClickSound = ClickSoundAsset.Object;
 	
 	static ConstructorHelpers::FObjectFinder<USoundBase> UpSoundAsset(TEXT("/Game/Sound/UpStat.UpStat"));
 	StatUpSound = UpSoundAsset.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> DeadSoundAsset(TEXT("/Game/Sound/2.2"));
+	MonsterDeadSound = DeadSoundAsset.Object;
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> DeadSoundAsset2(TEXT("/Game/Sound/POP.POP"));
+	MonsterHitSound = DeadSoundAsset2.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> DeadSoundAsset3(TEXT("/Game/Sound/GameClear.GameClear"));
+	GameClearSound = DeadSoundAsset3.Object;
 }
 
 void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)
@@ -215,9 +235,11 @@ void ARealGameModeBase::CheckStage()
 		else
 		{
 			//스테이지 클리어 메시지를 띄운다
+			UGameplayStatics::PlaySound2D(this,GameClearSound );
 			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 			player->PlayerScoreWidget->ShowStageClearBox(true);
-			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,2);
+			
+			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,5);
 					
 		
 		}

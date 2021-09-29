@@ -14,6 +14,8 @@
 #include "RealGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 
 #include "GameplayTagsModule.h"
 #include "GameplayTagsSettings.h"
@@ -38,10 +40,24 @@ AMonsterActor::AMonsterActor()
 	MonsterMeshComponent->SetCollisionProfileName("Monster");
 
 
+	
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> HitedMTAsset(
 		TEXT("/Game/Mesh/MonsterHitedMT.MonsterHitedMT"));
 	//MonsterHitedMT = CreateDefaultSubobject<UMaterialInterface>(TEXT("Mesh"));
 	MonsterHitedMT = HitedMTAsset.Object;
+
+	static ConstructorHelpers::FObjectFinder<UPaperSprite> ImogeAsset(
+		TEXT("/Game/Mesh/Sprite/Dead"));
+
+	Imoge = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Dead"));
+	Imoge->SetupAttachment(RootComponent);
+	if(ImogeAsset.Object)
+	{
+		Imoge->SetSprite(ImogeAsset.Object);
+		Imoge->SetRelativeLocation(FVector(0.f,0.f,260.f));
+		Imoge->SetRelativeRotation(FRotator(0.f,-90.f,0.f));
+		Imoge->SetRelativeScale3D(FVector(5.0f,5.f,5.f));
+	}
 
 
 	//충돌에대해 다시 해보기
@@ -135,13 +151,19 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 	MonsterHP -= Damage;
 	ChangeHitedMTTimer();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+	
 	if (MonsterHP < 0.f)
 	{
+		UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+
 		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		player->PlayerScoreWidget->DereaseMonsterText();
 		
 		int rand = FMath::RandRange(0, 1);
-		ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+		
 		if (rand == 0)
 		{
 			
@@ -165,6 +187,11 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 		gm->DecreaseCommomMonsterCount();
 	}
 
+	else
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+		UGameplayStatics::PlaySound2D(this, gm->MonsterHitSound);
+	}
 	return Damage;
 }
 
@@ -243,6 +270,8 @@ void AMonsterActor::SetStunMonster(float mStunTime)
 {
 	// 스턴상태로 바꾼다
 	isStun = true;
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle2, GetActorLocation());
 	// 3초후 원래대로
 	GetWorldTimerManager().SetTimer(StunTimer, this
 	                                , &AMonsterActor::StunMonster, mStunTime, false);

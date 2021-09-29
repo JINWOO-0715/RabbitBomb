@@ -88,7 +88,7 @@ AMainPawn::AMainPawn()
 
 	//½ºÅÝ (HP °ø°Ý·Â)
 	MaxHP = 100.f;
-	BulletPower = 100.5f;
+	BulletPower = 50.5f;
 
 	// Weapon
 
@@ -230,6 +230,8 @@ float AMainPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	//Engine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("HIT"));
 	NowHP -= Damage;
 	PlayerHPWidget->HPBar->SetPercent(NowHP / MaxHP);
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
 	// »ç¸Á Á×À½
 	// if (MonsterHP < 0.f)
 	// {

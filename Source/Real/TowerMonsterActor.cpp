@@ -28,7 +28,7 @@ ATowerMonsterActor::ATowerMonsterActor()
 	// MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	// AttackCount = 0;
 	// FireRate = 2.0f;
-	
+	Imoge->SetRelativeLocation(FVector(0.f,0.f,600.f));
 }
 
 

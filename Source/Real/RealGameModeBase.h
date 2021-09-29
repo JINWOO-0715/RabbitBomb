@@ -11,6 +11,8 @@
 #include "ItemPoolComponent.h"
 #include "GameStateDataTable.h"
 #include "MonsterDataTable.h"
+#include "Particles/ParticleSystem.h"
+
 
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
@@ -125,8 +127,24 @@ public:
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 	class USoundBase* StatUpSound;
 
+	//몬스터 죽는 효과음
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* MonsterDeadSound;
+
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* MonsterHitSound;
+
+	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
+	class USoundBase* GameClearSound;
 	
-	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	class UParticleSystem* HitedParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	class UParticleSystem* DeadParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	class UParticleSystem* DeadParticle2;
 
 	// // 플레이어 오른쪽아래 위젯
 	// UPROPERTY(EditAnywhere)
@@ -164,6 +182,6 @@ public:
 	void SetNowStage(int mStage);
 
 };
-
+	
 
 
