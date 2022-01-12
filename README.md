@@ -1,4 +1,4 @@
-# TheCube
+# RabbitBomb
 
 소개
 #
