@@ -6,5 +6,6 @@
 IDE : Visual Studio Community 2019 Version 16.8.3
 인원 구성 : 1인 개발
 
-https://www.youtube.com/watch?v=ktEin1gTjhw
+![Uploading image.png…](https://www.youtube.com/watch?v=ktEin1gTjhw)
+
 #
