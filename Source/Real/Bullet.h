@@ -74,11 +74,8 @@ public:
 	virtual void SetLifeSpan(float InLifespan=5.0f) override;
 	void SetActive(bool InActive);
 	
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	AActor* OwnerActor;
-	
 	UFUNCTION(BlueprintCallable)
-	void SetOwnerActor(AActor* ActorClass);
+	void SetOwnerActor(const AActor* ActorClass);
 
 	
 	void SetVelocity(FVector Velocity);

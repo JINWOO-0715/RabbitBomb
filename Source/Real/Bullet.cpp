@@ -63,6 +63,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 
 		
 	}
+	
 	// 몬스터 처리 
 	if (OtherActor->ActorHasTag("Monster"))
 	{
@@ -108,16 +109,16 @@ void ABullet::SetActive(bool InActive)
 
 }
 
-void ABullet::SetOwnerActor(AActor* ActorClass)
+void ABullet::SetOwnerActor(const AActor* ActorClass)
 {
-	OwnerActor = ActorClass;
+	const AActor *OwnerActor = ActorClass;
 	
 	if(OwnerActor)
 	{
 		if (OwnerActor->ActorHasTag("Monster"))
 		{
 			// 총알 설정.
-			AMonsterActor* TempMonster = Cast<AMonsterActor>(OwnerActor);
+			const AMonsterActor* TempMonster = Cast<AMonsterActor>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 			BulletDamage=TempMonster->BulletPower;
 			// mesh를 2개가지고 바꿔가면서 쓴다.
@@ -131,7 +132,7 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 		}
 		if (OwnerActor->ActorHasTag("Player"))
 		{
-			AMainPawn* Player = Cast<AMainPawn>(OwnerActor);
+			const AMainPawn* Player = Cast<AMainPawn>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 			BulletDamage=Player->GetBulletPower();
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
@@ -141,6 +142,7 @@ void ABullet::SetOwnerActor(AActor* ActorClass)
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);
 		}
 	}
+	
 }
 
 

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MonsterDataTable.h"
 #include "PaperSpriteComponent.h"
+#include "BulletAttackPattern.h"
 #include "PaperFlipbook.h"
 
 #include "PaperSprite.h"
@@ -17,6 +18,10 @@ class REAL_API AMonsterActor : public AActor
 	GENERATED_BODY()
 	
 protected:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprites")
+		class UBulletAttackPattern* AttackPatternComponent;
+
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* MonsterMeshComponent;
 
@@ -27,7 +32,6 @@ protected:
 	float MonsterHP = 50.f;
 
 
-	// A스타가 될 상.
 	UFUNCTION()
 	void MoveToTarget();
 
