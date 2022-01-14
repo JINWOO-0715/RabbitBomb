@@ -27,8 +27,10 @@ public:
 	// hasactor -> fireshot
 
 	UFUNCTION(BlueprintCallable)
-	void FireShot(const AActor* Target, const AActor* me , const float BulletSpeed);
+	void FireShot(const AActor* Target,  const float BulletSpeed);
 
+	UFUNCTION(BlueprintCallable)
+	void CirCleShot( const float BulletSpeed);
 
 
 

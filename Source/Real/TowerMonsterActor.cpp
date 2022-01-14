@@ -111,37 +111,7 @@ void ATowerMonsterActor::FireCircleShot()
 	
 	if (monsterBullet && World)
 	{
-		
-		for (int i = 0; i < 36; i++)
-		{
-			monsterBullet = gm->BulletPooler->GetPooledBullet();
-			// 몬스터 위치
-			FVector Location = GetActorLocation();
-			// 원 (x,y)
-			FVector Circledir(cos((2 * PI * i) / 36), sin((2 * PI * i) / 36), 0.f);
-			// 반지름이 100인 원(x,y)
-			Circledir *= 100;
-			// 내위치에 그 위치를 더해서
-			Location += Circledir;
-			// 방향은 먼위치 - 내위치
-			FVector Dir = Location - GetActorLocation();
-			// 방향벡터 
-			Dir.Normalize();
-
-			const FVector FMovement = Dir * BulletSpeed; //
-			// 가지고있는 액터 누구?
-			monsterBullet->SetOwnerActor(this);
-			// 가지고있는 총알위치
-			monsterBullet->SetActorLocation(Location);
-
-			//총알 속도
-			monsterBullet->SetVelocity(FMovement);
-			// 알아서 살아지게하고
-			monsterBullet->SetLifeSpan(	BulletLifeSpan);
-			// 활성화시킨다.
-			monsterBullet->SetActive(true);
-
-		}
+	AttackPatternComponent->CirCleShot(BulletSpeed);
 		if(AttackCount<2)
 		{
 			

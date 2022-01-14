@@ -110,6 +110,7 @@ void AMonsterActor::SetActive(bool InActive)
 void AMonsterActor::ShotTimerExpired()
 {
 	bCanFire = true;
+	
 }
 
 
@@ -204,7 +205,9 @@ void AMonsterActor::FireShot()
 		bCanFire = false; // 끊고
 
 		const AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-		AttackPatternComponent->FireShot(Player, this, BulletSpeed);
+		AttackPatternComponent->FireShot(Player, BulletSpeed);
+	
+
 		//// 그냥 1발 플레이어 방향으로 발사.
 		UWorld* const World = GetWorld();
 		//ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
