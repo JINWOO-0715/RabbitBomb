@@ -205,32 +205,12 @@ void AMonsterActor::FireShot()
 		bCanFire = false; // 끊고
 
 		const AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-		AttackPatternComponent->FireShot(Player, BulletSpeed);
-	
+		//AttackPatternComponent->FireShot(Player, BulletSpeed);
+		
+		AttackPatternComponent->CircularsectorShot();
 
-		//// 그냥 1발 플레이어 방향으로 발사.
+		
 		UWorld* const World = GetWorld();
-		//ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-		//ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
-		//if (monsterBullet && World)
-		//{
-		//	AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-		//	FVector Dir = player->GetActorLocation() - this->GetActorLocation();
-		//	Dir.Normalize(); // 벡터
-
-		//	const FVector Movement = Dir * BulletSpeed; //
-		//	// 가지고있는 액터 누구?
-		//	monsterBullet->SetOwnerActor(this);
-		//	// 가지고있는 총알위치
-		//	monsterBullet->SetActorLocation(GetActorLocation());
-		//	// 총알 속도
-		//	monsterBullet->SetVelocity(Movement);
-		//	// 알아서 살아지게하고
-		//	monsterBullet->SetLifeSpan(BulletLifeSpan);
-		//	// 활성화시킨다.
-		//	monsterBullet->SetActive(true);
-		//}
-
 		World->GetTimerManager().SetTimer(AttackTimer, this, &AMonsterActor::ShotTimerExpired, FireRate);
 	}
 }

@@ -39,7 +39,8 @@ AMainPawn::AMainPawn()
 
 	ShipMeshComponent->SetStaticMesh(MainMesh.Object);
 
-
+	BulletAttackPattern = CreateDefaultSubobject<UBulletAttackPattern>(TEXT("Attack"));
+	
 	static ConstructorHelpers::FClassFinder<UMainInGameWidget> HPBarAsset(
 		TEXT("/Game/BP/HPBar"));
 	PlayerHPWidgetClass = HPBarAsset.Class;
@@ -286,81 +287,26 @@ void AMainPawn::FireShot(FVector FireDir)
 		{
 			const FRotator FireRotation = FireDir.Rotation();
 
-			// 스폰위치잡기
-			FVector const SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
-
 			UWorld* const World = GetWorld();
+			
 
-			//AActor* const TempActor = Cast<AActor>(this);
-			ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-			ABullet* PlayerBullet = gm->BulletPooler->GetPooledBullet();
 			if (NumberOfShotBullet == 1)
 			{
-				if (World != nullptr && PlayerBullet)
-				{
-					PlayerBullet->SetOwnerActor(this);
-					PlayerBullet->SetActorLocation(SpawnLocation);
-					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
-					FireDir.Normalize();
-					const FVector Movement = FireDir * 1000.f; // 
-					PlayerBullet->SetVelocity(Movement);
-					PlayerBullet->SetLifeSpan();
-					PlayerBullet->SetActive(true);
-				}
+				BulletAttackPattern->OneStraightShot(FireDir);
 			}
 			else if (NumberOfShotBullet == 3)
 			{
-				float parameter = -0.3f;
-
-				for (int i = 0; i < 3; i++)
-				{
-					PlayerBullet = gm->BulletPooler->GetPooledBullet();
-					if (PlayerBullet)
-					{
-						PlayerBullet->SetActive(true);
-						PlayerBullet->SetOwnerActor(this);
-						PlayerBullet->SetActorLocation(SpawnLocation);
-						PlayerBullet->SetActorRotation(FireRotation.GetInverse());
-
-						FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
-						                       FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
-						RotationVector.Normalize();
-						parameter += 0.3f;
-						const FVector Movement = RotationVector * 1000.f; // 
-						PlayerBullet->SetVelocity(Movement);
-						PlayerBullet->SetLifeSpan();
-					}
-				}
+				BulletAttackPattern->ThreeStraightShot(FireDir);
 			}
 			else if (NumberOfShotBullet == 5)
 			{
-				float parameter = -0.4f;
-
-				for (int i = 0; i < 5; i++)
-				{
-					PlayerBullet = gm->BulletPooler->GetPooledBullet();
-					PlayerBullet->SetOwnerActor(this);
-					PlayerBullet->SetActorLocation(SpawnLocation);
-					PlayerBullet->SetActorRotation(FireRotation.GetInverse());
-
-					FVector RotationVector(FireDir.X * cos(parameter) - FireDir.Y * sin(parameter),
-					                       FireDir.X * sin(parameter) + FireDir.Y * cos(parameter), 0.f);
-					RotationVector.Normalize();
-					parameter += 0.2f;
-					const FVector Movement = RotationVector * 1000.f; // 
-					PlayerBullet->SetVelocity(Movement);
-					PlayerBullet->SetLifeSpan();
-					PlayerBullet->SetActive(true);
-				}
+				BulletAttackPattern->FiveStraightShot(FireDir);
 			}
-
-
+			
 			bCanFire = false; // 끊고
-
 			// 타이머 작동
 			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &AMainPawn::ShotTimerExpired,
 			                                  FireRate);
-
 			// 소리재생
 			if (FireSound != nullptr)
 			{

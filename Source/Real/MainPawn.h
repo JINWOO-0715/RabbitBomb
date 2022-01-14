@@ -15,6 +15,7 @@
 #include "Engine/Classes/Components/SphereComponent.h"
 
 #include "SkillComponent.h"
+#include "BulletAttackPattern.h"
 #include "MainPawn.generated.h"
 
 UCLASS(Blueprintable)
@@ -26,6 +27,10 @@ class REAL_API AMainPawn : public APawn
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 	                         class AController* EventInstigator, AActor* DamageCauser) override;
 
+	// 공격 패턴 컴포넌트
+	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UBulletAttackPattern* BulletAttackPattern;
+	
 	//스테틱 메쉬 컴포넌트
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* ShipMeshComponent;

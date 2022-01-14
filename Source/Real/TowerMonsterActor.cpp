@@ -111,7 +111,8 @@ void ATowerMonsterActor::FireCircleShot()
 	
 	if (monsterBullet && World)
 	{
-	AttackPatternComponent->CirCleShot(BulletSpeed);
+		//AttackPatternComponent->CirCleShot(BulletSpeed);
+		AttackPatternComponent->StarShot();
 		if(AttackCount<2)
 		{
 			
