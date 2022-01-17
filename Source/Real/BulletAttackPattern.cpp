@@ -89,7 +89,7 @@ void UBulletAttackPattern::CirCleShot(const float BulletSpeed)
 
 			//총알 속도
 			Bullet->SetVelocity(FMovement);
-			// 알아서 살아지게하고
+			// 알아서 사라지게하고
 			Bullet->SetLifeSpan();
 			// 활성화시킨다.
 			Bullet->SetActive(true);
