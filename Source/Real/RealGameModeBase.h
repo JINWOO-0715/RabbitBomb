@@ -11,8 +11,8 @@
 #include "ItemPoolComponent.h"
 #include "GameStateDataTable.h"
 #include "MonsterDataTable.h"
+#include "DataTableManager.h"
 #include "Particles/ParticleSystem.h"
-
 
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
@@ -22,6 +22,7 @@
 #include "BossMonsterActor.h"
 #include "ItemActor.h"
 #include "ChooseSkillWidget.h"
+
 #include "GameStateDataTable.h"
 #include "MonsterManager.h"
 #include "RealGameModeBase.generated.h"
@@ -47,8 +48,12 @@ class ARealGameModeBase : public AGameModeBase
 	class UDataTable* MonsterData;
 	class UDataTable* PlayerSkillData;
 	class UDataTable* GameStageData;
-
 	
+	FDataTableManage DataTableManage; 
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AMonsterManager> SDataTableManage;
+
 	class AMonsterManager* WorldMonsterManger;
 
 	FWaveType NowMosterCount; 

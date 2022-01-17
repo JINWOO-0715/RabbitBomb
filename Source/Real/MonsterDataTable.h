@@ -9,6 +9,7 @@
 
 #include "MonsterDataTable.generated.h"
 
+
 USTRUCT(BlueprintType)
 struct FMonsterRow : public FTableRowBase
 {

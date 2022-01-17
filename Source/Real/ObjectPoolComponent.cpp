@@ -27,64 +27,56 @@ ACommonMonster* UObjectPoolComponent::GetPooledCommonMonster()
 	}
 	return nullptr;
 }
-
-AMonsterActor* UObjectPoolComponent::GetPooledMonster()
-{
-	for (AMonsterActor* PoolableActor : CommonMonsterPool)
-	{
-		if (!PoolableActor->IsActive())
-		{
-			return PoolableActor;
-		}
-	}
-	return nullptr;
-}
-
-ATowerMonsterActor* UObjectPoolComponent::GetPooledTowerMonster()
-{
-	for (ATowerMonsterActor* PoolableActor : TowerMonsterPool)
-	{
-		if (!PoolableActor->IsActive())
-		{
-			return PoolableActor;
-		}
-	}
-	return nullptr;
-
-}
-
-ABossMonsterActor* UObjectPoolComponent::GetPooledBossMonster()
-{
-	for (ABossMonsterActor* PoolableActor : BossMonsterPool)
-	{
-		if (!PoolableActor->IsActive())
-		{
-			return PoolableActor;
-		}
-	}
-	return nullptr;
-}
+//
+// AMonsterActor* UObjectPoolComponent::GetPooledMonster()
+// {
+// 	for (AMonsterActor* PoolableActor : CommonMonsterPool)
+// 	{
+// 		if (!PoolableActor->IsActive())
+// 		{
+// 			return PoolableActor;
+// 		}
+// 	}
+// 	return nullptr;
+// }
+//
+// ATowerMonsterActor* UObjectPoolComponent::GetPooledTowerMonster()
+// {
+// 	for (ATowerMonsterActor* PoolableActor : TowerMonsterPool)
+// 	{
+// 		if (!PoolableActor->IsActive())
+// 		{
+// 			return PoolableActor;
+// 		}
+// 	}
+// 	return nullptr;
+//
+// }
+//
+// ABossMonsterActor* UObjectPoolComponent::GetPooledBossMonster()
+// {
+// 	for (ABossMonsterActor* PoolableActor : BossMonsterPool)
+// 	{
+// 		if (!PoolableActor->IsActive())
+// 		{
+// 			return PoolableActor;
+// 		}
+// 	}
+// 	return nullptr;
+// }
 
 void UObjectPoolComponent::Spawn()
 {
 	//Super::BeginPlay();
 
-	if (PooledMonsterSubclass != NULL)
+	if (MonsterSubclassOf != NULL)
 	{
 		UWorld* const world = GetWorld();
 		if (world)
 		{
 			for (int i = 0; i < PoolSize; i++)
 			{
-				AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(
-					PooledMonsterSubclass, FVector().ZeroVector, FRotator().ZeroRotator);
-				PoolableActor->SetActive(false);
-				CommonMonsterPool.Add(PoolableActor);
 
-				ATowerMonsterActor* TowerPoolableActor = GetWorld()->SpawnActor<ATowerMonsterActor>(
-					PooledTowerMonsterSubclass, FVector().ZeroVector, FRotator().ZeroRotator);
-				TowerPoolableActor->SetActive(false);
-				TowerMonsterPool.Add(TowerPoolableActor);
 
 				ACommonMonster* CommonMonster = GetWorld()->SpawnActor<ACommonMonster>(
 				MonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
@@ -92,13 +84,7 @@ void UObjectPoolComponent::Spawn()
 				MonsterPool.Add(CommonMonster);
 				
 			}
-			for (int i = 0; i < BossPoolSize; i++)
-			{
-				ABossMonsterActor* BossPoolableActor = GetWorld()->SpawnActor<ABossMonsterActor>(
-					PooledBossMonsterSubclass, FVector().ZeroVector, FRotator().ZeroRotator);
-				BossPoolableActor->SetActive(false);
-				BossMonsterPool.Add(BossPoolableActor);
-			}
+
 		}
 	}
 }
@@ -107,21 +93,21 @@ void UObjectPoolComponent::Spawn()
 void UObjectPoolComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	if (PooledMonsterSubclass != NULL)
-	{
-		UWorld* const world = GetWorld();
-		if (world)
-		{
-			for (int i = 0; i < PoolSize; i++)
-			{
-				AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(
-					PooledMonsterSubclass, FVector().ZeroVector, FRotator().ZeroRotator);
-				PoolableActor->SetActive(false);
-				CommonMonsterPool.Add(PoolableActor);
-				//UE_LOG(LogTemp,Warning,TEXT("add object"));
-			}
-		}
-	}
+	// if (PooledMonsterSubclass != NULL)
+	// {
+	// 	UWorld* const world = GetWorld();
+	// 	if (world)
+	// 	{
+	// 		for (int i = 0; i < PoolSize; i++)
+	// 		{
+	// 			AMonsterActor* PoolableActor = GetWorld()->SpawnActor<AMonsterActor>(
+	// 				PooledMonsterSubclass, FVector().ZeroVector, FRotator().ZeroRotator);
+	// 			PoolableActor->SetActive(false);
+	// 			CommonMonsterPool.Add(PoolableActor);
+	// 			//UE_LOG(LogTemp,Warning,TEXT("add object"));
+	// 		}
+	// 	}
+	// }
 	// ...
 }
 

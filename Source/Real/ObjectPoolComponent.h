@@ -22,12 +22,12 @@ public:
 
 	class ACommonMonster* GetPooledCommonMonster();
 	
-	class AMonsterActor* GetPooledMonster();
-
-	class ATowerMonsterActor* GetPooledTowerMonster();
-
-	class ABossMonsterActor* GetPooledBossMonster();
-	
+	// class AMonsterActor* GetPooledMonster();
+	//
+	// class ATowerMonsterActor* GetPooledTowerMonster();
+	//
+	// class ABossMonsterActor* GetPooledBossMonster();
+	//
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -41,18 +41,6 @@ public:
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class ACommonMonster> MonsterSubclassOf;
-
-	
-	
-	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
-	TSubclassOf<class AMonsterActor> PooledMonsterSubclass;
-
-	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
-	TSubclassOf<class ATowerMonsterActor> PooledTowerMonsterSubclass;
-	
-	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
-	TSubclassOf<class ABossMonsterActor> PooledBossMonsterSubclass;
-	
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int PoolSize =100;
@@ -62,12 +50,5 @@ public:
 
 	TArray<ACommonMonster*> MonsterPool;
 
-
-
-	//Áö¿ö
-	TArray<AMonsterActor*> CommonMonsterPool;
 	
-	TArray<ATowerMonsterActor*> TowerMonsterPool;
-	
-	TArray<ABossMonsterActor*> BossMonsterPool;
 };

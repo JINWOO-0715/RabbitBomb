@@ -54,9 +54,9 @@ void AMonsterManager::Spawn()
 {
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	AMonsterActor* Monster = gm->MonsterPooler->GetPooledMonster();
-	ATowerMonsterActor* TowerMonster = gm->MonsterPooler->GetPooledTowerMonster();
-	ABossMonsterActor* BossMonster = gm->MonsterPooler->GetPooledBossMonster();
+	// AMonsterActor* Monster = gm->MonsterPooler->GetPooledMonster();
+	// ATowerMonsterActor* TowerMonster = gm->MonsterPooler->GetPooledTowerMonster();
+	// ABossMonsterActor* BossMonster = gm->MonsterPooler->GetPooledBossMonster();
 	// 몬스터가 다죽었다
 
 	// 스테이지를 늘리냐 웨비를 늘리냐 체크한다
@@ -75,8 +75,8 @@ void AMonsterManager::Spawn()
 	// 		return;
 	// 	}
 	// 	// 스폰 위치
-	 	int randompoint = FMath::RandRange(0,8);
-	 	Monster->SetActorLocation(SpawnLocation[randompoint]);
+	 	//int randompoint = FMath::RandRange(0,8);
+	 	//Monster->SetActorLocation(SpawnLocation[randompoint]);
 	// 	//몬스터 종류
 	// 	Monster->InitMonster(gm->GoalGameStage->CommonMonsterType);
 	// 	// 활성화 ㄱㄱ

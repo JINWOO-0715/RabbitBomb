@@ -21,21 +21,25 @@ ARealGameModeBase::ARealGameModeBase()
 
 	ItemPooler = CreateDefaultSubobject<UItemPoolComponent>(TEXT("ItemPoller"));
 
+
 	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/MonsterDT"));
 	if (MonsterDataAsset.Succeeded())
 	{
+		DataTableManage.D_MonsterData = MonsterDataAsset.Object;
 		MonsterData = MonsterDataAsset.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> PlayerSkillDataAsset(TEXT("/Game/BP/PlayerSkillDT"));
 	if (PlayerSkillDataAsset.Succeeded())
 	{
+		DataTableManage.D_MonsterData = PlayerSkillDataAsset.Object;
 		PlayerSkillData = PlayerSkillDataAsset.Object;
 	}
 	
 	static ConstructorHelpers::FObjectFinder<UDataTable> GameDataAsset(TEXT("/Game/BP/GameStateDT"));
 	if (GameDataAsset.Succeeded())
 	{
+		DataTableManage.D_MonsterData = GameDataAsset.Object;
 		GameStageData = GameDataAsset.Object;
 	}
 	
@@ -272,6 +276,8 @@ void ARealGameModeBase::BeginPlay()
 		GameInstanceRef->isStroySaw = true;
 		Save();
 	}
+	
+	
 	// if (GetWorld()->GetName() == FString("MainLevel"))
 	// {
 	// 	//StartTime = 0.0f;
@@ -330,6 +336,7 @@ FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
 
 FGameStateRow* ARealGameModeBase::GetGameStateRowData(int rowN=1)
 {
+	
 	FGameStateRow* const GameStateRowData = GameStageData->FindRow<FGameStateRow>(
 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
