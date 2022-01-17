@@ -16,6 +16,18 @@ UObjectPoolComponent::UObjectPoolComponent()
 
 }
 
+ACommonMonster* UObjectPoolComponent::GetPooledCommonMonster()
+{
+	for (ACommonMonster* PoolableActor : MonsterPool)
+	{
+		if (!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+}
+
 AMonsterActor* UObjectPoolComponent::GetPooledMonster()
 {
 	for (AMonsterActor* PoolableActor : CommonMonsterPool)
@@ -74,7 +86,11 @@ void UObjectPoolComponent::Spawn()
 				TowerPoolableActor->SetActive(false);
 				TowerMonsterPool.Add(TowerPoolableActor);
 
-				UE_LOG(LogTemp, Warning, TEXT("add object"));
+				ACommonMonster* CommonMonster = GetWorld()->SpawnActor<ACommonMonster>(
+				MonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+				CommonMonster->SetActive(false);
+				MonsterPool.Add(CommonMonster);
+				
 			}
 			for (int i = 0; i < BossPoolSize; i++)
 			{

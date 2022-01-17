@@ -4,7 +4,7 @@
 #include "MonsterActor.h"
 #include "TowerMonsterActor.h"
 #include "CoreMinimal.h"
-#include "Monster.h"
+#include "CommonMonster.h"
 #include "BossMonsterActor.h"
 #include "Components/ActorComponent.h"
 #include "ObjectPoolComponent.generated.h"
@@ -19,8 +19,10 @@ public:
 	// Sets default values for this component's properties
 	UObjectPoolComponent();
 	
+
+	class ACommonMonster* GetPooledCommonMonster();
 	
-	AMonsterActor* GetPooledMonster();
+	class AMonsterActor* GetPooledMonster();
 
 	class ATowerMonsterActor* GetPooledTowerMonster();
 
@@ -38,8 +40,9 @@ public:
 	void Spawn();
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
-	TSubclassOf<class AMonster> MonsterSubclassOf;
+	TSubclassOf<class ACommonMonster> MonsterSubclassOf;
 
+	
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class AMonsterActor> PooledMonsterSubclass;
@@ -57,8 +60,11 @@ public:
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int BossPoolSize =3;
 
-	TArray<AMonster*> MonsterPool;
-	
+	TArray<ACommonMonster*> MonsterPool;
+
+
+
+	//Áö¿ö
 	TArray<AMonsterActor*> CommonMonsterPool;
 	
 	TArray<ATowerMonsterActor*> TowerMonsterPool;

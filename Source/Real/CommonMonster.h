@@ -20,5 +20,11 @@ class REAL_API ACommonMonster : public AMonster
 	
 	UFUNCTION(BlueprintCallable)
 	void Mfire() override;
+
+
+	UFUNCTION(BlueprintCallable)
+	void MoveToTarget();
 	
+	// 움직이는 함수 
+
 };

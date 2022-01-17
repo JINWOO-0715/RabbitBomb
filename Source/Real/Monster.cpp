@@ -3,13 +3,14 @@
 
 #include "Monster.h"
 #include "RealGameModeBase.h"
+#include "CoinItem.h"
 #include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 AMonster::AMonster()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// ¸Þ½Ã
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/MonsterBaseMesh.MonsterBaseMesh"));
@@ -33,14 +34,12 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetActive(true);
+	SetActive(false);
 }
 
 void AMonster::InitMonster(const FMonsterRow  *const mMonsterStat)
 {
 
-
-	
 	//¸Þ½Ã¼³Á¤
 	MonsterMeshComponent->SetStaticMesh(mMonsterStat->MonsterMesh);
 	//ÃÑ¾Ë¼Óµµ
@@ -55,6 +54,56 @@ void AMonster::InitMonster(const FMonsterRow  *const mMonsterStat)
 	MonsterStat.MoveSpeed = mMonsterStat->MoveSpeed;
 	//
 	MonsterStat.BulletLifeSpan = mMonsterStat->BulletLifeSpan;
+}
+
+float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& MovieSceneBlends, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	//float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float Damage = DamageAmount;
+	MonsterHP -= Damage;
+	//ChangeHitedMTTimer();
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+	
+	if (MonsterHP < 0.f)
+	{
+		UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+
+		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		player->PlayerScoreWidget->DereaseMonsterText();
+		
+		int rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			AItemActor* Item = gm->ItemPooler->GetPooledUItem();
+			Item->SetActorLocation(GetActorLocation());
+			Item->SetActive(true);
+		}
+		
+		rand = FMath::RandRange(0, 1);
+		
+		if (rand == 0)
+		{
+			
+			ACoinItem* Coin = gm->ItemPooler->GetPooledCoinItem();
+			Coin->SetActorLocation(GetActorLocation()+FVector(50.f,0.f,0.f));
+			Coin->SetActive(true);
+		}
+		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
+		SetActive(false);
+		//gm->DecreaseCommomMonsterCount();
+	}
+
+	else
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+		UGameplayStatics::PlaySound2D(this, gm->MonsterHitSound);
+	}
+	return Damage;
+
 }
 
 void AMonster::SetActive(bool InActive)
@@ -82,6 +131,11 @@ void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+bool AMonster::IsActive()
+{
+	return Active;
 }
 
 void AMonster::ShotTimerExpired()

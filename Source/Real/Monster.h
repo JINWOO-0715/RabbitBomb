@@ -28,10 +28,11 @@ protected:
 
 	virtual void InitMonster(const FMonsterRow* MonsterStat);
 	
-	UFUNCTION(BlueprintCallable)
-	virtual void SetActive(bool InActive);
 	//virtual void DeActive();
 	
+	UFUNCTION()
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	// 공격 패턴 컴포넌트
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttackStyle")
 	class UBulletAttackPattern* AttackPatternComponent;
@@ -44,14 +45,23 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Stat" )
 	FMonsterRow MonsterStat;
 
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Stat" )
+	float MonsterHP;
+	
 
 	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// 
 	bool bCanFire;
+
+	UFUNCTION(BlueprintCallable)
+	void SetActive(bool InActive);
 	
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsActive(); 
 	 
 	UFUNCTION(BlueprintCallable)
 	virtual void ShotTimerExpired();

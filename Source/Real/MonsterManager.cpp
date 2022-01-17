@@ -75,8 +75,8 @@ void AMonsterManager::Spawn()
 	// 		return;
 	// 	}
 	// 	// 스폰 위치
-	// 	int randompoint = FMath::RandRange(0,8);
-	// 	Monster->SetActorLocation(SpawnLocation[randompoint]);
+	 	int randompoint = FMath::RandRange(0,8);
+	 	Monster->SetActorLocation(SpawnLocation[randompoint]);
 	// 	//몬스터 종류
 	// 	Monster->InitMonster(gm->GoalGameStage->CommonMonsterType);
 	// 	// 활성화 ㄱㄱ

@@ -9,7 +9,6 @@ void ACommonMonster::Tick(float DeltaTime)
 
 	if(Active)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 		Mfire();
 	}
 	
@@ -17,7 +16,7 @@ void ACommonMonster::Tick(float DeltaTime)
 
 void ACommonMonster::Mfire()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+	
 	if(bCanFire)
 	{
 		bCanFire = false; 
@@ -30,4 +29,22 @@ void ACommonMonster::Mfire()
 		World->GetTimerManager().SetTimer(AttackTimer, this, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
 	}
 	
+}
+
+
+void ACommonMonster::MoveToTarget()
+{
+
+		AActor* player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+		FVector Dir = player->GetActorLocation() - this->GetActorLocation();
+		Dir.Normalize(); // บคลอ
+
+		const FVector Movement = Dir * MonsterStat.MoveSpeed; //
+
+		FRotator NewRotation = Movement.Rotation();
+		//FTransform d (Movement,NewRotation,NULL;
+		SetActorRotation(NewRotation);
+		//AddActorWorldOffset(Movement,true,nullptr);
+		RootComponent->MoveComponent(Movement, NewRotation, true);
+
 }

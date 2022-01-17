@@ -279,7 +279,7 @@ void ARealGameModeBase::BeginPlay()
 	// 	
 	// 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	 	BulletPooler->Spawn();
-	// 	MonsterPooler->Spawn();
+	 	MonsterPooler->Spawn();
 	// 	ItemPooler->Spawn();
 	// 	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
 	// 	//FGameStateRow* GameStage = GetGameStateRowData(NowStage);

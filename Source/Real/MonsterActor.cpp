@@ -251,6 +251,7 @@ void AMonsterActor::InitMonster(int dataRowN)
 //	
 //}
 
+
 void AMonsterActor::SetStunMonster(float mStunTime)
 {
 	// 스턴상태로 바꾼다
