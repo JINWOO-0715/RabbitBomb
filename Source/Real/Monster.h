@@ -25,6 +25,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void InitMonster(const FMonsterRow* MonsterStat);
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void SetActive(bool InActive);
+	//virtual void DeActive();
+	
 	// 공격 패턴 컴포넌트
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttackStyle")
 	class UBulletAttackPattern* AttackPatternComponent;
@@ -34,7 +40,7 @@ protected:
 	class UStaticMeshComponent* MonsterMeshComponent;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Stat" )
-	FMonsterRow MyStat;
+	FMonsterRow MonsterStat;
 	
 public:	
 	// Called every frame

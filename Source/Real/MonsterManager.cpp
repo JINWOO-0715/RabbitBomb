@@ -66,63 +66,63 @@ void AMonsterManager::Spawn()
 	// 다되면 꺼지는데
 
 	// 목표만큼 
-	if(NowSpawnMosterCount.eCommomMonster < gm->GetGoalCommonMonsterCount())
-	{
-		if (Monster == nullptr)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
-			GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, false);
-			return;
-		}
-		// 스폰 위치
-		int randompoint = FMath::RandRange(0,8);
-		Monster->SetActorLocation(SpawnLocation[randompoint]);
-		//몬스터 종류
-		Monster->InitMonster(gm->GoalGameStage->CommonMonsterType);
-		// 활성화 ㄱㄱ
-		Monster->SetActive(true);
-		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
-		//목표수치 ++
-		NowSpawnMosterCount.eCommomMonster++;
-		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
-		
-	}
-	if(NowSpawnMosterCount.eTowerMonster <  gm->GetGoalTowerMonsterCount())
-	{
-		int randompoint = FMath::RandRange(0,8);
-		TowerMonster->SetActorLocation(SpawnLocation[randompoint]);
-		//몬스터 종류
-		TowerMonster->InitMonster(gm->GoalGameStage->TowerMonsterType);
-		// 활성화 ㄱㄱ
-		TowerMonster->SetActive(true);
-		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
-		//목표수치 ++
-		NowSpawnMosterCount.eTowerMonster++;
-		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
-		
-
-		
-	}
-	if(NowSpawnMosterCount.eBossMonster<gm->GetGoalBossMonsterCount())
-	{
-		BossMonster->SetActorLocation(FVector(0.0f,0.0f,5.0f));
-		//몬스터 종류
-		BossMonster->InitMonster(gm->GoalGameStage->BossMonsterType);
-		// 활성화 ㄱㄱ
-		BossMonster->SetActive(true);
-		UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
-		//목표수치 ++
-		NowSpawnMosterCount.eBossMonster++;
-		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
-		
-
-	}
-	else
-	{
-		//꺼버린다.
-	
-	
-	}
+	// if(NowSpawnMosterCount.eCommomMonster < gm->GetGoalCommonMonsterCount())
+	// {
+	// 	if (Monster == nullptr)
+	// 	{
+	// 		UE_LOG(LogTemp, Warning, TEXT("Cannot spawn"));
+	// 		GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown, false);
+	// 		return;
+	// 	}
+	// 	// 스폰 위치
+	// 	int randompoint = FMath::RandRange(0,8);
+	// 	Monster->SetActorLocation(SpawnLocation[randompoint]);
+	// 	//몬스터 종류
+	// 	Monster->InitMonster(gm->GoalGameStage->CommonMonsterType);
+	// 	// 활성화 ㄱㄱ
+	// 	Monster->SetActive(true);
+	// 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
+	// 	//목표수치 ++
+	// 	NowSpawnMosterCount.eCommomMonster++;
+	// 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+	// 	
+	// }
+	// if(NowSpawnMosterCount.eTowerMonster <  gm->GetGoalTowerMonsterCount())
+	// {
+	// 	int randompoint = FMath::RandRange(0,8);
+	// 	TowerMonster->SetActorLocation(SpawnLocation[randompoint]);
+	// 	//몬스터 종류
+	// 	TowerMonster->InitMonster(gm->GoalGameStage->TowerMonsterType);
+	// 	// 활성화 ㄱㄱ
+	// 	TowerMonster->SetActive(true);
+	// 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
+	// 	//목표수치 ++
+	// 	NowSpawnMosterCount.eTowerMonster++;
+	// 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+	// 	
+	//
+	// 	
+	// }
+	// if(NowSpawnMosterCount.eBossMonster<gm->GetGoalBossMonsterCount())
+	// {
+	// 	BossMonster->SetActorLocation(FVector(0.0f,0.0f,5.0f));
+	// 	//몬스터 종류
+	// 	BossMonster->InitMonster(gm->GoalGameStage->BossMonsterType);
+	// 	// 활성화 ㄱㄱ
+	// 	BossMonster->SetActive(true);
+	// 	UE_LOG(LogTemp, Warning, TEXT("Monster spawn"));
+	// 	//목표수치 ++
+	// 	NowSpawnMosterCount.eBossMonster++;
+	// 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
+	// 	
+	//
+	// }
+	// else
+	// {
+	// 	//꺼버린다.
+	//
+	//
+	// }
 
 
 		

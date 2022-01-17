@@ -15,5 +15,7 @@ class REAL_API ACommonMonster : public AMonster
 	GENERATED_BODY()
 
 	public:
+
+	UFUNCTION(BlueprintCallable)
 	virtual void Mfire() override;
 };

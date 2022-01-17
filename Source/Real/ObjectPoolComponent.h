@@ -4,6 +4,7 @@
 #include "MonsterActor.h"
 #include "TowerMonsterActor.h"
 #include "CoreMinimal.h"
+#include "Monster.h"
 #include "BossMonsterActor.h"
 #include "Components/ActorComponent.h"
 #include "ObjectPoolComponent.generated.h"
@@ -17,6 +18,7 @@ class REAL_API UObjectPoolComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UObjectPoolComponent();
+	
 	
 	AMonsterActor* GetPooledMonster();
 

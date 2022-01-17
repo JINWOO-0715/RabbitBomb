@@ -256,11 +256,11 @@ void ARealGameModeBase::CheckStage()
 void ARealGameModeBase::BeginPlay()
 {
 	
-	UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
-			UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
-
-	if (LoadGameInstance)
-		Load();
+	// UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
+	// 		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
+	//
+	// if (LoadGameInstance)
+	// 	Load();
 
 	if(GetWorld()->GetName() == FString("StoryLevel"))
 	{
@@ -272,45 +272,45 @@ void ARealGameModeBase::BeginPlay()
 		GameInstanceRef->isStroySaw = true;
 		Save();
 	}
-	if (GetWorld()->GetName() == FString("MainLevel"))
-	{
-		//StartTime = 0.0f;
-		// 총알 스폰
-		
-		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-		BulletPooler->Spawn();
-		MonsterPooler->Spawn();
-		ItemPooler->Spawn();
-		PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
-		//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
-
-		AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		
-		
-		
-		// 목표 스테이지 설정
-		SetNowStage(GameInstanceRef->NowStage);
-		GoalGameStage = GetGameStateRowData(NowStage);
-		NowWave =1;
-		NowMosterCount.eCommomMonster = GoalGameStage->MonsterWave[NowWave].eCommomMonster;
-		NowMosterCount.eTowerMonster = GoalGameStage->MonsterWave[NowWave].eTowerMonster;
-		NowMosterCount.eBossMonster = GoalGameStage->MonsterWave[NowWave].eBossMonster;
-		// 몬스터 수 UI의 몬스터 수 설정
-		
-		int MonsterNum = NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster+NowMosterCount.eBossMonster;
-		GameInstanceRef->MonsterCount= MonsterNum;
-		// 
-		GameInstanceRef->GoalWave = GoalGameStage->MonsterWave.Num();
-		GameInstanceRef->NowWave =1; 
-		
-		// 스테이지의 1wave부터 시작
-		UWorld* const World = GetWorld();
-		player->SetScoreText();
-		Save();
-		
-		// World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn,
-		//                                   MonsterSpawnCoolTime);
-	}
+	// if (GetWorld()->GetName() == FString("MainLevel"))
+	// {
+	// 	//StartTime = 0.0f;
+	// 	// 총알 스폰
+	// 	
+	// 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	 	BulletPooler->Spawn();
+	// 	MonsterPooler->Spawn();
+	// 	ItemPooler->Spawn();
+	// 	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
+	// 	//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
+	//
+	// 	AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	// 	
+	// 	
+	// 	
+	// 	// 목표 스테이지 설정
+	// 	SetNowStage(GameInstanceRef->NowStage);
+	// 	GoalGameStage = GetGameStateRowData(NowStage);
+	// 	NowWave =1;
+	// 	NowMosterCount.eCommomMonster = GoalGameStage->MonsterWave[NowWave].eCommomMonster;
+	// 	NowMosterCount.eTowerMonster = GoalGameStage->MonsterWave[NowWave].eTowerMonster;
+	// 	NowMosterCount.eBossMonster = GoalGameStage->MonsterWave[NowWave].eBossMonster;
+	// 	// 몬스터 수 UI의 몬스터 수 설정
+	// 	
+	// 	int MonsterNum = NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster+NowMosterCount.eBossMonster;
+	// 	GameInstanceRef->MonsterCount= MonsterNum;
+	// 	// 
+	// 	GameInstanceRef->GoalWave = GoalGameStage->MonsterWave.Num();
+	// 	GameInstanceRef->NowWave =1; 
+	// 	
+	// 	// 스테이지의 1wave부터 시작
+	// 	UWorld* const World = GetWorld();
+	// 	player->SetScoreText();
+	// 	Save();
+	// 	
+	// 	// World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn,
+	// 	//                                   MonsterSpawnCoolTime);
+	// }
 }
 FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
 {
