@@ -38,6 +38,10 @@ public:
 	void Spawn();
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class AMonster> MonsterSubclassOf;
+
+	
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class AMonsterActor> PooledMonsterSubclass;
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
@@ -53,6 +57,8 @@ public:
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int BossPoolSize =3;
 
+	TArray<AMonster*> MonsterPool;
+	
 	TArray<AMonsterActor*> CommonMonsterPool;
 	
 	TArray<ATowerMonsterActor*> TowerMonsterPool;

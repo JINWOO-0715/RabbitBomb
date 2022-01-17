@@ -16,6 +16,9 @@ class REAL_API ACommonMonster : public AMonster
 
 	public:
 
+	virtual void Tick(float DeltaTime) override;
+	
 	UFUNCTION(BlueprintCallable)
-	virtual void Mfire() override;
+	void Mfire() override;
+	
 };

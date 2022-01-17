@@ -25,6 +25,7 @@ AMonster::AMonster()
 	AttackPatternComponent = CreateDefaultSubobject<UBulletAttackPattern>(TEXT("AttackPatternComponent"));
 
 	// 스탯 기본설정.
+	Active =false;
 }
 
 // Called when the game starts or when spawned
@@ -32,7 +33,7 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	
+	SetActive(true);
 }
 
 void AMonster::InitMonster(const FMonsterRow  *const mMonsterStat)
@@ -58,6 +59,7 @@ void AMonster::InitMonster(const FMonsterRow  *const mMonsterStat)
 
 void AMonster::SetActive(bool InActive)
 {
+	Active=InActive;
 	// 충돌 off
 	SetActorEnableCollision(InActive);
 
@@ -69,6 +71,9 @@ void AMonster::SetActive(bool InActive)
 
 	//틱종료
 	SetActorTickEnabled(InActive);
+
+	GetWorldTimerManager().SetTimer(AttackTimer, this
+								, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
 	
 }
 
@@ -76,6 +81,12 @@ void AMonster::SetActive(bool InActive)
 void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void AMonster::ShotTimerExpired()
+{
+	bCanFire = true;
 
 }
 

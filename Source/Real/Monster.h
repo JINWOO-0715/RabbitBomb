@@ -21,6 +21,7 @@ public:
 	
 	virtual void Mfire() PURE_VIRTUAL(AMonster);
 
+	bool Active;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,17 +36,29 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttackStyle")
 	class UBulletAttackPattern* AttackPatternComponent;
 
-
+	//메시 컴포넌트
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	class UStaticMeshComponent* MonsterMeshComponent;
 
+	// Stat구조체
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Stat" )
 	FMonsterRow MonsterStat;
+
+
 	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool bCanFire;
+	
+	 
+	UFUNCTION(BlueprintCallable)
+	virtual void ShotTimerExpired();
+	
+	// 타이머 핸들
+	UPROPERTY(EditAnywhere)
+	FTimerHandle AttackTimer;
 
 
 };
