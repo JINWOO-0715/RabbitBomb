@@ -51,10 +51,10 @@ protected:
 	
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
 	// 몬스터 초기화
-	virtual void InitMonster(const FCommonMonsterData* MonsterType);
+	void InitMonster(const FCommonMonsterData* MonsterType);
 	// 
 	bool bCanFire;
 
@@ -62,10 +62,10 @@ public:
 	void SetActive(bool InActive);
 	
 	UFUNCTION(BlueprintCallable)
-	virtual bool IsActive(); 
+	bool IsActive(); 
 	 
 	UFUNCTION(BlueprintCallable)
-	virtual void ShotTimerExpired();
+	void ShotTimerExpired();
 	
 	// 타이머 핸들
 	UPROPERTY(EditAnywhere)

@@ -34,7 +34,9 @@ void UBulletAttackPattern::TargetShot(const AActor* Target, const float BulletSp
 	//UWorld* const World = GetWorld();
 	ARealGameModeBase* Gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	ABullet* Bullet = Gm->BulletPooler->GetPooledBullet();
+
 	const AActor* Me = GetOwner();
+
 	if (Bullet)
 	{
 		

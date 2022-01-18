@@ -50,7 +50,7 @@ FCommonMonsterData* UStageManageComponent::GetCommonMonsterRowData(int rowN=1) c
 	FCommonMonsterData* const MonsterDataRowData = CommonMonsterData->FindRow<FCommonMonsterData>(
 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
-	return MonsterDataRowData;
+		return MonsterDataRowData;
 	}
 	UE_LOG(LogTemp, Warning,TEXT("FCommonMonsterData is Not Valid"));
 	return nullptr;
@@ -59,20 +59,20 @@ FCommonMonsterData* UStageManageComponent::GetCommonMonsterRowData(int rowN=1) c
 void UStageManageComponent::StageStart(int StageNum)
 {
 	const FGameStageRow*  NowStage  = GetGameStateRowData(StageNum);
-	const FCommonMonsterData*  StageCommonMonster = GetCommonMonsterRowData(NowStage->CommonMonsterType);
+	const FCommonMonsterData*  StageCommonMonsterData = GetCommonMonsterRowData(NowStage->CommonMonsterType);
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 
-	auto c = gm->MonsterPooler->GetPooledCommonMonster();
+	ACommonMonster* CommonMonster = gm->MonsterPooler->GetPooledCommonMonster();
 
-	if(c==nullptr)
+	if(CommonMonster==nullptr)
 	{
 		UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
 		return;
 	}
-	c->InitMonster(StageCommonMonster);
-	c->SetActive(true);
-	c->SetActorLocation(FVector(0.0f,370.f,50.f));
-	UE_LOG(LogTemp, Warning,TEXT("Sucess"));
+	CommonMonster->InitMonster(StageCommonMonsterData);
+	CommonMonster->SetActive(true);
+	CommonMonster->SetActorLocation(FVector(0.0f,370.f,150.f));
+
 }
 
 // Called when the game starts

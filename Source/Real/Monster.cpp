@@ -34,6 +34,7 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//
 
 }
 
@@ -129,17 +130,18 @@ void AMonster::SetActive(bool InActive)
 	//Æ½Á¾·á
 	SetActorTickEnabled(InActive);
 
+	bCanFire=InActive;
 	GetWorldTimerManager().SetTimer(AttackTimer, this
-								, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
+	 							, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
 	
 }
 
 // Called every frame
-void AMonster::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
+// void AMonster::Tick(float DeltaTime)
+// {
+// 	Super::Tick(DeltaTime);
+//
+// }
 
 bool AMonster::IsActive()
 {

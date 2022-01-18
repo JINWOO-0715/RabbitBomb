@@ -15,16 +15,18 @@ class REAL_API ACommonMonster : public AMonster
 	GENERATED_BODY()
 
 	public:
+	ACommonMonster();
 
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable)
-	void Mfire() override;
-
-
+	void Mfire();
+	
 	UFUNCTION(BlueprintCallable)
 	void MoveToTarget();
-	
+
+	UFUNCTION(BlueprintCallable)
+	bool GetbeCanFire();
 	// 움직이는 함수 
 
 };

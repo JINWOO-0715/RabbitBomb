@@ -4,12 +4,19 @@
 #include "CommonMonster.h"
 #include "Kismet/GameplayStatics.h"
 
+ACommonMonster::ACommonMonster()
+{
+	
+}
+
 void ACommonMonster::Tick(float DeltaTime)
 {
-
+	Super::Tick(DeltaTime);
+	
 	if(Active)
 	{
 		Mfire();
+		MoveToTarget();
 	}
 	
 }
@@ -20,7 +27,6 @@ void ACommonMonster::Mfire()
 	if(bCanFire)
 	{
 		bCanFire = false; 
-
 		const AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 		AttackPatternComponent->TargetShot(Player, MonsterStat.BulletSpeed);
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
@@ -30,6 +36,13 @@ void ACommonMonster::Mfire()
 	}
 	
 }
+//
+// void ACommonMonster::SetActive(bool bInActive)
+// {
+// 	Super::SetActive(bInActive);
+// 	 GetWorldTimerManager().SetTimer(AttackTimer, this
+// 	 							, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
+// }
 
 
 void ACommonMonster::MoveToTarget()
@@ -47,4 +60,9 @@ void ACommonMonster::MoveToTarget()
 		//AddActorWorldOffset(Movement,true,nullptr);
 		RootComponent->MoveComponent(Movement, NewRotation, true);
 
+}
+
+bool ACommonMonster::GetbeCanFire()
+{
+	return bCanFire;
 }
