@@ -28,9 +28,9 @@ AMonsterManager::AMonsterManager()
 
 void AMonsterManager::ResetCount()
 {
-	NowSpawnMosterCount.eCommomMonster =0;
-	NowSpawnMosterCount.eBossMonster =0;
-	NowSpawnMosterCount.eTowerMonster =0;
+	// NowSpawnMosterCount.eCommomMonster =0;
+	// NowSpawnMosterCount.eBossMonster =0;
+	// NowSpawnMosterCount.eTowerMonster =0;
 	GetWorldTimerManager().SetTimer(SpawnCooldownTimer, this, &AMonsterManager::Spawn, SpawnCooldown);
 }
 

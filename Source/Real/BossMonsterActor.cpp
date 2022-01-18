@@ -16,8 +16,8 @@ float ABossMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent cons
 		UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
 
-		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		player->PlayerScoreWidget->DereaseMonsterText();
+		//AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		//player->PlayerScoreWidget->DereaseMonsterText();
 	
 		int rand = FMath::RandRange(0, 1);
 		
@@ -40,7 +40,7 @@ float ABossMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent cons
 		}
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
-		gm->DecreaseBossMonsterCount();
+		//gm->DecreaseBossMonsterCount();
 	}
 	else
 	{

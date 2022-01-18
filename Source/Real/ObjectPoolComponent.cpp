@@ -76,8 +76,6 @@ void UObjectPoolComponent::Spawn()
 		{
 			for (int i = 0; i < PoolSize; i++)
 			{
-
-
 				ACommonMonster* CommonMonster = GetWorld()->SpawnActor<ACommonMonster>(
 				MonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
 				CommonMonster->SetActive(false);

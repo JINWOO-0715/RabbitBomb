@@ -6,7 +6,7 @@
 
 #include "Engine/DataTable.h"
 #include "GameFramework/Actor.h"
-#include "DataTableManager.generated.h"
+#include "DataTableList.generated.h"
 
 
 USTRUCT(BlueprintType)
@@ -42,8 +42,6 @@ struct FStatData : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStaticMesh* MonsterMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MonsterHP;
@@ -68,18 +66,93 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FCommonMonsterData : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMesh* MonsterMesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FStatData Stat;
+};
+
+USTRUCT(BlueprintType)
+struct FWaveType : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+    
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CommonMonsterSpawnCount;
+    
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int TowerMonsterSpawnCount;
+    
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int BossMonsterSpawnCount;
+
+
+
+};
+
+USTRUCT(BlueprintType)
+struct FGameStageRow : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Stage;
+   
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CommonMonsterType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int TowerMonsterType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int BossMonsterType;
+    
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<int,FWaveType> MonsterWave;
+
+    
+
+};
+
+USTRUCT(BlueprintType)
 struct FDataTableManage: public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
+
+	// list??
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UDataTable* D_MonsterData;
-	 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UDataTable* D_GameState;
+	UDataTable* D_CommonMonsterData;
 		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* D_PlayerSkill;
+
+	// 시도1 연산자 오버로딩 but 값이 안넘어감
+	// FDataTableManage& operator =( const FDataTableManage* ref) 
+	// {
+	// 	FDataTableManage TmpDataTableManage;
+	// 	TmpDataTableManage.D_CommonMonsterData=ref->D_CommonMonsterData;
+	// 	
+	// 	TmpDataTableManage.D_PlayerSkill=ref->D_PlayerSkill;
+	//
+	// 	return *this;
+	// }
+
+	// 시도2 Copy함수 만들기??
+	
+	
+
 };
 
 UCLASS()

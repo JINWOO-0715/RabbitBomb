@@ -186,7 +186,7 @@ float AMonsterActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 		}
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
-		gm->DecreaseCommomMonsterCount();
+		//gm->DecreaseCommomMonsterCount();
 	}
 
 	else
@@ -219,19 +219,19 @@ void AMonsterActor::InitMonster(int dataRowN)
 {
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	
-	FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
-	
-	
-	ChangeHitMT();
-	MonsterMeshComponent->SetStaticMesh(MonsterData->MonsterMesh);
-	BulletSpeed = MonsterData->BulletSpeed;
-	FireRate = MonsterData->FireRate *gm->GoalGameStage->FireRateUPCount;
-	Lifespan = MonsterData->Lifespan;
-	float const time = GetWorld()->GetAudioTimeSeconds();
-	MonsterHP =  MonsterData->MonsterHP*gm->GoalGameStage->HpUPCount;
-	BulletPower = MonsterData->BulletPower*gm->GoalGameStage->BulletPowerUPCount;
-	MoveSpeed = MonsterData->MoveSpeed;
-	BulletLifeSpan = MonsterData->BulletLifeSpan;
+	// FMonsterRow* MonsterData = gm->GetMonsterRowData(dataRowN);
+	//
+	//
+	// ChangeHitMT();
+	// MonsterMeshComponent->SetStaticMesh(MonsterData->MonsterMesh);
+	// BulletSpeed = MonsterData->BulletSpeed;
+	// FireRate = MonsterData->FireRate *gm->GoalGameStage->FireRateUPCount;
+	// Lifespan = MonsterData->Lifespan;
+	// float const time = GetWorld()->GetAudioTimeSeconds();
+	// MonsterHP =  MonsterData->MonsterHP*gm->GoalGameStage->HpUPCount;
+	// BulletPower = MonsterData->BulletPower*gm->GoalGameStage->BulletPowerUPCount;
+	// MoveSpeed = MonsterData->MoveSpeed;
+	// BulletLifeSpan = MonsterData->BulletLifeSpan;
 	
 	//0.0008*x*x+100;
 }

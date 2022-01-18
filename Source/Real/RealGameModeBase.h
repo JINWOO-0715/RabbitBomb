@@ -7,13 +7,13 @@
 #include "ObjectPoolComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "PlayerSkillDataTable.h"
+//#include "PlayerSkillDataTable.h"
 #include "ItemPoolComponent.h"
 #include "GameStateDataTable.h"
 #include "MonsterDataTable.h"
-#include "DataTableManager.h"
+#include "DataTableList.h"
 #include "Particles/ParticleSystem.h"
-
+#include "StageManageComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MonsterDataTable.h"
 #include "UObject/ConstructorHelpers.h"
@@ -45,11 +45,19 @@ class ARealGameModeBase : public AGameModeBase
 	// 메인으로 돌아가기 핸들
 	FTimerHandle ReturnToTitleTimerHandle;
 
-	class UDataTable* MonsterData;
-	class UDataTable* PlayerSkillData;
-	class UDataTable* GameStageData;
 	
-	FDataTableManage DataTableManage; 
+	//
+	// class UDataTable* MonsterData;
+	// class UDataTable* PlayerSkillData;
+	// class UDataTable* GameStageData;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AMonsterManager> SDataTableManager;
+
+	UPROPERTY(EditAnywhere)
+	class UDataTable*  DataTableManageClass;
+	
+
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AMonsterManager> SDataTableManage;
@@ -62,11 +70,11 @@ class ARealGameModeBase : public AGameModeBase
 	//float StartTime =0.0f;
 
 protected:
-	virtual void BeginPlay() override;
+
 	
 public:
 	ARealGameModeBase();
-
+	virtual void BeginPlay() override;
 	// 몬스터 매니저에게 일시키기
 	void SetMonsterManager(AMonsterManager* mMonsterManager);
 
@@ -75,6 +83,17 @@ public:
 	
 	//메쉬
 
+	UPROPERTY(EditAnywhere)
+	class UDataTable*  CommonMonsterDataTable;
+
+	// 스마트포인터 사용???
+	UPROPERTY(BlueprintReadOnly)
+	FDataTableManage DataTableManager;
+
+	
+	FCommonMonsterData* GetCommonMonsterData(int Num=1); 
+
+	
 	// 몬스터 수를 줄여 웨이브 관리
 	void DecreaseCommomMonsterCount();
 	
@@ -86,7 +105,7 @@ public:
 
 	void ReturnToTitle();
 	
-	FGameStateRow* GoalGameStage;
+	
 	
 	int NowStage = 1;
 	int NowWave	= 1;
@@ -113,17 +132,21 @@ public:
 	UPROPERTY(EditAnywhere,Category="Spawner")
 		class UItemPoolComponent* ItemPooler;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Spawner")
+		class UStageManageComponent* StageManageComponent;
 
-	//몬스터 데이터 초기화
-	FMonsterRow* GetMonsterRowData(int rowN);
-	FMonsterRow* GetMonsterRowData(FName mSkillName);
 
-	//플레이어 스킬 가져오기
-	FPlayerSkillRow* GetPlayerSkillRowDataToNum(int rowN);
-	FPlayerSkillRow* GetPlayerSkillRowDataToNum(FName mSkillName);
-	
-	//스테이지 정보 가져오기
-	FGameStateRow* GetGameStateRowData(int rowN);
+	//
+	// //몬스터 데이터 초기화
+	// FMonsterRow* GetMonsterRowData(int rowN);
+	// FMonsterRow* GetMonsterRowData(FName mSkillName);
+	//
+	// //플레이어 스킬 가져오기
+	// FPlayerSkillRow* GetPlayerSkillRowDataToNum(int rowN);
+	// FPlayerSkillRow* GetPlayerSkillRowDataToNum(FName mSkillName);
+	//
+	// //스테이지 정보 가져오기
+	// FGameStateRow* GetGameStateRowData(int rowN);
 
 	//클릭효과음
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)

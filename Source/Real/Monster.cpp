@@ -34,26 +34,34 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetActive(false);
+
 }
 
-void AMonster::InitMonster(const FMonsterRow  *const mMonsterStat)
+void AMonster::InitMonster(const FCommonMonsterData* mMonsterStat)
 {
 
-	//메시설정
-	MonsterMeshComponent->SetStaticMesh(mMonsterStat->MonsterMesh);
-	//총알속도
-	MonsterStat.BulletSpeed = mMonsterStat->BulletSpeed;
-	//공격속도
-	MonsterStat.FireRate = mMonsterStat->FireRate;
-	// 몬스터HP
-	MonsterStat.MonsterHP =  mMonsterStat->MonsterHP;
-	//총알 파워
-	MonsterStat.BulletPower = mMonsterStat->BulletPower;
-	//몬스터 이속
-	MonsterStat.MoveSpeed = mMonsterStat->MoveSpeed;
+	// ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	//
-	MonsterStat.BulletLifeSpan = mMonsterStat->BulletLifeSpan;
+	// FCommonMonsterData* mMonsterStat = gm->CommonMonsterDataTable->FindRow<FCommonMonsterData>(
+	// 				FName(*(FString::FormatAsNumber(1))), FString(""));
+	if(mMonsterStat)
+	{
+		//메시설정
+		MonsterMeshComponent->SetStaticMesh(mMonsterStat->MonsterMesh);
+		//총알속도
+		MonsterStat.BulletSpeed = mMonsterStat->Stat.BulletSpeed;
+		//공격속도
+		MonsterStat.FireRate = mMonsterStat->Stat.FireRate;
+		// 몬스터HP
+		MonsterStat.MonsterHP =  mMonsterStat->Stat.MonsterHP;
+		//총알 파워
+		MonsterStat.BulletPower = mMonsterStat->Stat.BulletPower;
+		//몬스터 이속
+		MonsterStat.MoveSpeed = mMonsterStat->Stat.MoveSpeed;
+		//
+		MonsterStat.BulletLifeSpan = mMonsterStat->Stat.BulletLifeSpan;	
+	}
+
 }
 
 float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& MovieSceneBlends, AController* EventInstigator,

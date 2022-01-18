@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataTableList.h"
 #include "Engine/GameInstance.h"
+
 // #include  스테이지 매니져 
 #include "RabbitBombGameInstance.generated.h"
 
@@ -26,6 +28,8 @@ class REAL_API URabbitBombGameInstance : public UGameInstance
 	public:
 	int NowStage;
 
+	
+	
 	int PlayerFireRateLevel =1;
 	int PlayerPowerLevel =1;
 	int PlayerSpeedLevel =1;

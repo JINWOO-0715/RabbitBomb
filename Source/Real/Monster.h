@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BulletAttackPattern.h"
 #include "MonsterDataTable.h"
+#include "DataTableList.h"
 
 #include "Monster.generated.h"
 
@@ -26,7 +27,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void InitMonster(const FMonsterRow* MonsterStat);
 	
 	//virtual void DeActive();
 	
@@ -42,7 +42,6 @@ protected:
 	class UStaticMeshComponent* MonsterMeshComponent;
 
 	// Stat구조체
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Stat" )
 	FMonsterRow MonsterStat;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Stat" )
@@ -54,6 +53,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// 몬스터 초기화
+	virtual void InitMonster(const FCommonMonsterData* MonsterType);
 	// 
 	bool bCanFire;
 

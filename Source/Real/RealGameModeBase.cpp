@@ -3,6 +3,7 @@
 
 #include "RealGameModeBase.h"
 
+#include "HeadMountedDisplayTypes.h"
 #include "RabbitBombGameInstance.h"
 #include "MonsterManager.h"
 #include "TowerMonsterActor.h"
@@ -20,28 +21,46 @@ ARealGameModeBase::ARealGameModeBase()
 	MonsterPooler = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("MonsterPoller"));
 
 	ItemPooler = CreateDefaultSubobject<UItemPoolComponent>(TEXT("ItemPoller"));
-
-
-	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/MonsterDT"));
-	if (MonsterDataAsset.Succeeded())
-	{
-		DataTableManage.D_MonsterData = MonsterDataAsset.Object;
-		MonsterData = MonsterDataAsset.Object;
-	}
-
-	static ConstructorHelpers::FObjectFinder<UDataTable> PlayerSkillDataAsset(TEXT("/Game/BP/PlayerSkillDT"));
-	if (PlayerSkillDataAsset.Succeeded())
-	{
-		DataTableManage.D_MonsterData = PlayerSkillDataAsset.Object;
-		PlayerSkillData = PlayerSkillDataAsset.Object;
-	}
 	
-	static ConstructorHelpers::FObjectFinder<UDataTable> GameDataAsset(TEXT("/Game/BP/GameStateDT"));
-	if (GameDataAsset.Succeeded())
+	StageManageComponent = CreateDefaultSubobject<UStageManageComponent>(TEXT("StageComponent"));
+
+	
+	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset2(TEXT("/Game/BP/CommonMonsterDT"));
+	if (MonsterDataAsset2.Succeeded())
 	{
-		DataTableManage.D_MonsterData = GameDataAsset.Object;
-		GameStageData = GameDataAsset.Object;
+		CommonMonsterDataTable = MonsterDataAsset2.Object;
 	}
+
+	
+	//
+	// static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset2(TEXT("/Game/BP/NewDataTable"));
+	// if (MonsterDataAsset2.Succeeded())
+	// {
+	// 	DataTableManageClass = MonsterDataAsset2.Object;
+	//
+	// 	//DataTableManage2.StatGetRow();
+	// }	
+	//
+	// static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/MonsterDT"));
+	// if (MonsterDataAsset.Succeeded())
+	// {
+	// 	DataTableManage.D_MonsterData = MonsterDataAsset.Object;
+	// 	MonsterData = MonsterDataAsset.Object;
+	// }
+	//
+	// static ConstructorHelpers::FObjectFinder<UDataTable> PlayerSkillDataAsset(TEXT("/Game/BP/PlayerSkillDT"));
+	// if (PlayerSkillDataAsset.Succeeded())
+	// {
+	// 	DataTableManage.D_MonsterData = PlayerSkillDataAsset.Object;
+	// 	PlayerSkillData = PlayerSkillDataAsset.Object;
+	// }
+	//
+	// static ConstructorHelpers::FObjectFinder<UDataTable> GameDataAsset(TEXT("/Game/BP/GameStateDT"));
+	// if (GameDataAsset.Succeeded())
+	// {
+	// 	DataTableManage.D_MonsterData = GameDataAsset.Object;
+	// 	GameStageData = GameDataAsset.Object;
+	// }
 	
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> Particle(TEXT("/Game/Particle/P_Impact_Shield_Ice.P_Impact_Shield_Ice"));
 	HitedParticle = Particle.Object;
@@ -98,7 +117,7 @@ void ARealGameModeBase::Save()
 {
 	UPlayerSaveGame* SaveGameInstance = Cast<UPlayerSaveGame>(
 		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
-
+	
 	if (SaveGameInstance)
 	{
 		/** Save file data **/
@@ -177,95 +196,124 @@ void ARealGameModeBase::Load()
 }
 
 
-int ARealGameModeBase::GetGoalWave()
-{
-	return GoalGameStage->MonsterWave.Num();
-}
+// int ARealGameModeBase::GetGoalWave()
+// {
+// //	return GoalGameStage->MonsterWave.Num();
+// }
 
 void ARealGameModeBase::SetNowStage(int mStage)
 {
 	NowStage=mStage;
-}
-
-void ARealGameModeBase::DecreaseCommomMonsterCount()
-{
-	NowMosterCount.eCommomMonster--;
 	
-	CheckStage();
-}	
-void ARealGameModeBase::DecreaseTowerMonsterCount()
-{
-	NowMosterCount.eTowerMonster--;
-	
-	CheckStage();
 }
 
-void ARealGameModeBase::DecreaseBossMonsterCount()
-{
-	NowMosterCount.eBossMonster--;
-	
-	CheckStage();
-}
+FCommonMonsterData* ARealGameModeBase::GetCommonMonsterData(int Num)
+{	
 
-int ARealGameModeBase::GetGoalCommonMonsterCount()
-{
-	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
-}
-
-int ARealGameModeBase::GetGoalTowerMonsterCount()
-{
-	return GoalGameStage->MonsterWave[NowWave].eTowerMonster; 
-}
-
-int ARealGameModeBase::GetGoalBossMonsterCount()
-{
-	return GoalGameStage->MonsterWave[NowWave].eBossMonster; 
-}
-
-void ARealGameModeBase::CheckStage()
-{
-	// 플레이어안의 몬스터 정보 처리해준다.
-	 
-	// 다죽었으면
-	if (NowMosterCount.eBossMonster < 1 && NowMosterCount.eCommomMonster < 1 && NowMosterCount.eTowerMonster < 1)
+	if(DataTableManager.D_CommonMonsterData)
 	{
-		
-		// 웨이브를 늘려야하면 늘리고
-		if(NowWave < GetGoalWave())
-		{
-			NowWave++;
-			NowMosterCount = GoalGameStage->MonsterWave[NowWave];
-			WorldMonsterManger->ResetCount();
-			// 리셋해서 다시 스폰하슈
-			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-			player->PlayerScoreWidget->SetRemainMonsterText(NowMosterCount.eBossMonster+NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster);
-			auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-			player->PlayerScoreWidget->SetNowWaveText(NowWave,GameInstanceRef->GoalWave);
-		}
-		else
-		{
-			//스테이지 클리어 메시지를 띄운다
-			UGameplayStatics::PlaySound2D(this,GameClearSound );
-			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-			player->PlayerScoreWidget->ShowStageClearBox(true);
-			
-			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,4);
-					
-		
-		}
-
-		
+		FCommonMonsterData* MonsterRowData = DataTableManager.D_CommonMonsterData->FindRow<FCommonMonsterData>(
+	FName(*(FString::FormatAsNumber(Num))), FString(""));
+	
+		return  MonsterRowData;
 	}
+	else
+	{
+		return nullptr;
+	}
+	
+	
 }
+//
+// void ARealGameModeBase::DecreaseCommomMonsterCount()
+// {
+// 	NowMosterCount.eCommomMonster--;
+// 	
+// 	CheckStage();
+// }	
+// void ARealGameModeBase::DecreaseTowerMonsterCount()
+// {
+// 	NowMosterCount.eTowerMonster--;
+// 	
+// 	CheckStage();
+// }
+//
+// void ARealGameModeBase::DecreaseBossMonsterCount()
+// {
+// 	NowMosterCount.eBossMonster--;
+// 	
+// 	CheckStage();
+// }
+//
+// int ARealGameModeBase::GetGoalCommonMonsterCount()
+// {
+// 	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
+// }
+//
+// int ARealGameModeBase::GetGoalTowerMonsterCount()
+// {
+// 	return GoalGameStage->MonsterWave[NowWave].eTowerMonster; 
+// }
+//
+// int ARealGameModeBase::GetGoalBossMonsterCount()
+// {
+// 	return GoalGameStage->MonsterWave[NowWave].eBossMonster; 
+// }
+//
+// void ARealGameModeBase::CheckStage()
+// {
+// 	// 플레이어안의 몬스터 정보 처리해준다.
+// 	 
+// 	// 다죽었으면
+// 	if (NowMosterCount.eBossMonster < 1 && NowMosterCount.eCommomMonster < 1 && NowMosterCount.eTowerMonster < 1)
+// 	{
+// 		
+// 		// 웨이브를 늘려야하면 늘리고
+// 		if(NowWave < GetGoalWave())
+// 		{
+// 			NowWave++;
+// 			NowMosterCount = GoalGameStage->MonsterWave[NowWave];
+// 			WorldMonsterManger->ResetCount();
+// 			// 리셋해서 다시 스폰하슈
+// 			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+// 			player->PlayerScoreWidget->SetRemainMonsterText(NowMosterCount.eBossMonster+NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster);
+// 			auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+// 			player->PlayerScoreWidget->SetNowWaveText(NowWave,GameInstanceRef->GoalWave);
+// 		}
+// 		else
+// 		{
+// 			//스테이지 클리어 메시지를 띄운다
+// 			UGameplayStatics::PlaySound2D(this,GameClearSound );
+// 			AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+// 			player->PlayerScoreWidget->ShowStageClearBox(true);
+// 			
+// 			GetWorld()->GetTimerManager().SetTimer(ReturnToTitleTimerHandle, this, &ARealGameModeBase::ReturnToTitle,4);
+// 					
+// 		
+// 		}
+//
+// 		
+// 	}
+// }
 void ARealGameModeBase::BeginPlay()
 {
+
+	//======================DataTable안에서만 가능하게 바꿀것======================//
+	// DataTableManager.D_PlayerSkill = DataTableManageClass->FindRow<FDataTableManage>(
+	// FName(*(FString::FormatAsNumber(1))), FString(""))->D_PlayerSkill;
+	//
+	// DataTableManager.D_CommonMonsterData = DataTableManageClass->FindRow<FDataTableManage>(
+	// 	FName(*(FString::FormatAsNumber(1))), FString(""))->D_CommonMonsterData;
 	
 	// UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
 	// 		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
 	//
 	// if (LoadGameInstance)
 	// 	Load();
-
+	// DataTableManage2.D_GameState = DataTableManage->FindRow<FDataTableManage>(
+	// FName(*(FString::FormatAsNumber(1))), FString(""))->D_GameState;
+	
+	
 	if(GetWorld()->GetName() == FString("StoryLevel"))
 	{
 		auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -286,6 +334,7 @@ void ARealGameModeBase::BeginPlay()
 	// 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	 	BulletPooler->Spawn();
 	 	MonsterPooler->Spawn();
+		StageManageComponent->StageStart(1);
 	// 	ItemPooler->Spawn();
 	// 	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
 	// 	//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
@@ -318,44 +367,49 @@ void ARealGameModeBase::BeginPlay()
 	// 	//                                   MonsterSpawnCoolTime);
 	// }
 }
-FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
-{
-	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
-		FName(*(FString::FormatAsNumber(rowN))), FString(""));
-	
-	return  MonsterRowData;
-}
 
-FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
-{
-	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
-		mSkillName, FString(""));
 
-	return MonsterRowData;
-}
+// FMonsterRow* ARealGameModeBase::GetMonsterRowData(int rowN)
+// {
+// 	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
+// 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
+// 	
+// 	return  MonsterRowData;
+// }
+//
+// FMonsterRow* ARealGameModeBase::GetMonsterRowData(FName mSkillName)
+// {
+// 	FMonsterRow* const MonsterRowData = MonsterData->FindRow<FMonsterRow>(
+// 		mSkillName, FString(""));
+//
+// 	return MonsterRowData;
+// }
+//
+//
 
-FGameStateRow* ARealGameModeBase::GetGameStateRowData(int rowN=1)
-{
-	
-	FGameStateRow* const GameStateRowData = GameStageData->FindRow<FGameStateRow>(
-		FName(*(FString::FormatAsNumber(rowN))), FString(""));
 
-	return GameStateRowData;
-}
-FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(int rowN)
-{
-	FPlayerSkillRow* const PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
-		FName(*(FString::FormatAsNumber(rowN))), FString(""));
-
-	return PlayerKillRowData;
-}
-
-FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
-{
-	FPlayerSkillRow* const PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
-		mSkillName, FString(""));
-
-	return PlayerKillRowData;
-}
+// FGameStateRow* ARealGameModeBase::GetGameStateRowData(int rowN=1)
+// {
+// 	
+// 	FGameStateRow* const GameStateRowData = GameStageData->FindRow<FGameStateRow>(
+// 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
+//
+// 	return GameStateRowData;
+// }
+// FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(int rowN)
+// {
+// 	FPlayerSkillRow* const PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
+// 		FName(*(FString::FormatAsNumber(rowN))), FString(""));
+//
+// 	return PlayerKillRowData;
+// }
+//
+// FPlayerSkillRow* ARealGameModeBase::GetPlayerSkillRowDataToNum(FName mSkillName)
+// {
+// 	FPlayerSkillRow* const PlayerKillRowData = PlayerSkillData->FindRow<FPlayerSkillRow>(
+// 		mSkillName, FString(""));
+//
+// 	return PlayerKillRowData;
+// }
 
 

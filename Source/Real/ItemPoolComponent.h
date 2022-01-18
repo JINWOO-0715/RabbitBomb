@@ -18,7 +18,7 @@ public:
 	// Sets default values for this component's properties
 	UItemPoolComponent();
 
-	// 들어간거 가져오는거
+	// ????? ???????°?
 	class AItemActor* GetPooledUItem();
 	class ACoinItem* GetPooledCoinItem();
 protected:

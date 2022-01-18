@@ -65,22 +65,23 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 void USkillComponent::AddSkill(int mSkillInt)
 {
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillInt);
 
-	FName mSkillName =PlayerSkillRowData->SKillName;
-
-	// 없다면 스킬추가.
-	
-	if (!HasSkill.Find(mSkillName))
-	{
-		HasSkill.Add(mSkillName, 0);
-		ActiveSkill(PlayerSkillRowData, mSkillName);
-	}
-	// 있는 스킬이라면
-	else
-	{
-		ActiveSkill(PlayerSkillRowData, mSkillName);
-	}
+	//	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillInt);
+//
+// 	FName mSkillName =PlayerSkillRowData->SKillName;
+//
+// 	// 없다면 스킬추가.
+// 	
+// 	if (!HasSkill.Find(mSkillName))
+// 	{
+// 		HasSkill.Add(mSkillName, 0);
+// 		ActiveSkill(PlayerSkillRowData, mSkillName);
+// 	}
+// 	// 있는 스킬이라면
+// 	else
+// 	{
+// 		ActiveSkill(PlayerSkillRowData, mSkillName);
+// 	}
 
 
 	// 오브젝트에 버프중 fname에 해당하는걸 적용한다.

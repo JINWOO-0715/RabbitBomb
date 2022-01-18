@@ -61,7 +61,7 @@ void UItemPoolComponent::Spawn()
 				AItemActor* PoolableActor = GetWorld()->SpawnActor<AItemActor>(PooledItemSubClass,FVector().ZeroVector,FRotator().ZeroRotator);
 				PoolableActor->SetActive(false);
 				Pool.Add(PoolableActor);
-				UE_LOG(LogTemp,Warning,TEXT("add object"));
+				//UE_LOG(LogTemp,Warning,TEXT("add object"));
 			}
 		}
 	}
@@ -76,7 +76,7 @@ void UItemPoolComponent::Spawn()
 				ACoinItem* PoolableCoinActor = GetWorld()->SpawnActor<ACoinItem>(PooledCoinItemSubClass,FVector().ZeroVector,FRotator().ZeroRotator);
 				PoolableCoinActor->SetActive(false);
 				Coin.Add(PoolableCoinActor);
-				UE_LOG(LogTemp,Warning,TEXT("add object"));
+			//	UE_LOG(LogTemp,Warning,TEXT("add object"));
 			}
 		}
 	}

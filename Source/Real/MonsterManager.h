@@ -16,9 +16,6 @@ class REAL_API AMonsterManager : public AActor
 	
 	class UBoxComponent* SpawnVolume;
 
-	// UPROPERTY(EditAnywhere,Category="Spawner")
-	// UObjectPoolComponent* ObjectPooler;
-
 	UPROPERTY(EditAnywhere,Category="Spawner")
 	float SpawnCooldown  = 1.2f;
 	int NowWave =1;
@@ -33,7 +30,7 @@ class REAL_API AMonsterManager : public AActor
 	bool isActive;
 	void Spawn();
 
-	FWaveType NowSpawnMosterCount;
+	//FWaveType NowSpawnMosterCount;
 
 	
 public:	

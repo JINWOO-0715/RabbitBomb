@@ -41,7 +41,7 @@ void UBulletPoolComopnent::Spawn()
 				ABullet* PoolableActor = GetWorld()->SpawnActor<ABullet>(PooledBulletSubClass,FVector().ZeroVector,FRotator().ZeroRotator);
 				PoolableActor->SetActive(false);
 				Pool.Add(PoolableActor);
-				UE_LOG(LogTemp,Warning,TEXT("add object"));
+				//UE_LOG(LogTemp,Warning,TEXT("add object"));
 			}
 		}
 	}

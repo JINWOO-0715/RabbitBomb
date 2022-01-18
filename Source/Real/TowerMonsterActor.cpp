@@ -41,7 +41,7 @@ float ATowerMonsterActor::TakeDamage(float DamageAmount, struct FDamageEvent con
 		}
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		Deactivate();
-		gm->DecreaseTowerMonsterCount();
+	//	gm->DecreaseTowerMonsterCount();
 	}
 	else
 	{

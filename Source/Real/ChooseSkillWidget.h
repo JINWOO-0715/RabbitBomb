@@ -58,8 +58,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChooseSkillTrd();
 	
-	UFUNCTION()
-	void SetRandomSkill();
+	// UFUNCTION()
+	// void SetRandomSkill();
 
 	const int skillSize =4;
 	
