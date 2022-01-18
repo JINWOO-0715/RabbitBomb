@@ -2,6 +2,7 @@
 
 
 #include "Bullet.h"
+#include "Monster.h"
 #include "Engine/StaticMesh.h"
 
 
@@ -118,9 +119,8 @@ void ABullet::SetOwnerActor(const AActor* ActorClass)
 		if (OwnerActor->ActorHasTag("Monster"))
 		{
 			// 총알 설정.
-			const AMonsterActor* TempMonster = Cast<AMonsterActor>(OwnerActor);
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
-			BulletDamage=TempMonster->BulletPower;
+			
 			// mesh를 2개가지고 바꿔가면서 쓴다.
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 			

@@ -14,9 +14,10 @@ void ACommonMonster::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	if(Active)
-	{GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+	{
+		
 		Mfire();
-		UE_LOG(LogTemp, Warning,TEXT("Active is Sucess %f" ),bCanFire);
+		
 		MoveToTarget();
 	}
 	
@@ -31,10 +32,6 @@ void ACommonMonster::Mfire()
 		bCanFire = false; 
 		const AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 		AttackPatternComponent->TargetShot(Player, MonsterStat.BulletSpeed);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
-
-		UWorld* const World = GetWorld();
-		World->GetTimerManager().SetTimer(AttackTimer, this, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
 	}
 	
 }

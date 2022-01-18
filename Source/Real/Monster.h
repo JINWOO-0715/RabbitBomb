@@ -41,8 +41,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	class UStaticMeshComponent* MonsterMeshComponent;
 
-	// Stat구조체
-	FMonsterRow MonsterStat;
+	
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Stat" )
 	float MonsterHP;
@@ -52,7 +51,9 @@ protected:
 public:	
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
-
+	// Stat구조체
+	FMonsterRow MonsterStat;
+	
 	// 몬스터 초기화
 	void InitMonster(const FCommonMonsterData* MonsterType);
 	// 

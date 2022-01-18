@@ -22,6 +22,10 @@ AMonster::AMonster()
 	MonsterMeshComponent->SetStaticMesh(MeshAsset.Object);
 	MonsterMeshComponent->SetCollisionProfileName("Monster");
 
+	// 태그 설정
+	Tags.Add("Monster");
+
+	
 	//공격패턴
 	AttackPatternComponent = CreateDefaultSubobject<UBulletAttackPattern>(TEXT("AttackPatternComponent"));
 

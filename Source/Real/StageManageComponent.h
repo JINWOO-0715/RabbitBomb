@@ -30,10 +30,24 @@ public:
 
 	// 데이터 테이블 Row get
 	FGameStageRow* GetGameStateRowData(int rowN) const;
-	FCommonMonsterData* GetCommonMonsterRowData(int rowN) const; 
+	FCommonMonsterData* GetCommonMonsterRowData(int rowN) const;
+	//FWaveType* GetWaveType(int rowN) const;
 
+	// 스테이지 시작 함수
 	UFUNCTION(BlueprintCallable)
 	void StageStart(int StageNum);
+
+	UFUNCTION(BlueprintCallable)
+	void IsClearWave();
+	
+	UFUNCTION(BlueprintCallable)
+	void ClearWave();
+	
+	UPROPERTY(BlueprintReadWrite)
+	int NowWave;
+
+	UPROPERTY(BlueprintReadWrite)
+	FWaveType NowWaveMonsterType;
 	
 	//데이터 테이블 
 	UPROPERTY(BlueprintReadWrite)
@@ -41,4 +55,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	class UDataTable* CommonMonsterData;
+
+	
 };
