@@ -10,7 +10,7 @@
 AMonster::AMonster()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// 메시
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Mesh/MonsterBaseMesh.MonsterBaseMesh"));
@@ -45,6 +45,7 @@ void AMonster::InitMonster(const FCommonMonsterData* mMonsterStat)
 	//
 	// FCommonMonsterData* mMonsterStat = gm->CommonMonsterDataTable->FindRow<FCommonMonsterData>(
 	// 				FName(*(FString::FormatAsNumber(1))), FString(""));
+	
 	if(mMonsterStat)
 	{
 		//메시설정
@@ -131,9 +132,21 @@ void AMonster::SetActive(bool InActive)
 	SetActorTickEnabled(InActive);
 
 	bCanFire=InActive;
-	GetWorldTimerManager().SetTimer(AttackTimer, this
-	 							, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
 	
+	if(InActive)
+	{
+		GetWorldTimerManager().SetTimer(AttackTimer, this
+							, &AMonster::ShotTimerExpired, MonsterStat.FireRate,InActive);
+		UE_LOG(LogTemp, Warning,TEXT("Timer is Sucess %f" ),MonsterStat.FireRate);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(AttackTimer);
+	}
+
+	
+		
+		
 }
 
 // Called every frame
@@ -150,7 +163,8 @@ bool AMonster::IsActive()
 
 void AMonster::ShotTimerExpired()
 {
+	
 	bCanFire = true;
-
+	UE_LOG(LogTemp, Warning,TEXT("ShotTimerExpired is Sucess %f" ),bCanFire);
 }
 
