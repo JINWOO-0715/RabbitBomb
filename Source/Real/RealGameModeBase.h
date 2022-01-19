@@ -132,7 +132,7 @@ public:
 	UPROPERTY(EditAnywhere,Category="Spawner")
 		class UItemPoolComponent* ItemPooler;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Spawner")
+	UPROPERTY(EditAnywhere,Category="Spawner")
 		class UStageManageComponent* StageManageComponent;
 
 

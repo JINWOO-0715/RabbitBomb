@@ -2,6 +2,7 @@
 
 
 #include "StageManageComponent.h"
+
 #include "RealGameModeBase.h"
 
 // Sets default values for this component's properties
@@ -25,10 +26,23 @@ UStageManageComponent::UStageManageComponent()
 	{
 		CommonMonsterData = MonsterDataAsset.Object;
 	}
-	NowWave=0;
-	NowWaveMonsterType.CommonMonsterSpawnCount = 0; 
-	NowWaveMonsterType.TowerMonsterSpawnCount = 0;
-	NowWaveMonsterType.BossMonsterSpawnCount =  0;
+	NowWave=1;
+	NowStage=0;
+	
+	NowWaveMonsterCount.CommonMonsterSpawnCount = 0; 
+	NowWaveMonsterCount.TowerMonsterSpawnCount = 0;
+	NowWaveMonsterCount.BossMonsterSpawnCount =  0;
+	
+	SpawnPoints.Push(FVector(1400.f,0.f,50.f));
+	SpawnPoints.Push(FVector(-1400.f,1400.f,50.f));
+	SpawnPoints.Push(FVector(0.f,-1400.f,50.f));
+	SpawnPoints.Push(FVector(1400.f,0.f,50.f));
+	SpawnPoints.Push(FVector(-1400.f,0.f,50.f));
+	SpawnPoints.Push(FVector(0.f,14000.f,50.f));
+	SpawnPoints.Push(FVector(1400.f,-1400.f,50.f));
+	SpawnPoints.Push(FVector(-1400.f,-14000.f,50.f));
+
+	
 }
 
 
@@ -60,43 +74,63 @@ FCommonMonsterData* UStageManageComponent::GetCommonMonsterRowData(int rowN=1) c
 	return nullptr;
 }
 
-void UStageManageComponent::StageStart(int StageNum)
+
+
+void UStageManageComponent::StageStart(int StageNum , int WaveNum)
 {
-	const FGameStageRow*  NowStage  = GetGameStateRowData(StageNum);
+	// 스테이지 정보를 저장
+	NowStage = StageNum;
+	
+	//Wave와 몬스터수 초기화
+	NowWave=WaveNum;
+	NowWaveMonsterCount.CommonMonsterSpawnCount = 0; 
+	NowWaveMonsterCount.TowerMonsterSpawnCount = 0;
+	NowWaveMonsterCount.BossMonsterSpawnCount =  0;
 
+	//죽인 몬스터수 초기화
+	MonsterDeadCount.CommonMonsterSpawnCount =0;
+	MonsterDeadCount.TowerMonsterSpawnCount =0;
+	MonsterDeadCount.BossMonsterSpawnCount =0;
+	
+	// 스테이지 정보(웨이브)를 얻습니다.
+	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
+	
+	//SpawnCoolTime마다 몬스터 소환하기.
+	GetWorld()->GetTimerManager().SetTimer(SpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
+	
+}
+
+void UStageManageComponent::SpawnCommonMonster()
+{
+	// 스테이지 정보(웨이브)를 얻습니다.
+	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	// 몬스터의 타입을 얻습니다.
-	const FCommonMonsterData*  StageCommonMonsterData = GetCommonMonsterRowData(NowStage->CommonMonsterType);
-	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-
+	const FCommonMonsterData*  StageCommonMonsterData = GetCommonMonsterRowData(NowStageData->CommonMonsterType);
 	
-
-
-	NowWave=1;
-	NowWaveMonsterType.CommonMonsterSpawnCount = 0; 
-	NowWaveMonsterType.TowerMonsterSpawnCount = 0;
-	NowWaveMonsterType.BossMonsterSpawnCount =  0;
-	
-	if(NowStage !=nullptr)
+	// 몬스터를 소환합니다.
+	if(NowStageData !=nullptr)
 	{
 		// CommonMonster소환
-		if(NowStage->MonsterWave.Num()!=0)
+		if(NowStageData->MonsterWave.Num()!=0)
 		{
-			for(int i = 0 ; i < NowStage->MonsterWave[NowWave].CommonMonsterSpawnCount;i++)
+			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+			//Wave의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
+			ACommonMonster* TmpCommonMonster = gm->MonsterPooler->GetPooledCommonMonster();
+			if(TmpCommonMonster==nullptr)
 			{
-				//타입의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
-				ACommonMonster* TmpCommonMonster = gm->MonsterPooler->GetPooledCommonMonster();
-				if(TmpCommonMonster==nullptr)
-				{
-					UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
-					return;
-				}
-				
-				// 몬스터 타입으로 초기화해서 활성화해줍니다.
-				TmpCommonMonster->InitMonster(StageCommonMonsterData);
-				TmpCommonMonster->SetActive(true);
-				TmpCommonMonster->SetActorLocation(FVector(0.0f,370.f,150.f));
-				NowWaveMonsterType.CommonMonsterSpawnCount++;
+				UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
+				return;
 			}
+			// 몬스터 타입으로 초기화해서 활성화해줍니다.
+			TmpCommonMonster->InitMonster(StageCommonMonsterData);
+			TmpCommonMonster->SetActive(true);
+			// 랜덤한 위치에 소환합니다. 
+			int RandomPoint = FMath::RandRange(0,SpawnPoints.Num()-1);
+			TmpCommonMonster->SetActorLocation(SpawnPoints[RandomPoint]);
+			// 현재 소환된 CommonMonster수를 늘립니다. 
+			NowWaveMonsterCount.CommonMonsterSpawnCount++;
+		
 		}
 		else
 		{
@@ -104,35 +138,87 @@ void UStageManageComponent::StageStart(int StageNum)
 		}
 		
 	}
+	// CommonMonster가 소환완료되면 타이머를 종료한다.
+	if(NowWaveMonsterCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(SpawnTimer);
+	}
+}
 
-	
-
-
-	
+void UStageManageComponent::SpawnTowerMonster()
+{
 	
 }
+
+void UStageManageComponent::SpawnBossMonster()
+{
+}
+
+void UStageManageComponent::DecreaseDeadCommonMonster()
+{
+	MonsterDeadCount.CommonMonsterSpawnCount++;
+	IsClearWave();
+}
+
+void UStageManageComponent::WaveStart()
+{
+
+}
+
 
 void UStageManageComponent::IsClearWave()
 {
-	if(NowWaveMonsterType.BossMonsterSpawnCount<1)
+	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
+	
+	// 몬스터를 다 잡았다면
+	if(MonsterDeadCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
 	{
-		ClearWave();
+		auto c = NowStageData->MonsterWave.Num();
+		UE_LOG(LogTemp, Warning,TEXT("NowWave : %d  & MonsterWave: %d"),NowWave,c);
+		// 웨이브가 남았다면 다음웨이브로
+		if(NowWave < NowStageData->MonsterWave.Num())
+		{
+			NowWave+=1;
+			NowWaveMonsterCount.CommonMonsterSpawnCount = 0; 
+			NowWaveMonsterCount.TowerMonsterSpawnCount = 0;
+			NowWaveMonsterCount.BossMonsterSpawnCount = 0;
+
+			MonsterDeadCount.CommonMonsterSpawnCount =0;
+			MonsterDeadCount.TowerMonsterSpawnCount =0;
+			MonsterDeadCount.BossMonsterSpawnCount =0;
+			
+			GetWorld()->GetTimerManager().SetTimer(SpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
+		}
+		// 아니라면 스테이지 클리어
+		else
+		{
+			StageClear();
+		}
 	}
+	
+	
 		
 }
 
-void UStageManageComponent::ClearWave()
+void UStageManageComponent::StageClear()
 {
-	NowWave+=1;
-	NowWaveMonsterType.CommonMonsterSpawnCount = 0; 
-	NowWaveMonsterType.TowerMonsterSpawnCount = 0;
-	NowWaveMonsterType.BossMonsterSpawnCount = 0;
-}
 
+	//UGameplayStatics::PlaySound2D(this,GameClearSound );
+	AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	player->PlayerScoreWidget->ShowStageClearBox(true);
+	GetWorld()->GetTimerManager().SetTimer(ReturnToTile, this, &UStageManageComponent::ReturnToTitle,4);
+	
+	
+}
+void UStageManageComponent::ReturnToTitle()
+{
+	UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
+}
 // Called when the game starts
 void UStageManageComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
 
 	// ...
 	

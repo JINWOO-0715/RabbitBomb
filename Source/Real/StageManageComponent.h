@@ -23,6 +23,8 @@ protected:
 
 	virtual void InitializeComponent() override;
 
+	FTimerHandle SpawnTimer;
+	FTimerHandle ReturnToTile;
 	
 public:	
 	// Called every frame
@@ -35,19 +37,53 @@ public:
 
 	// 스테이지 시작 함수
 	UFUNCTION(BlueprintCallable)
-	void StageStart(int StageNum);
+	void StageStart(int StageNum, int WaveNum=1);
+	
+	// CommonMonster 스폰 함수
+	UFUNCTION(BlueprintCallable)
+	void SpawnCommonMonster();
+
+	// CommonMonster 스폰 함수
+	UFUNCTION(BlueprintCallable)
+	void SpawnTowerMonster();
+
+	// CommonMonster 스폰 함수
+	UFUNCTION(BlueprintCallable)
+	void SpawnBossMonster();
+
+	
+	// 몬스터 수 감소함수
+	UFUNCTION(BlueprintCallable)
+	void DecreaseDeadCommonMonster();	
+	
+	// 웨이브 시작 함수
+	UFUNCTION(BlueprintCallable)
+	void WaveStart();
 
 	UFUNCTION(BlueprintCallable)
 	void IsClearWave();
 	
 	UFUNCTION(BlueprintCallable)
-	void ClearWave();
+	void StageClear();
+	
+	UFUNCTION(BlueprintCallable)
+	void ReturnToTitle();
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)  
+	float SpawnCoolTime; 	
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int NowWave;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int NowStage;			 
 	
 	UPROPERTY(BlueprintReadWrite)
-	int NowWave;
+	FWaveType NowWaveMonsterCount;
 
 	UPROPERTY(BlueprintReadWrite)
-	FWaveType NowWaveMonsterType;
+	FWaveType MonsterDeadCount;
+
 	
 	//데이터 테이블 
 	UPROPERTY(BlueprintReadWrite)
@@ -56,5 +92,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class UDataTable* CommonMonsterData;
 
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FVector> SpawnPoints;
+	
 	
 };

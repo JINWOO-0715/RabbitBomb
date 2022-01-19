@@ -82,35 +82,35 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& MovieSceneBle
 	
 	if (MonsterHP < 0.f)
 	{
-		UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
-
-		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		player->PlayerScoreWidget->DereaseMonsterText();
-		
-		int rand = FMath::RandRange(0, 1);
-		
-		if (rand == 0)
-		{
-			AItemActor* Item = gm->ItemPooler->GetPooledUItem();
-			Item->SetActorLocation(GetActorLocation());
-			Item->SetActive(true);
-		}
-		
-		rand = FMath::RandRange(0, 1);
-		
-		if (rand == 0)
-		{
-			
-			ACoinItem* Coin = gm->ItemPooler->GetPooledCoinItem();
-			Coin->SetActorLocation(GetActorLocation()+FVector(50.f,0.f,0.f));
-			Coin->SetActive(true);
-		}
+		// UGameplayStatics::PlaySound2D(this, gm->MonsterDeadSound );
+		// UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
+		//
+		// AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		// player->PlayerScoreWidget->DereaseMonsterText();
+		//
+		// int rand = FMath::RandRange(0, 1);
+		//
+		// if (rand == 0)
+		// {
+		// 	AItemActor* Item = gm->ItemPooler->GetPooledUItem();
+		// 	Item->SetActorLocation(GetActorLocation());
+		// 	Item->SetActive(true);
+		// }
+		//
+		// rand = FMath::RandRange(0, 1);
+		//
+		// if (rand == 0)
+		// {
+		// 	
+		// 	ACoinItem* Coin = gm->ItemPooler->GetPooledCoinItem();
+		// 	Coin->SetActorLocation(GetActorLocation()+FVector(50.f,0.f,0.f));
+		// 	Coin->SetActive(true);
+		// }
 		// °æÄ¡±¸½½ È¹µæ È®·ü 40%
 		SetActive(false);
+		gm->StageManageComponent->DecreaseDeadCommonMonster();
 		//gm->DecreaseCommomMonsterCount();
 	}
-
 	else
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->HitedParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
@@ -141,7 +141,7 @@ void AMonster::SetActive(bool InActive)
 	{
 		GetWorldTimerManager().SetTimer(AttackTimer, this
 							, &AMonster::ShotTimerExpired, MonsterStat.FireRate,InActive);
-		UE_LOG(LogTemp, Warning,TEXT("Timer is Sucess %f" ),MonsterStat.FireRate);
+		//UE_LOG(LogTemp, Warning,TEXT("Timer is Sucess %f" ),MonsterStat.FireRate);
 	}
 	else
 	{
@@ -169,6 +169,6 @@ void AMonster::ShotTimerExpired()
 {
 	
 	bCanFire = true;
-	UE_LOG(LogTemp, Warning,TEXT("ShotTimerExpired is Sucess %f" ),bCanFire);
+	//UE_LOG(LogTemp, Warning,TEXT("ShotTimerExpired is Sucess %f" ),bCanFire);
 }
 
