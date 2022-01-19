@@ -35,13 +35,7 @@ void ACommonMonster::Mfire()
 	}
 	
 }
-//
-// void ACommonMonster::SetActive(bool bInActive)
-// {
-// 	Super::SetActive(bInActive);
-// 	 GetWorldTimerManager().SetTimer(AttackTimer, this
-// 	 							, &AMonster::ShotTimerExpired, MonsterStat.FireRate);
-// }
+
 
 
 void ACommonMonster::MoveToTarget()
@@ -61,7 +55,26 @@ void ACommonMonster::MoveToTarget()
 
 }
 
-bool ACommonMonster::GetbeCanFire()
+void ACommonMonster::InitMonster(const FCommonMonsterData* mMonsterStat)
 {
-	return bCanFire;
+	
+
+		if(mMonsterStat)
+		{
+			//메시설정
+			MonsterMeshComponent->SetStaticMesh(mMonsterStat->MonsterMesh);
+			//총알속도
+			MonsterStat.BulletSpeed = mMonsterStat->Stat.BulletSpeed;
+			//공격속도
+			MonsterStat.FireRate = mMonsterStat->Stat.FireRate;
+			// 몬스터HP
+			MonsterStat.MonsterHP =  mMonsterStat->Stat.MonsterHP;
+			//총알 파워
+			MonsterStat.BulletPower = mMonsterStat->Stat.BulletPower;
+			//몬스터 이속
+			MonsterStat.MoveSpeed = mMonsterStat->Stat.MoveSpeed;
+			//
+			MonsterStat.BulletLifeSpan = mMonsterStat->Stat.BulletLifeSpan;	
+		}
+
 }

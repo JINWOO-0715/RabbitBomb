@@ -2,15 +2,12 @@
 
 
 #include "RealGameModeBase.h"
-
-#include "HeadMountedDisplayTypes.h"
 #include "RabbitBombGameInstance.h"
-#include "MonsterManager.h"
-#include "TowerMonsterActor.h"
-
+#include "PlayerSaveGame.h"
+#include "Particles/ParticleSystemComponent.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
+
 
 ARealGameModeBase::ARealGameModeBase()
 {
@@ -93,10 +90,10 @@ ARealGameModeBase::ARealGameModeBase()
 	GameClearSound = DeadSoundAsset3.Object;
 }
 
-void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)
-{
-	WorldMonsterManger = mMonsterManager;
-}
+// void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)
+// {
+// 	WorldMonsterManger = mMonsterManager;
+// }
 
 
 void ARealGameModeBase::Tick(float DeltaTime)
@@ -106,11 +103,11 @@ void ARealGameModeBase::Tick(float DeltaTime)
 
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(GetWorld()->GetRealTimeSeconds()));
 }
-
-void ARealGameModeBase::ReturnToTitle()
-{
-	UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
-}
+//
+// void ARealGameModeBase::ReturnToTitle()
+// {
+// 	UGameplayStatics::OpenLevel(this, FName("TitleLevel"), true);
+// }
 
 
 void ARealGameModeBase::Save()
@@ -180,7 +177,7 @@ void ARealGameModeBase::Load()
 			GameInstanceRef->PlayerHasCoin = LoadGameInstance->PlayerCoin;
 			GameInstanceRef->isStroySaw = LoadGameInstance->PlayerStorySaw; 
 			//SetStage(LoadGameInstance->PlayerStage);
-			NowStage = LoadGameInstance->PlayerStage;
+			//NowStage = LoadGameInstance->PlayerStage;
 			
 			
 		}
@@ -201,29 +198,29 @@ void ARealGameModeBase::Load()
 // //	return GoalGameStage->MonsterWave.Num();
 // }
 
-void ARealGameModeBase::SetNowStage(int mStage)
-{
-	NowStage=mStage;
-	
-}
+// void ARealGameModeBase::SetNowStage(int mStage)
+// {
+// 	NowStage=mStage;
+// 	
+// }
 
-FCommonMonsterData* ARealGameModeBase::GetCommonMonsterData(int Num)
-{	
-
-	if(DataTableManager.D_CommonMonsterData)
-	{
-		FCommonMonsterData* MonsterRowData = DataTableManager.D_CommonMonsterData->FindRow<FCommonMonsterData>(
-	FName(*(FString::FormatAsNumber(Num))), FString(""));
-	
-		return  MonsterRowData;
-	}
-	else
-	{
-		return nullptr;
-	}
-	
-	
-}
+// FCommonMonsterData* ARealGameModeBase::GetCommonMonsterData(int Num)
+// {	
+//
+// 	if(DataTableManager.D_CommonMonsterData)
+// 	{
+// 		FCommonMonsterData* MonsterRowData = DataTableManager.D_CommonMonsterData->FindRow<FCommonMonsterData>(
+// 	FName(*(FString::FormatAsNumber(Num))), FString(""));
+// 	
+// 		return  MonsterRowData;
+// 	}
+// 	else
+// 	{
+// 		return nullptr;
+// 	}
+// 	
+// 	
+// }
 //
 // void ARealGameModeBase::DecreaseCommomMonsterCount()
 // {

@@ -79,6 +79,31 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FTowerMonsterData : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMesh* MonsterMesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FStatData Stat;
+};
+
+USTRUCT(BlueprintType)
+struct FBossMonsterData : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMesh* MonsterMesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FStatData Stat;
+};
+USTRUCT(BlueprintType)
 struct FWaveType : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
@@ -107,16 +132,16 @@ struct FGameStageRow : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int Stage;
+	int Stage=1;
    
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int CommonMonsterType;
+	int CommonMonsterType=1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int TowerMonsterType;
+	int TowerMonsterType=1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int BossMonsterType;
+	int BossMonsterType=1;
     
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<int,FWaveType> MonsterWave;

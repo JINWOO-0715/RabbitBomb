@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BulletAttackPattern.h"
+
 #include "MonsterDataTable.h"
 #include "DataTableList.h"
 
@@ -53,11 +54,10 @@ public:
 	//virtual void Tick(float DeltaTime) override;
 	// Stat구조체
 	FMonsterRow MonsterStat;
-	
-	// 몬스터 초기화
-	void InitMonster(const FCommonMonsterData* MonsterType);
+
 	// 
 	bool bCanFire;
+	
 
 	UFUNCTION(BlueprintCallable)
 	void SetActive(bool InActive);

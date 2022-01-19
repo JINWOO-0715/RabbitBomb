@@ -3,6 +3,7 @@
 
 #include "StageManageComponent.h"
 
+#include "BossMonster.h"
 #include "RealGameModeBase.h"
 
 // Sets default values for this component's properties
@@ -21,11 +22,22 @@ UStageManageComponent::UStageManageComponent()
 		GameStageData = StageAsset.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/CommonMonsterDT"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/CommonMonsterDT.CommonMonsterDT"));
 	if (MonsterDataAsset.Succeeded())
 	{
 		CommonMonsterData = MonsterDataAsset.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UDataTable> BossMonsterDataAsset(TEXT("/Game/BP/BossMonsterDT.BossMonsterDT"));
+	if (BossMonsterDataAsset.Succeeded())
+	{
+		BossMonsterData = BossMonsterDataAsset.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UDataTable> TowerMonsterDataAsset(TEXT("/Game/BP/TowerMonsterDT.TowerMonsterDT"));
+	if (TowerMonsterDataAsset.Succeeded())
+	{
+		TowerMonsterData = TowerMonsterDataAsset.Object;
+	}
+	
 	NowWave=1;
 	NowStage=0;
 	
@@ -38,15 +50,15 @@ UStageManageComponent::UStageManageComponent()
 	SpawnPoints.Push(FVector(0.f,-1400.f,50.f));
 	SpawnPoints.Push(FVector(1400.f,0.f,50.f));
 	SpawnPoints.Push(FVector(-1400.f,0.f,50.f));
-	SpawnPoints.Push(FVector(0.f,14000.f,50.f));
+	SpawnPoints.Push(FVector(0.f,1400.f,50.f));
 	SpawnPoints.Push(FVector(1400.f,-1400.f,50.f));
-	SpawnPoints.Push(FVector(-1400.f,-14000.f,50.f));
+	SpawnPoints.Push(FVector(-1400.f,-1400.f,50.f));
 
 	
 }
 
 
-FGameStageRow* UStageManageComponent::GetGameStateRowData(int rowN=1) const
+FGameStageRow* UStageManageComponent::GetGameStateRowData(int rowN) const
 {
 	if(IsValid(GameStageData))
 	{
@@ -61,7 +73,7 @@ FGameStageRow* UStageManageComponent::GetGameStateRowData(int rowN=1) const
 
 }
 
-FCommonMonsterData* UStageManageComponent::GetCommonMonsterRowData(int rowN=1) const
+FCommonMonsterData* UStageManageComponent::GetCommonMonsterRowData(int rowN) const
 {
 	if(IsValid(CommonMonsterData))
 	{
@@ -74,6 +86,31 @@ FCommonMonsterData* UStageManageComponent::GetCommonMonsterRowData(int rowN=1) c
 	return nullptr;
 }
 
+FTowerMonsterData* UStageManageComponent::GetTowerMonsterRowData(int rowN) const
+{
+	if(IsValid(TowerMonsterData))
+	{
+		FTowerMonsterData* const MonsterDataRowData = TowerMonsterData->FindRow<FTowerMonsterData>(
+			FName(*(FString::FormatAsNumber(rowN))), FString(""));
+
+		return MonsterDataRowData;
+	}
+	UE_LOG(LogTemp, Warning,TEXT("FTowerMonsterData is Not Valid"));
+	return nullptr;
+}
+
+FBossMonsterData* UStageManageComponent::GetBossMonsterRowData(int rowN) const
+{
+	if(IsValid(BossMonsterData))
+	{
+		FBossMonsterData* const MonsterDataRowData = BossMonsterData->FindRow<FBossMonsterData>(
+			FName(*(FString::FormatAsNumber(rowN))), FString(""));
+
+		return MonsterDataRowData;
+	}
+	UE_LOG(LogTemp, Warning,TEXT("FBossMonsterData is Not Valid"));
+	return nullptr;
+}
 
 
 void UStageManageComponent::StageStart(int StageNum , int WaveNum)
@@ -96,8 +133,9 @@ void UStageManageComponent::StageStart(int StageNum , int WaveNum)
 	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	
 	//SpawnCoolTime마다 몬스터 소환하기.
-	GetWorld()->GetTimerManager().SetTimer(SpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
-	
+	GetWorld()->GetTimerManager().SetTimer(CommonMonsterSpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
+	GetWorld()->GetTimerManager().SetTimer(TowerMonsterSpawnTimer, this, &UStageManageComponent::SpawnTowerMonster, SpawnCoolTime,true);
+	GetWorld()->GetTimerManager().SetTimer(BossMonsterSpawnTimer, this, &UStageManageComponent::SpawnBossMonster, SpawnCoolTime,true);
 }
 
 void UStageManageComponent::SpawnCommonMonster()
@@ -141,7 +179,7 @@ void UStageManageComponent::SpawnCommonMonster()
 	// CommonMonster가 소환완료되면 타이머를 종료한다.
 	if(NowWaveMonsterCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
 	{
-		GetWorld()->GetTimerManager().ClearTimer(SpawnTimer);
+		GetWorld()->GetTimerManager().ClearTimer(CommonMonsterSpawnTimer);
 	}
 }
 
@@ -152,6 +190,51 @@ void UStageManageComponent::SpawnTowerMonster()
 
 void UStageManageComponent::SpawnBossMonster()
 {
+	// 스테이지 정보(웨이브)를 얻습니다.
+	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
+	// CommonMonster가 소환완료되면 타이머를 종료한다.
+	if(NowWaveMonsterCount.BossMonsterSpawnCount == NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CommonMonsterSpawnTimer);
+		return;
+	}
+	
+
+	// 몬스터의 타입을 얻습니다.
+	const FBossMonsterData*  StageBossMonsterData = GetBossMonsterRowData(NowStageData->BossMonsterType);
+	
+	// 몬스터를 소환합니다.
+	if(NowStageData !=nullptr)
+	{
+		// CommonMonster소환
+		if(NowStageData->MonsterWave.Num()!=0)
+		{
+			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+			//Wave의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
+			ABossMonster* TmpCommonMonster = gm->MonsterPooler->GetPooledBossMonster();
+			if(TmpCommonMonster==nullptr)
+			{
+				UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
+				return;
+			}
+			// 몬스터 타입으로 초기화해서 활성화해줍니다.
+			TmpCommonMonster->InitMonster(StageBossMonsterData);
+			TmpCommonMonster->SetActive(true);
+			// 랜덤한 위치에 소환합니다. 
+			int RandomPoint = FMath::RandRange(0,SpawnPoints.Num()-1);
+			TmpCommonMonster->SetActorLocation(SpawnPoints[RandomPoint]);
+			// 현재 소환된 CommonMonster수를 늘립니다. 
+			NowWaveMonsterCount.BossMonsterSpawnCount++;
+		
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning,TEXT("NowStage->MonsterWave.Num() is Empty!!!"));
+		}
+		
+	}
+
 }
 
 void UStageManageComponent::DecreaseDeadCommonMonster()
@@ -187,7 +270,7 @@ void UStageManageComponent::IsClearWave()
 			MonsterDeadCount.TowerMonsterSpawnCount =0;
 			MonsterDeadCount.BossMonsterSpawnCount =0;
 			
-			GetWorld()->GetTimerManager().SetTimer(SpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
+			GetWorld()->GetTimerManager().SetTimer(CommonMonsterSpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
 		}
 		// 아니라면 스테이지 클리어
 		else

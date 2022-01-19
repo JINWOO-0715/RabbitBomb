@@ -23,16 +23,21 @@ protected:
 
 	virtual void InitializeComponent() override;
 
-	FTimerHandle SpawnTimer;
+	FTimerHandle CommonMonsterSpawnTimer;
+	FTimerHandle TowerMonsterSpawnTimer;
+	FTimerHandle BossMonsterSpawnTimer;
+	
 	FTimerHandle ReturnToTile;
 	
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// 데이터 테이블 Row get
-	FGameStageRow* GetGameStateRowData(int rowN) const;
-	FCommonMonsterData* GetCommonMonsterRowData(int rowN) const;
+	// 데이터 테이블 Row get 탬플릿화 하면 좋겠다!
+	FGameStageRow* GetGameStateRowData(int rowN =1) const;
+	FCommonMonsterData* GetCommonMonsterRowData(int rowN =1) const;
+	FTowerMonsterData* GetTowerMonsterRowData(int rowN=1) const;
+	FBossMonsterData* GetBossMonsterRowData(int rowN=1) const;
 	//FWaveType* GetWaveType(int rowN) const;
 
 	// 스테이지 시작 함수
@@ -91,6 +96,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	class UDataTable* CommonMonsterData;
+
+	UPROPERTY(BlueprintReadWrite)
+	class UDataTable* TowerMonsterData;
+
+	UPROPERTY(BlueprintReadWrite)
+	class UDataTable* BossMonsterData;
 
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FVector> SpawnPoints;

@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "MonsterActor.h"
-#include "TowerMonsterActor.h"
+
+
 #include "CoreMinimal.h"
 #include "CommonMonster.h"
-#include "BossMonsterActor.h"
+#include "BossMonster.h"
+#include "TowerMonster.h"
 #include "Components/ActorComponent.h"
 #include "ObjectPoolComponent.generated.h"
 
@@ -16,18 +17,10 @@ class REAL_API UObjectPoolComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	
+	// 생성자
 	UObjectPoolComponent();
-	
 
-	class ACommonMonster* GetPooledCommonMonster();
-	
-	// class AMonsterActor* GetPooledMonster();
-	//
-	// class ATowerMonsterActor* GetPooledTowerMonster();
-	//
-	// class ABossMonsterActor* GetPooledBossMonster();
-	//
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -36,11 +29,31 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	//몬스터 스폰
+	//풀링 전부 객체 스폰
+	UFUNCTION(BlueprintCallable)
 	void Spawn();
 
+	// Spawn함수
+	UFUNCTION(BlueprintCallable)
+	void CommonMonsterSpawn();
+	UFUNCTION(BlueprintCallable)
+	void TowerMonsterSpawn();
+	UFUNCTION(BlueprintCallable)
+	void BossMonsterSpawn();
+
+	// Getter함수
+	class ACommonMonster* GetPooledCommonMonster();
+	class ATowerMonster* GetPooledTowerMonster();
+	class ABossMonster* GetPooledBossMonster();
+	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
-	TSubclassOf<class ACommonMonster> MonsterSubclassOf;
+	TSubclassOf<class ACommonMonster> CommonMonsterSubclassOf;
+	
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ATowerMonster> TowerMonsterSubclassOf;
+	
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ABossMonster> BossMonsterSubclassOf;
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int PoolSize =100;
@@ -48,7 +61,14 @@ public:
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int BossPoolSize =3;
 
-	TArray<ACommonMonster*> MonsterPool;
+	UPROPERTY(BlueprintReadWrite);
+	TArray<ACommonMonster*> CommonMonstersPool;
+	
+	UPROPERTY(BlueprintReadWrite);
+	TArray<ATowerMonster*> TowerMonstersPool;
+	
+	UPROPERTY(BlueprintReadWrite);
+	TArray<ABossMonster*> BossMonstersPool;
 
 	
 };

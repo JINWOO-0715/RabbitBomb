@@ -21,12 +21,16 @@ class REAL_API ACommonMonster : public AMonster
 	
 	UFUNCTION(BlueprintCallable)
 	void Mfire();
-	
+
+	// 움직이는 함수
 	UFUNCTION(BlueprintCallable)
 	void MoveToTarget();
+	
+	void InitMonster(const FCommonMonsterData* mMonsterStat);
+	
+	//void InitMonster( const FCommonMonsterData* mMonsterStat );
 
-	UFUNCTION(BlueprintCallable)
-	bool GetbeCanFire();
-	// 움직이는 함수 
+
+ 
 
 };

@@ -4,8 +4,9 @@
 #include "ObjectPoolComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/Actor.h"
+
 #include "Engine.h"
-#include "TowerMonsterActor.h"
+
 
 // Sets default values for this component's properties
 UObjectPoolComponent::UObjectPoolComponent()
@@ -18,7 +19,32 @@ UObjectPoolComponent::UObjectPoolComponent()
 
 ACommonMonster* UObjectPoolComponent::GetPooledCommonMonster()
 {
-	for (ACommonMonster* PoolableActor : MonsterPool)
+	for (ACommonMonster* PoolableActor : CommonMonstersPool)
+	{
+		if (!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+}
+
+ATowerMonster* UObjectPoolComponent::GetPooledTowerMonster()
+{
+	for (ATowerMonster* PoolableActor : TowerMonstersPool)
+	{
+		if (!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+}
+
+
+ABossMonster* UObjectPoolComponent::GetPooledBossMonster()
+{
+	for (ABossMonster* PoolableActor : BossMonstersPool)
 	{
 		if (!PoolableActor->IsActive())
 		{
@@ -69,7 +95,15 @@ void UObjectPoolComponent::Spawn()
 {
 	//Super::BeginPlay();
 
-	if (MonsterSubclassOf != NULL)
+	CommonMonsterSpawn();
+	TowerMonsterSpawn();
+	BossMonsterSpawn();
+	
+}
+
+void UObjectPoolComponent::CommonMonsterSpawn()
+{
+	if (CommonMonsterSubclassOf != NULL)
 	{
 		UWorld* const world = GetWorld();
 		if (world)
@@ -77,14 +111,51 @@ void UObjectPoolComponent::Spawn()
 			for (int i = 0; i < PoolSize; i++)
 			{
 				ACommonMonster* CommonMonster = GetWorld()->SpawnActor<ACommonMonster>(
-				MonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+					CommonMonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
 				CommonMonster->SetActive(false);
-				MonsterPool.Add(CommonMonster);
-				
+				CommonMonstersPool.Add(CommonMonster);
 			}
-
 		}
 	}
+	
+}
+
+void UObjectPoolComponent::TowerMonsterSpawn()
+{
+	if (TowerMonsterSubclassOf != NULL)
+	{
+		UWorld* const world = GetWorld();
+		if (world)
+		{
+			for (int i = 0; i < PoolSize; i++)
+			{
+				ATowerMonster* CommonMonster = GetWorld()->SpawnActor<ATowerMonster>(
+					TowerMonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+				CommonMonster->SetActive(false);
+				TowerMonstersPool.Add(CommonMonster);
+			}
+		}
+	}
+
+}
+
+void UObjectPoolComponent::BossMonsterSpawn()
+{
+	if (BossMonsterSubclassOf != NULL)
+	{
+		UWorld* const world = GetWorld();
+		if (world)
+		{
+			for (int i = 0; i < PoolSize; i++)
+			{
+				ABossMonster* CommonMonster = GetWorld()->SpawnActor<ABossMonster>(
+					BossMonsterSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+				CommonMonster->SetActive(false);
+				BossMonstersPool.Add(CommonMonster);
+			}
+		}
+	}
+
 }
 
 // Called when the game starts
