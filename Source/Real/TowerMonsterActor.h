@@ -16,22 +16,22 @@ class REAL_API ATowerMonsterActor : public AMonsterActor
 {
 	GENERATED_BODY()
 private:
-
-	FTimerHandle BossAttackTimer;
-	int BossBulletPattern;
-
-
-		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-	int AttackCount = 0;
-public:
-	ATowerMonsterActor();
-
-	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	virtual void FireShot() override;
-
-	void FireCircleShot();
+//
+// 	FTimerHandle BossAttackTimer;
+// 	int BossBulletPattern;
+//
+//
+// 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+//
+// 	int AttackCount = 0;
+// public:
+// 	ATowerMonsterActor();
+//
+// 	
+// 	// Called every frame
+// 	virtual void Tick(float DeltaTime) override;
+// 	virtual void FireShot() override;
+//
+// 	void FireCircleShot();
 
 };

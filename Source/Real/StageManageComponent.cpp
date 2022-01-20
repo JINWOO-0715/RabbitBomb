@@ -39,8 +39,8 @@ UStageManageComponent::UStageManageComponent()
 	}
 	
 	NowWave=1;
-	NowStage=0;
-	
+	NowStage=1;
+	SpawnCoolTime =0.5f;
 	NowWaveMonsterCount.CommonMonsterSpawnCount = 0; 
 	NowWaveMonsterCount.TowerMonsterSpawnCount = 0;
 	NowWaveMonsterCount.BossMonsterSpawnCount =  0;
@@ -133,7 +133,7 @@ void UStageManageComponent::StageStart(int StageNum , int WaveNum)
 	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	
 	//SpawnCoolTime마다 몬스터 소환하기.
-	GetWorld()->GetTimerManager().SetTimer(CommonMonsterSpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
+	GetWorld()->GetTimerManager().SetTimer(CommonMonsterSpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, 0.5f,true);
 	GetWorld()->GetTimerManager().SetTimer(TowerMonsterSpawnTimer, this, &UStageManageComponent::SpawnTowerMonster, SpawnCoolTime,true);
 	GetWorld()->GetTimerManager().SetTimer(BossMonsterSpawnTimer, this, &UStageManageComponent::SpawnBossMonster, SpawnCoolTime,true);
 }
@@ -144,6 +144,16 @@ void UStageManageComponent::SpawnCommonMonster()
 	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	// 몬스터의 타입을 얻습니다.
 	const FCommonMonsterData*  StageCommonMonsterData = GetCommonMonsterRowData(NowStageData->CommonMonsterType);
+	UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
+	
+	// CommonMonster가 소환완료되면 타이머를 종료한다.
+	if(NowWaveMonsterCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CommonMonsterSpawnTimer);
+		UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
+		return;
+		
+	}
 	
 	// 몬스터를 소환합니다.
 	if(NowStageData !=nullptr)
@@ -154,7 +164,7 @@ void UStageManageComponent::SpawnCommonMonster()
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 
 			//Wave의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
-			ACommonMonster* TmpCommonMonster = gm->MonsterPooler->GetPooledCommonMonster();
+			ACommonMonster* TmpCommonMonster = gm->ObjectPooler->GetPooledCommonMonster();
 			if(TmpCommonMonster==nullptr)
 			{
 				UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
@@ -176,11 +186,7 @@ void UStageManageComponent::SpawnCommonMonster()
 		}
 		
 	}
-	// CommonMonster가 소환완료되면 타이머를 종료한다.
-	if(NowWaveMonsterCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(CommonMonsterSpawnTimer);
-	}
+
 }
 
 void UStageManageComponent::SpawnTowerMonster()
@@ -207,7 +213,7 @@ void UStageManageComponent::SpawnTowerMonster()
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 
 			//Wave의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
-			ATowerMonster* TmpTowerMonster = gm->MonsterPooler->GetPooledTowerMonster();
+			ATowerMonster* TmpTowerMonster = gm->ObjectPooler->GetPooledTowerMonster();
 			if(TmpTowerMonster==nullptr)
 			{
 				UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
@@ -238,7 +244,7 @@ void UStageManageComponent::SpawnBossMonster()
 	// CommonMonster가 소환완료되면 타이머를 종료한다.
 	if(NowWaveMonsterCount.BossMonsterSpawnCount == NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount)
 	{
-		GetWorld()->GetTimerManager().ClearTimer(CommonMonsterSpawnTimer);
+		GetWorld()->GetTimerManager().ClearTimer(BossMonsterSpawnTimer);
 		return;
 	}
 	
@@ -255,7 +261,7 @@ void UStageManageComponent::SpawnBossMonster()
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 
 			//Wave의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
-			ABossMonster* TmpCommonMonster = gm->MonsterPooler->GetPooledBossMonster();
+			ABossMonster* TmpCommonMonster = gm->ObjectPooler->GetPooledBossMonster();
 			if(TmpCommonMonster==nullptr)
 			{
 				UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
@@ -286,6 +292,16 @@ void UStageManageComponent::DecreaseDeadCommonMonster()
 	IsClearWave();
 }
 
+void UStageManageComponent::DecreaseDeadTowerMonster()
+{	MonsterDeadCount.TowerMonsterSpawnCount++;
+	IsClearWave();
+}
+
+void UStageManageComponent::DecreaseDeadBossMonster()
+{	MonsterDeadCount.BossMonsterSpawnCount++;
+	IsClearWave();
+}
+
 void UStageManageComponent::WaveStart()
 {
 
@@ -297,7 +313,9 @@ void UStageManageComponent::IsClearWave()
 	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	
 	// 몬스터를 다 잡았다면
-	if(MonsterDeadCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
+	if(MonsterDeadCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount &&
+		MonsterDeadCount.TowerMonsterSpawnCount == NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount&&
+		MonsterDeadCount.BossMonsterSpawnCount == NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount)
 	{
 		auto c = NowStageData->MonsterWave.Num();
 		UE_LOG(LogTemp, Warning,TEXT("NowWave : %d  & MonsterWave: %d"),NowWave,c);

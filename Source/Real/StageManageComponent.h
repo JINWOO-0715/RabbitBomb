@@ -60,6 +60,11 @@ public:
 	// 몬스터 수 감소함수
 	UFUNCTION(BlueprintCallable)
 	void DecreaseDeadCommonMonster();	
+	UFUNCTION(BlueprintCallable)
+	void DecreaseDeadTowerMonster();
+	UFUNCTION(BlueprintCallable)
+	void DecreaseDeadBossMonster();	
+
 	
 	// 웨이브 시작 함수
 	UFUNCTION(BlueprintCallable)

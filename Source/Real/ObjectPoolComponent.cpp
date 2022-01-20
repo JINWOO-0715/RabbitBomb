@@ -14,7 +14,6 @@ UObjectPoolComponent::UObjectPoolComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
 }
 
 ACommonMonster* UObjectPoolComponent::GetPooledCommonMonster()
@@ -53,43 +52,48 @@ ABossMonster* UObjectPoolComponent::GetPooledBossMonster()
 	}
 	return nullptr;
 }
-//
-// AMonsterActor* UObjectPoolComponent::GetPooledMonster()
-// {
-// 	for (AMonsterActor* PoolableActor : CommonMonsterPool)
-// 	{
-// 		if (!PoolableActor->IsActive())
-// 		{
-// 			return PoolableActor;
-// 		}
-// 	}
-// 	return nullptr;
-// }
-//
-// ATowerMonsterActor* UObjectPoolComponent::GetPooledTowerMonster()
-// {
-// 	for (ATowerMonsterActor* PoolableActor : TowerMonsterPool)
-// 	{
-// 		if (!PoolableActor->IsActive())
-// 		{
-// 			return PoolableActor;
-// 		}
-// 	}
-// 	return nullptr;
-//
-// }
-//
-// ABossMonsterActor* UObjectPoolComponent::GetPooledBossMonster()
-// {
-// 	for (ABossMonsterActor* PoolableActor : BossMonsterPool)
-// 	{
-// 		if (!PoolableActor->IsActive())
-// 		{
-// 			return PoolableActor;
-// 		}
-// 	}
-// 	return nullptr;
-// }
+
+ABullet* UObjectPoolComponent::GetPooledBullet()
+{
+	for (ABullet* PoolableActor : BulletsPool)
+	{
+		if (!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+
+
+}
+
+AItemActor* UObjectPoolComponent::GetPooledItemActor()
+{
+	for (AItemActor* PoolableActor : ItemPool)
+	{
+		if (!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+
+
+}
+
+ACoinItem* UObjectPoolComponent::GetPooledCoinItemActor()
+{
+	for (ACoinItem* PoolableActor : CoinPool)
+	{
+		if (!PoolableActor->IsActive())
+		{
+			return PoolableActor;
+		}
+	}
+	return nullptr;
+
+
+}
 
 void UObjectPoolComponent::Spawn()
 {
@@ -98,7 +102,8 @@ void UObjectPoolComponent::Spawn()
 	CommonMonsterSpawn();
 	TowerMonsterSpawn();
 	BossMonsterSpawn();
-	
+	BulletSpawn();
+	ItemSpawn();
 }
 
 void UObjectPoolComponent::CommonMonsterSpawn()
@@ -117,7 +122,6 @@ void UObjectPoolComponent::CommonMonsterSpawn()
 			}
 		}
 	}
-	
 }
 
 void UObjectPoolComponent::TowerMonsterSpawn()
@@ -136,7 +140,6 @@ void UObjectPoolComponent::TowerMonsterSpawn()
 			}
 		}
 	}
-
 }
 
 void UObjectPoolComponent::BossMonsterSpawn()
@@ -155,7 +158,56 @@ void UObjectPoolComponent::BossMonsterSpawn()
 			}
 		}
 	}
+}
 
+void UObjectPoolComponent::BulletSpawn()
+{
+	if (BulletSubclassOf != NULL)
+	{
+		UWorld* const world = GetWorld();
+		if (world)
+		{
+			for (int i = 0; i < BulletPoolSize; i++)
+			{
+				ABullet* Bullet = GetWorld()->SpawnActor<ABullet>(
+					BulletSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+				Bullet->SetActive(false);
+				BulletsPool.Add(Bullet);
+			}
+		}
+	}
+}
+
+void UObjectPoolComponent::ItemSpawn()
+{
+	if (ItemSubclassOf != NULL)
+	{
+		UWorld* const world = GetWorld();
+		if (world)
+		{
+			for (int i = 0; i < PoolSize; i++)
+			{
+				AItemActor* ItemActor = GetWorld()->SpawnActor<AItemActor>(
+					ItemSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+				ItemActor->SetActive(false);
+				ItemPool.Add(ItemActor);
+			}
+		}
+	}
+	if (CoinSubclassOf != NULL)
+	{
+		UWorld* const world = GetWorld();
+		if (world)
+		{
+			for (int i = 0; i < PoolSize; i++)
+			{
+				ACoinItem* CoinItem = GetWorld()->SpawnActor<ACoinItem>(
+					CoinSubclassOf, FVector().ZeroVector, FRotator().ZeroRotator);
+				CoinItem->SetActive(false);
+				CoinPool.Add(CoinItem);
+			}
+		}
+	}
 }
 
 // Called when the game starts

@@ -12,21 +12,18 @@
 ARealGameModeBase::ARealGameModeBase()
 {
 	//DefaultPawnClass = AMainPawn::StaticClass();
+	
 
-	BulletPooler = CreateDefaultSubobject<UBulletPoolComopnent>(TEXT("BulletPoller"));
-
-	MonsterPooler = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("MonsterPoller"));
-
-	ItemPooler = CreateDefaultSubobject<UItemPoolComponent>(TEXT("ItemPoller"));
+	ObjectPooler = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("MonsterPoller"));
 	
 	StageManageComponent = CreateDefaultSubobject<UStageManageComponent>(TEXT("StageComponent"));
 
 	
-	static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset2(TEXT("/Game/BP/CommonMonsterDT"));
-	if (MonsterDataAsset2.Succeeded())
-	{
-		CommonMonsterDataTable = MonsterDataAsset2.Object;
-	}
+	// static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset2(TEXT("/Game/BP/CommonMonsterDT"));
+	// if (MonsterDataAsset2.Succeeded())
+	// {
+	// 	CommonMonsterDataTable = MonsterDataAsset2.Object;
+	// }
 
 	
 	//
@@ -329,8 +326,8 @@ void ARealGameModeBase::BeginPlay()
 	// 	// ÃÑ¾Ë ½ºÆù
 	// 	
 	// 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	 	BulletPooler->Spawn();
-	 	MonsterPooler->Spawn();
+	 	ObjectPooler->Spawn();
+	 	ObjectPooler->Spawn();
 		StageManageComponent->StageStart(1);
 	// 	ItemPooler->Spawn();
 	// 	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));

@@ -24,10 +24,10 @@ void URightWidget::DashOn()
 	{
 		SetPlayer();
 	}
-	if(Player)
-	{
-		Player->Dash();;
-	}
+	// if(Player)
+	// {
+	// 	Player->Dash();;
+	// }
 }
 
 

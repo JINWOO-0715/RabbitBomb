@@ -6,7 +6,7 @@
 
 ACommonMonster::ACommonMonster()
 {
-	
+	Tags.Add("CommonMonster");
 }
 
 void ACommonMonster::Tick(float DeltaTime)

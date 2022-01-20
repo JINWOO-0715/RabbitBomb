@@ -45,14 +45,14 @@ void UIceSkillComponent::IceCircleAttack()
 		World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &UIceSkillComponent::ShotTimerExpired,
 		                                  SkillCoolTime);
 		ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-		ABullet* IceTypeBullet = gm->BulletPooler->GetPooledBullet();
+		ABullet* IceTypeBullet = gm->ObjectPooler->GetPooledBullet();
 
 		// 얼음 소환해서 공격하기
 		float parameter = -2.2f;
 		for (int i = 0; i < 4; i++)
 		{
 			IceTypeBullet->BulletType = FName("Ice");
-			IceTypeBullet = gm->BulletPooler->GetPooledBullet();
+			IceTypeBullet = gm->ObjectPooler->GetPooledBullet();
 			IceTypeBullet->SetOwnerActor(OwnerActor);
 			IceTypeBullet->SetActorLocation(OwnerActor->GetActorLocation());
 			//IceTypeBullet->SetActorRotation(FireRotation.GetInverse());

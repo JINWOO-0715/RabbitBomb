@@ -6,7 +6,8 @@
 
 ABossMonster::ABossMonster()
 {
-	
+	// 태그 설정
+	Tags.Add("BossMonster");
 }
 
 void ABossMonster::Tick(float DeltaSeconds)

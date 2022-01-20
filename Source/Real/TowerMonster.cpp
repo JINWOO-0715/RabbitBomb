@@ -4,7 +4,8 @@
 #include "TowerMonster.h"
 
 ATowerMonster::ATowerMonster()
-{
+{	// 태그 설정
+	Tags.Add("TowerMonster");
 }
 
 void ATowerMonster::Tick(float DeltaSeconds)

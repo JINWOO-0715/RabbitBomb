@@ -12,6 +12,7 @@
 #include "GameStateDataTable.h"
 #include "DataTableList.h"
 
+
 #include "StageManageComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -28,12 +29,7 @@ class ARealGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	//타이머 핸들
-	UPROPERTY()
-	FTimerHandle MonsterSpawnTimer;
-	
-	UPROPERTY()
-	FWaveType NowMosterCount; 
+
 
 protected:
 
@@ -43,27 +39,15 @@ public:
 	virtual void BeginPlay() override;
 
 	
-	UPROPERTY(EditAnywhere)
-	class UDataTable*  CommonMonsterDataTable;
-
-	// 스마트포인터 사용???
-	UPROPERTY(BlueprintReadOnly)
-	FDataTableManage DataTableManager;
-	
 	
 	virtual void Tick(float DeltaTime) override;
 	
 
-	//총알 담기
-	UPROPERTY(EditAnywhere,Category="Spawner")
-		class 	UBulletPoolComopnent* BulletPooler;
 
 	// 몬스터 담기 
 	UPROPERTY(EditAnywhere,Category="Spawner")
-		class UObjectPoolComponent* MonsterPooler;
+		class UObjectPoolComponent* ObjectPooler;
 
-	UPROPERTY(EditAnywhere,Category="Spawner")
-		class UItemPoolComponent* ItemPooler;
 
 	UPROPERTY(EditAnywhere,Category="Spawner")
 		class UStageManageComponent* StageManageComponent;

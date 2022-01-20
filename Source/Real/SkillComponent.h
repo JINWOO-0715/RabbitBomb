@@ -13,16 +13,7 @@ class REAL_API USkillComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-
-
-	// 모든 스킬 적용하기
 	
-
-	
-	// 스킬 적용은 스킬 컴포넌트들 각자 만들어거 추가하는 방식으로 생성
-	//Tarray<Object> RateUp;
-
-	// ObJect는 스킬 오브젝트로해서 하나하나 제작 (버프, 디버프 , AoE, ) 
 
 public:	
 	// Sets default values for this component's properties
@@ -46,8 +37,6 @@ public:
 	AActor* OwnerActor ;
 	
 	void ActiveSkill(FPlayerSkillRow* mSkillRow ,FName mSkillName);
-	//void AddSkill(FName mSkillName);
-
 	
 	UFUNCTION(BlueprintCallable)
 	void AddSkill(int mSkillInt);
@@ -55,12 +44,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SkillLevelUp(FName mSkillName);
 	
-
+	UFUNCTION(BlueprintCallable)
 	void IceBulletCircle();
 
-	
-	
+
 	void SetPlayerBuff( FPlayerSkillRow* mSkillRow , int mSkillLevel=0);
+	
+	
 	void SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkillLevel=0);
 
 };

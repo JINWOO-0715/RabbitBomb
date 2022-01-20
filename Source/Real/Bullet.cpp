@@ -125,7 +125,7 @@ void ABullet::SetOwnerActor(const AActor* ActorClass)
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 			
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
-			BulletMesh->SetStaticMesh(gm->BulletPooler->MonsterBulletMesh);
+			BulletMesh->SetStaticMesh(gm->ObjectPooler->MonsterBulletMesh);
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
@@ -136,7 +136,7 @@ void ABullet::SetOwnerActor(const AActor* ActorClass)
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
 			BulletDamage=Player->GetBulletPower();
 			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-			BulletMesh->SetStaticMesh(gm->BulletPooler->PlayeruBulletMesh);
+			BulletMesh->SetStaticMesh(gm->ObjectPooler->PlayeruBulletMesh);
 			BulletMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 			BulletMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Block);

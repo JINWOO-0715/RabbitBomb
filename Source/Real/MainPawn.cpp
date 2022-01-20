@@ -201,6 +201,7 @@ void AMainPawn::Tick(float DeltaTime)
 	{
 		RightValue=1.0f;
 	}
+	
 	// 움직일 벡터 만듬.
 	const FVector MoveDirection = FVector(ForwardValue, RightValue, 0.f).GetClampedToMaxSize(1.0f);
 
@@ -284,11 +285,10 @@ void AMainPawn::FireShot(FVector FireDir)
 	if (bCanFire)
 	{
 		if (FireDir.SizeSquared() > 0.0f)
-		{
+		{	bCanFire = false; // 끊고
 			const FRotator FireRotation = FireDir.Rotation();
 
 			UWorld* const World = GetWorld();
-			
 
 			if (NumberOfShotBullet == 1)
 			{
@@ -303,18 +303,16 @@ void AMainPawn::FireShot(FVector FireDir)
 				BulletAttackPattern->FiveStraightShot(FireDir);
 			}
 			
-			bCanFire = false; // 끊고
+		
 			// 타이머 작동
 			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &AMainPawn::ShotTimerExpired,
 			                                  FireRate);
 			// 소리재생
 			if (FireSound != nullptr)
 			{
-				
 				UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 			}
 
-			bCanFire = false;
 		}
 	}
 }
@@ -340,12 +338,9 @@ void AMainPawn::GetExperience(float Exp)
 		// 스킬 선택
 		//
 
-		
 		NowEXP = 0.f;
 		MaxEXP = 2 * MaxEXP;
 
-
-	
 		APlayerController* const MyPlayer = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 		if (MyPlayer != NULL)
 		{
@@ -355,13 +350,13 @@ void AMainPawn::GetExperience(float Exp)
 }
 
 
-void AMainPawn::Dash()
-{
-	FHitResult Hit(1.f);
-	const FVector TeleportPoint = GetActorLocation() + (GetActorForwardVector() * 300.f);
-
-	SetActorLocation(TeleportPoint, true, &Hit);
-}
+// void AMainPawn::Dash()
+// {
+// 	FHitResult Hit(1.f);
+// 	const FVector TeleportPoint = GetActorLocation() + (GetActorForwardVector() * 300.f);
+//
+// 	SetActorLocation(TeleportPoint, true, &Hit);
+// }
 
 void AMainPawn::ShotTimerExpired()
 {
@@ -386,9 +381,7 @@ void AMainPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AMainPawn::SetMaxHPToLevel(int HpLevel)
 {
 
-	//100 -> 120->140
-	// 100 -> 100*1*1.2
-	// 1 2 3 4 5 6
+
     MaxHP = MaxHP+(MaxHP*0.3*HpLevel);
 	NowHP = MaxHP;
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();

@@ -92,6 +92,7 @@ class REAL_API AMainPawn : public APawn
 
 	//발사 한다 한한다 flag
 	uint32 bCanFire : 1;
+	
     void BackButton();
 	//타이머 핸들
 	FTimerHandle TimerHandle_ShotTimerExpired;
@@ -119,7 +120,7 @@ public:
 	bool PressedFireButton;
 	
 
-	// 초기 셋팅을 위한 setter
+	
 	// 레벨에 따른 스텟 설정
 	void SetMaxHPToLevel(int HpLevel);
 	void SetPowerToLevel(int PowerLevel);
@@ -183,8 +184,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GetExperience(float Exp);
 
-	UFUNCTION(BlueprintCallable)
-	void Dash();
+	// UFUNCTION(BlueprintCallable)
+	// void Dash();
 
 	//이건 발사타이머.
 	void ShotTimerExpired();
@@ -208,7 +209,6 @@ public:
 	// 발사수
 	FORCEINLINE float GetNumOfShotBullet() const { return NumberOfShotBullet; };
 	//HP 
-	UFUNCTION(BlueprintCallable)
 	FORCEINLINE float GetNowHp() const { return NowHP; };
 	//HP 
 	FORCEINLINE float GetMaxHp() const { return MaxHP; };

@@ -6,6 +6,11 @@
 #include "CoreMinimal.h"
 #include "CommonMonster.h"
 #include "BossMonster.h"
+#include "Bullet.h"
+#include "ItemActor.h"
+#include "CoinItem.h"
+
+
 #include "TowerMonster.h"
 #include "Components/ActorComponent.h"
 #include "ObjectPoolComponent.generated.h"
@@ -40,11 +45,19 @@ public:
 	void TowerMonsterSpawn();
 	UFUNCTION(BlueprintCallable)
 	void BossMonsterSpawn();
+	UFUNCTION(BlueprintCallable)
+	void BulletSpawn();
+	UFUNCTION(BlueprintCallable)
+	void ItemSpawn();
 
 	// Getter함수
 	class ACommonMonster* GetPooledCommonMonster();
 	class ATowerMonster* GetPooledTowerMonster();
 	class ABossMonster* GetPooledBossMonster();
+	class ABullet* GetPooledBullet();
+	class AItemActor* GetPooledItemActor();
+	class ACoinItem* GetPooledCoinItemActor();
+	
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class ACommonMonster> CommonMonsterSubclassOf;
@@ -54,9 +67,21 @@ public:
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	TSubclassOf<class ABossMonster> BossMonsterSubclassOf;
+
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ABullet> BulletSubclassOf;
+
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class AItemActor> ItemSubclassOf;
+
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	TSubclassOf<class ACoinItem> CoinSubclassOf;
 	
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int PoolSize =100;
+	
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	int BulletPoolSize =100;
 
 	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
 	int BossPoolSize =3;
@@ -70,5 +95,20 @@ public:
 	UPROPERTY(BlueprintReadWrite);
 	TArray<ABossMonster*> BossMonstersPool;
 
+	UPROPERTY(BlueprintReadWrite);
+	TArray<ABullet*> BulletsPool;
 	
+	UPROPERTY(BlueprintReadWrite);
+	TArray<AItemActor*> ItemPool;
+	
+	UPROPERTY(BlueprintReadWrite);
+	TArray<ACoinItem*> CoinPool;
+
+	// BulletMesh(몬스터 플레이어에 따라 바뀜)
+	UPROPERTY(EditAnywhere,Category	="ObjectPooler");
+	class UStaticMesh* MonsterBulletMesh;
+
+	UPROPERTY(EditAnywhere, Category = "ObjectPooler");
+	class UStaticMesh* PlayeruBulletMesh;
+
 };

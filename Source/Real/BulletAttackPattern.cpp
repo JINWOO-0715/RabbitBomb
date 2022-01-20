@@ -33,7 +33,7 @@ void UBulletAttackPattern::TargetShot(const AActor* Target, const float BulletSp
 
 	//UWorld* const World = GetWorld();
 	ARealGameModeBase* Gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* Bullet = Gm->BulletPooler->GetPooledBullet();
+	ABullet* Bullet = Gm->ObjectPooler->GetPooledBullet();
 
 	const AActor* Me = GetOwner();
 
@@ -62,14 +62,14 @@ void UBulletAttackPattern::CirCleShot(const float BulletSpeed)
 {
 
 	ARealGameModeBase* Gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* Bullet = Gm->BulletPooler->GetPooledBullet();
+	ABullet* Bullet = Gm->ObjectPooler->GetPooledBullet();
 	const AActor* Me = GetOwner();
 	UWorld* const World = GetWorld();
 	if (World)
 	{
 		for (int i = 0; i < 36; i++)
 		{
-			Bullet = Gm->BulletPooler->GetPooledBullet();
+			Bullet = Gm->ObjectPooler->GetPooledBullet();
 			// 몬스터 위치
 			FVector Location = Me->GetActorLocation();
 			// 원 (x,y)
@@ -107,12 +107,12 @@ void UBulletAttackPattern::StarShot()
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 	const AActor * const  Me = GetOwner();
 	
-	ABullet*  Bullet = gm->BulletPooler->GetPooledBullet();
+	ABullet*  Bullet = gm->ObjectPooler->GetPooledBullet();
 	FVector FireDir = Me->GetActorForwardVector();
 
 	for(int t = -50;t<50;t++)
 	{
-		Bullet = gm->BulletPooler->GetPooledBullet();
+		Bullet = gm->ObjectPooler->GetPooledBullet();
 		Bullet->SetActive(true);
 		Bullet->SetOwnerActor(Me);
 	
@@ -154,13 +154,13 @@ void UBulletAttackPattern::CircularsectorShot()
 	FVector FireDir = Me->GetActorForwardVector();
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
+	ABullet* monsterBullet = gm->ObjectPooler->GetPooledBullet();
 
 	for(int i = 0 ; i<5;i++)
 	{
 		if (monsterBullet && World)
 		{
-			monsterBullet = gm->BulletPooler->GetPooledBullet();
+			monsterBullet = gm->ObjectPooler->GetPooledBullet();
 			monsterBullet->SetActive(true);
 			monsterBullet->SetOwnerActor(Me);
 			monsterBullet->SetActorLocation(Me->GetActorLocation());
@@ -184,7 +184,7 @@ void UBulletAttackPattern::OneStraightShot(FVector ForwardVector)
 {
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* Bullet = gm->BulletPooler->GetPooledBullet();
+	ABullet* Bullet = gm->ObjectPooler->GetPooledBullet();
 	AActor* Me = GetOwner();
 	
 	if (World != nullptr)
@@ -208,7 +208,7 @@ void UBulletAttackPattern::ThreeStraightShot(const FVector ForwardVector)
 {
 	const UWorld* const World = GetWorld();
 	const ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* Bullet = gm->BulletPooler->GetPooledBullet();
+	ABullet* Bullet = gm->ObjectPooler->GetPooledBullet();
 	const AActor* const Me = GetOwner();
 	
 	if (World != nullptr)
@@ -217,7 +217,7 @@ void UBulletAttackPattern::ThreeStraightShot(const FVector ForwardVector)
 		const FRotator FireRotation = ForwardVector.Rotation();
 		for (int i = 0; i < 3; i++)
 		{
-			Bullet = gm->BulletPooler->GetPooledBullet();
+			Bullet = gm->ObjectPooler->GetPooledBullet();
 			if (Bullet)
 			{
 				Bullet->SetActive(true);
@@ -241,7 +241,7 @@ void UBulletAttackPattern::FiveStraightShot(const FVector ForwardVector)
 {
 	const UWorld* const World = GetWorld();
 	const ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* Bullet = gm->BulletPooler->GetPooledBullet();
+	ABullet* Bullet = gm->ObjectPooler->GetPooledBullet();
 	const AActor* const Me = GetOwner();
 	
 	if (World != nullptr)
@@ -250,7 +250,7 @@ void UBulletAttackPattern::FiveStraightShot(const FVector ForwardVector)
 		const FRotator FireRotation = ForwardVector.Rotation();
 		for (int i = 0; i < 5; i++)
 		{
-			Bullet = gm->BulletPooler->GetPooledBullet();
+			Bullet = gm->ObjectPooler->GetPooledBullet();
 			if (Bullet)
 			{
 				Bullet->SetActive(true);
@@ -274,7 +274,7 @@ void UBulletAttackPattern::SevenStraightShot(const FVector ForwardVector)
 {
 	const UWorld* const World = GetWorld();
 	const ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* Bullet = gm->BulletPooler->GetPooledBullet();
+	ABullet* Bullet = gm->ObjectPooler->GetPooledBullet();
 	const AActor* const Me = GetOwner();
 	
 	if (World != nullptr)
@@ -283,7 +283,7 @@ void UBulletAttackPattern::SevenStraightShot(const FVector ForwardVector)
 		const FRotator FireRotation = ForwardVector.Rotation();
 		for (int i = 0; i < 7; i++)
 		{
-			Bullet = gm->BulletPooler->GetPooledBullet();
+			Bullet = gm->ObjectPooler->GetPooledBullet();
 			if (Bullet)
 			{
 				Bullet->SetActive(true);
@@ -310,14 +310,14 @@ void UBulletAttackPattern::FireStraightRandom()
 	FVector FireDir =Me->GetActorForwardVector();
 	UWorld* const World = GetWorld();
 	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
-	ABullet* monsterBullet = gm->BulletPooler->GetPooledBullet();
+	ABullet* monsterBullet = gm->ObjectPooler->GetPooledBullet();
 	
 	for (int i = 0; i < 10; i++)
 	{
 
 		if (monsterBullet && World)
 		{
-			monsterBullet = gm->BulletPooler->GetPooledBullet();
+			monsterBullet = gm->ObjectPooler->GetPooledBullet();
 			monsterBullet->SetActive(true);
 			monsterBullet->SetOwnerActor(Me);
 			monsterBullet->SetActorLocation(Me->GetActorLocation());

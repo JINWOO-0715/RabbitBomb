@@ -66,32 +66,7 @@ void USkillComponent::AddSkill(int mSkillInt)
 {
 	ARealGameModeBase* const gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
 
-	//	FPlayerSkillRow* PlayerSkillRowData = gm->GetPlayerSkillRowDataToNum(mSkillInt);
-//
-// 	FName mSkillName =PlayerSkillRowData->SKillName;
-//
-// 	// 없다면 스킬추가.
-// 	
-// 	if (!HasSkill.Find(mSkillName))
-// 	{
-// 		HasSkill.Add(mSkillName, 0);
-// 		ActiveSkill(PlayerSkillRowData, mSkillName);
-// 	}
-// 	// 있는 스킬이라면
-// 	else
-// 	{
-// 		ActiveSkill(PlayerSkillRowData, mSkillName);
-// 	}
 
-
-	// 오브젝트에 버프중 fname에 해당하는걸 적용한다.
-
-	//레벨에 따른 건 또 datatble을 만든다???
-
-
-	//가져온 오브젝트가 알아서 스킬을 적용한다.
-
-	// 오브젝트 가져오는 함수
 }
 
 void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkillLevel)
@@ -103,10 +78,7 @@ void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkil
 		
 		 if (OwnerActor->ActorHasTag("Player"))
 		 {
-// iceSkill 1렙 2렙 3렙  추가하면됌!
-		 	
-		
-
+				// iceSkill 1렙 2렙 3렙  추가하면됌!
 		 	AMainPawn* PlayerPawn = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 		 	
 		 	UIceSkillComponent* component = NewObject<UIceSkillComponent>(PlayerPawn, UIceSkillComponent::StaticClass());
@@ -115,14 +87,9 @@ void USkillComponent::SetPlayerActiveSkill(FPlayerSkillRow* mSkillRow, int mSkil
 		 	component->OwnerActor =PlayerPawn;
 		 	component->Activate(true);
 		 	component->RegisterComponent();
-		
-		
 		 }
-		
-
-		// 총알을 바꾼다?
 	}
-	// 작동되게 한다 
+
 }
 
 void USkillComponent::IceBulletCircle()
@@ -164,13 +131,10 @@ void USkillComponent::SetPlayerBuff(FPlayerSkillRow* mSkillRow, int mSkillLevel)
 
 	if (mSkillRow->SKillName == FName("LaunchIncrease"))
 	{
-		//if(ownerac)
+
 		if (OwnerActor->ActorHasTag("Player"))
 		{
-	
 			PlayerPawn->SetNumberOfShotBullet(mSkillRow->SkillLevelMap[mSkillLevel]);
-			// 등록하면 알아서 진행되는건 파이어볼 같은 액티브고
-			// 아래는 페시브라고 생각하는게 맞는??
 		}
 	}
 
