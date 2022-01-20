@@ -84,7 +84,7 @@ void ABossMonsterActor::FireShot()
 {
 	if (bCanFire)
 	{
-		
+		bCanFire = false; // ²÷°í
 		BossBulletPattern = FMath::RandRange(0, 4);
 		FireRate = FMath::RandRange(1.f, 2.5f);
 		switch (BossBulletPattern)
@@ -111,7 +111,7 @@ void ABossMonsterActor::FireShot()
 		default:
 			break;
 		}
-		bCanFire = false; // ²÷°í
+
 
 	}
 }

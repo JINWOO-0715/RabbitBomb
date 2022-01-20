@@ -185,7 +185,50 @@ void UStageManageComponent::SpawnCommonMonster()
 
 void UStageManageComponent::SpawnTowerMonster()
 {
+	// 스테이지 정보(웨이브)를 얻습니다.
+	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
+	// CommonMonster가 소환완료되면 타이머를 종료한다.
+	if(NowWaveMonsterCount.TowerMonsterSpawnCount == NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TowerMonsterSpawnTimer);
+		return;
+	}
 	
+
+	// 몬스터의 타입을 얻습니다.
+	const FTowerMonsterData*  StageTowerMonsterData = GetTowerMonsterRowData(NowStageData->TowerMonsterType);
+	
+	// 몬스터를 소환합니다.
+	if(NowStageData !=nullptr)
+	{
+		// CommonMonster소환
+		if(NowStageData->MonsterWave.Num()!=0)
+		{
+			ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+			//Wave의 몬스터를 적용하기 위해 퓰링된 몬스터를 가져옵니다.
+			ATowerMonster* TmpTowerMonster = gm->MonsterPooler->GetPooledTowerMonster();
+			if(TmpTowerMonster==nullptr)
+			{
+				UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
+				return;
+			}
+			// 몬스터 타입으로 초기화해서 활성화해줍니다.
+			TmpTowerMonster->InitMonster(StageTowerMonsterData);
+			TmpTowerMonster->SetActive(true);
+			// 랜덤한 위치에 소환합니다. 
+			int RandomPoint = FMath::RandRange(0,SpawnPoints.Num()-1);
+			TmpTowerMonster->SetActorLocation(SpawnPoints[RandomPoint]);
+			// 현재 소환된 CommonMonster수를 늘립니다. 
+			NowWaveMonsterCount.TowerMonsterSpawnCount++;
+		
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning,TEXT("NowStage->MonsterWave.Num() is Empty!!!"));
+		}
+		
+	}
 }
 
 void UStageManageComponent::SpawnBossMonster()

@@ -10,11 +10,22 @@ ATowerMonster::ATowerMonster()
 void ATowerMonster::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	
+	if (Active)
+	{
+	
+		Mfire();
+	}
 }
 
 void ATowerMonster::Mfire()
 {
-	
+	if(bCanFire)
+	{
+		bCanFire=false;
+		
+		AttackPatternComponent->CirCleShot();
+	}
 }
 
 void ATowerMonster::InitMonster(const FTowerMonsterData* mMonsterStat)

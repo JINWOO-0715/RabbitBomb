@@ -72,8 +72,8 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		if(BulletType==FName("Ice"))
 		{
 
-			AMonsterActor* TempMonster = Cast<AMonsterActor>(OtherActor);
-			TempMonster->SetStunMonster(2.f);
+			// AMonsterActor* TempMonster = Cast<AMonsterActor>(OtherActor);
+			// TempMonster->SetStunMonster(2.f);
 		}
 
 	}
