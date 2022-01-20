@@ -112,12 +112,17 @@ FBossMonsterData* UStageManageComponent::GetBossMonsterRowData(int rowN) const
 	return nullptr;
 }
 
+int UStageManageComponent::GetRemainMonster()
+{
+	return RemainMonster;
+}
+
 
 void UStageManageComponent::StageStart(int StageNum , int WaveNum)
 {
 	// 스테이지 정보를 저장
 	NowStage = StageNum;
-	
+
 	//Wave와 몬스터수 초기화
 	NowWave=WaveNum;
 	NowWaveMonsterCount.CommonMonsterSpawnCount = 0; 
@@ -136,6 +141,12 @@ void UStageManageComponent::StageStart(int StageNum , int WaveNum)
 	GetWorld()->GetTimerManager().SetTimer(CommonMonsterSpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, 0.5f,true);
 	GetWorld()->GetTimerManager().SetTimer(TowerMonsterSpawnTimer, this, &UStageManageComponent::SpawnTowerMonster, SpawnCoolTime,true);
 	GetWorld()->GetTimerManager().SetTimer(BossMonsterSpawnTimer, this, &UStageManageComponent::SpawnBossMonster, SpawnCoolTime,true);
+
+	GoalWave =NowStageData->MonsterWave.Num();
+RemainMonster = (NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount - MonsterDeadCount.CommonMonsterSpawnCount) +
+	NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount-MonsterDeadCount.TowerMonsterSpawnCount+NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount-
+	MonsterDeadCount.BossMonsterSpawnCount;	
+	
 }
 
 void UStageManageComponent::SpawnCommonMonster()
@@ -144,8 +155,7 @@ void UStageManageComponent::SpawnCommonMonster()
 	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	// 몬스터의 타입을 얻습니다.
 	const FCommonMonsterData*  StageCommonMonsterData = GetCommonMonsterRowData(NowStageData->CommonMonsterType);
-	UE_LOG(LogTemp, Warning,TEXT("CommonMonster is Not Valid"));
-	
+
 	// CommonMonster가 소환완료되면 타이머를 종료한다.
 	if(NowWaveMonsterCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount)
 	{
@@ -289,6 +299,7 @@ void UStageManageComponent::SpawnBossMonster()
 void UStageManageComponent::DecreaseDeadCommonMonster()
 {
 	MonsterDeadCount.CommonMonsterSpawnCount++;
+	
 	IsClearWave();
 }
 
@@ -312,16 +323,35 @@ void UStageManageComponent::IsClearWave()
 {
 	const FGameStageRow*  NowStageData  = GetGameStateRowData(NowStage);
 	
+	//UE_LOG(LogTemp, Warning,TEXT("TowerMonsterSpawnCount : %d  & NowWave: %d"),MonsterDeadCount.TowerMonsterSpawnCount ,NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount);
 	// 몬스터를 다 잡았다면
+
+// 	
+// 	
+// 	PlayerScoreWidget->SetRemainMonsterText((NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount - MonsterDeadCount.CommonMonsterSpawnCount) +
+// NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount-MonsterDeadCount.TowerMonsterSpawnCount+NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount-
+// MonsterDeadCount.BossMonsterSpawnCount);
+// 	 			auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+// 	 			player->PlayerScoreWidget->SetNowWaveText(NowWave,GameInstanceRef->GoalWave);
+	
+	RemainMonster = (NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount - MonsterDeadCount.CommonMonsterSpawnCount) +
+			NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount-MonsterDeadCount.TowerMonsterSpawnCount+NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount-
+			MonsterDeadCount.BossMonsterSpawnCount;
+	ARealGameModeBase* gm = (ARealGameModeBase*)GetWorld()->GetAuthGameMode();
+
+	gm->PlayerScoreWidget->SetRemainMonsterText(RemainMonster);
+	
 	if(MonsterDeadCount.CommonMonsterSpawnCount == NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount &&
 		MonsterDeadCount.TowerMonsterSpawnCount == NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount&&
 		MonsterDeadCount.BossMonsterSpawnCount == NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount)
+			
 	{
-		auto c = NowStageData->MonsterWave.Num();
-		UE_LOG(LogTemp, Warning,TEXT("NowWave : %d  & MonsterWave: %d"),NowWave,c);
+	
+	
 		// 웨이브가 남았다면 다음웨이브로
 		if(NowWave < NowStageData->MonsterWave.Num())
 		{
+			
 			NowWave+=1;
 			NowWaveMonsterCount.CommonMonsterSpawnCount = 0; 
 			NowWaveMonsterCount.TowerMonsterSpawnCount = 0;
@@ -330,8 +360,15 @@ void UStageManageComponent::IsClearWave()
 			MonsterDeadCount.CommonMonsterSpawnCount =0;
 			MonsterDeadCount.TowerMonsterSpawnCount =0;
 			MonsterDeadCount.BossMonsterSpawnCount =0;
+
+			gm->PlayerScoreWidget->SetNowWaveText(NowWave,GoalWave);
+			RemainMonster = (NowStageData->MonsterWave[NowWave].CommonMonsterSpawnCount - MonsterDeadCount.CommonMonsterSpawnCount) +
+		NowStageData->MonsterWave[NowWave].TowerMonsterSpawnCount-MonsterDeadCount.TowerMonsterSpawnCount+NowStageData->MonsterWave[NowWave].BossMonsterSpawnCount-
+		MonsterDeadCount.BossMonsterSpawnCount;
 			
+			gm->PlayerScoreWidget->SetRemainMonsterText(RemainMonster);
 			GetWorld()->GetTimerManager().SetTimer(CommonMonsterSpawnTimer, this, &UStageManageComponent::SpawnCommonMonster, SpawnCoolTime,true);
+			
 		}
 		// 아니라면 스테이지 클리어
 		else
@@ -349,7 +386,7 @@ void UStageManageComponent::StageClear()
 
 	//UGameplayStatics::PlaySound2D(this,GameClearSound );
 	AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	player->PlayerScoreWidget->ShowStageClearBox(true);
+	//player->PlayerScoreWidget->ShowStageClearBox(true);
 	GetWorld()->GetTimerManager().SetTimer(ReturnToTile, this, &UStageManageComponent::ReturnToTitle,4);
 	
 	

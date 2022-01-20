@@ -45,9 +45,6 @@ AMainPawn::AMainPawn()
 		TEXT("/Game/BP/HPBar"));
 	PlayerHPWidgetClass = HPBarAsset.Class;
 	
-	static ConstructorHelpers::FClassFinder<UScoreWidget> ScoreAsset(
-			TEXT("/Game/BP/ScoreWidget"));
-	ScoreWidgetClass = ScoreAsset.Class;
 
 
 	//사운드
@@ -128,19 +125,19 @@ void AMainPawn::SetBulletPower(float mBulletPower)
 
 void AMainPawn::BackButton()
 {
-	PlayerScoreWidget->ShowButton();
+	//PlayerScoreWidget->ShowButton();
 }
-
-void AMainPawn::SetScoreText()
-{
-	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	
-	if(PlayerScoreWidget!=nullptr)
-	{
-		PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
-		PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
-	}
-}
+//
+// void AMainPawn::SetScoreText()
+// {
+// 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+// 	
+// 	if(PlayerScoreWidget!=nullptr)
+// 	{
+// 		PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
+// 		PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
+// 	}
+// }
 
 //// Called when the game starts or when spawned 비긴플레이 쓸일있으면 사용
 void AMainPawn::BeginPlay()
@@ -151,7 +148,7 @@ void AMainPawn::BeginPlay()
 	if (GetWorld()->GetName() == FString("MainLevel"))
 	{
 		PlayerHPWidget = Cast<UMainInGameWidget>(CreateWidget(GetWorld(), PlayerHPWidgetClass));
-		PlayerScoreWidget = Cast<UScoreWidget>(CreateWidget(GetWorld(), ScoreWidgetClass));
+		
 		if (PlayerHPWidget != nullptr)
 		{
 			PlayerHPWidget->AddToViewport();
@@ -159,13 +156,7 @@ void AMainPawn::BeginPlay()
 			// PlayerSkillChooseWidget->Player=this;
 			// PlayerRightWidget->AddToViewport();
 		}
-		if(PlayerScoreWidget!=nullptr)
-		{
-			PlayerScoreWidget->AddToViewport();
-			// PlayerScoreWidget->SetRemainMonsterText(GameInstanceRef->MonsterCount);
-			// PlayerScoreWidget->SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
-		}
-		// 레벨에따라 설정
+	
 		
 		SetMaxHPToLevel(GameInstanceRef->PlayerHPLevel);
 		SetPowerToLevel(GameInstanceRef->PlayerPowerLevel);

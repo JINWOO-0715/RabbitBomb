@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "CoreMinimal.h"
 
 #include "Engine/DataTable.h"

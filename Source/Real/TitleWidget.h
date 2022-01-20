@@ -98,8 +98,9 @@ protected:
 	// 고른 스테이지
 	int ChooseStage = 1;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	// 구현한 끝 스테이지
-	int EndStage =10;
+	int EndStage =1;
 	
 
 

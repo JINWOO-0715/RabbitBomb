@@ -19,42 +19,9 @@ ARealGameModeBase::ARealGameModeBase()
 	StageManageComponent = CreateDefaultSubobject<UStageManageComponent>(TEXT("StageComponent"));
 
 	
-	// static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset2(TEXT("/Game/BP/CommonMonsterDT"));
-	// if (MonsterDataAsset2.Succeeded())
-	// {
-	// 	CommonMonsterDataTable = MonsterDataAsset2.Object;
-	// }
+	static ConstructorHelpers::FClassFinder<UScoreWidget> ScoreAsset(TEXT("/Game/BP/ScoreWidget"));
+	ScoreWidgetClass = ScoreAsset.Class;
 
-	
-	//
-	// static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset2(TEXT("/Game/BP/NewDataTable"));
-	// if (MonsterDataAsset2.Succeeded())
-	// {
-	// 	DataTableManageClass = MonsterDataAsset2.Object;
-	//
-	// 	//DataTableManage2.StatGetRow();
-	// }	
-	//
-	// static ConstructorHelpers::FObjectFinder<UDataTable> MonsterDataAsset(TEXT("/Game/BP/MonsterDT"));
-	// if (MonsterDataAsset.Succeeded())
-	// {
-	// 	DataTableManage.D_MonsterData = MonsterDataAsset.Object;
-	// 	MonsterData = MonsterDataAsset.Object;
-	// }
-	//
-	// static ConstructorHelpers::FObjectFinder<UDataTable> PlayerSkillDataAsset(TEXT("/Game/BP/PlayerSkillDT"));
-	// if (PlayerSkillDataAsset.Succeeded())
-	// {
-	// 	DataTableManage.D_MonsterData = PlayerSkillDataAsset.Object;
-	// 	PlayerSkillData = PlayerSkillDataAsset.Object;
-	// }
-	//
-	// static ConstructorHelpers::FObjectFinder<UDataTable> GameDataAsset(TEXT("/Game/BP/GameStateDT"));
-	// if (GameDataAsset.Succeeded())
-	// {
-	// 	DataTableManage.D_MonsterData = GameDataAsset.Object;
-	// 	GameStageData = GameDataAsset.Object;
-	// }
 	
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> Particle(TEXT("/Game/Particle/P_Impact_Shield_Ice.P_Impact_Shield_Ice"));
 	HitedParticle = Particle.Object;
@@ -87,18 +54,10 @@ ARealGameModeBase::ARealGameModeBase()
 	GameClearSound = DeadSoundAsset3.Object;
 }
 
-// void ARealGameModeBase::SetMonsterManager(AMonsterManager* mMonsterManager)
-// {
-// 	WorldMonsterManger = mMonsterManager;
-// }
-
 
 void ARealGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//GetWorld()->GetRealTimeSeconds();
-
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(GetWorld()->GetRealTimeSeconds()));
 }
 //
 // void ARealGameModeBase::ReturnToTitle()
@@ -163,8 +122,8 @@ void ARealGameModeBase::Load()
 
 		if (LoadGameInstance)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("SaveName : %s"), *LoadGameInstance->SaveName.ToString());
-			UE_LOG(LogTemp, Warning, TEXT("SaveFloat : %f"), LoadGameInstance->BulletPower);
+			//UE_LOG(LogTemp, Warning, TEXT("SaveName : %s"), *LoadGameInstance->SaveName.ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("SaveFloat : %f"), LoadGameInstance->BulletPower);
 
 			// 인스턴스에도 레벨에 넘겨주기 위해 저장.
 			GameInstanceRef->PlayerPowerLevel =LoadGameInstance->BulletPowerlevel;
@@ -190,69 +149,6 @@ void ARealGameModeBase::Load()
 }
 
 
-// int ARealGameModeBase::GetGoalWave()
-// {
-// //	return GoalGameStage->MonsterWave.Num();
-// }
-
-// void ARealGameModeBase::SetNowStage(int mStage)
-// {
-// 	NowStage=mStage;
-// 	
-// }
-
-// FCommonMonsterData* ARealGameModeBase::GetCommonMonsterData(int Num)
-// {	
-//
-// 	if(DataTableManager.D_CommonMonsterData)
-// 	{
-// 		FCommonMonsterData* MonsterRowData = DataTableManager.D_CommonMonsterData->FindRow<FCommonMonsterData>(
-// 	FName(*(FString::FormatAsNumber(Num))), FString(""));
-// 	
-// 		return  MonsterRowData;
-// 	}
-// 	else
-// 	{
-// 		return nullptr;
-// 	}
-// 	
-// 	
-// }
-//
-// void ARealGameModeBase::DecreaseCommomMonsterCount()
-// {
-// 	NowMosterCount.eCommomMonster--;
-// 	
-// 	CheckStage();
-// }	
-// void ARealGameModeBase::DecreaseTowerMonsterCount()
-// {
-// 	NowMosterCount.eTowerMonster--;
-// 	
-// 	CheckStage();
-// }
-//
-// void ARealGameModeBase::DecreaseBossMonsterCount()
-// {
-// 	NowMosterCount.eBossMonster--;
-// 	
-// 	CheckStage();
-// }
-//
-// int ARealGameModeBase::GetGoalCommonMonsterCount()
-// {
-// 	return GoalGameStage->MonsterWave[NowWave].eCommomMonster; 
-// }
-//
-// int ARealGameModeBase::GetGoalTowerMonsterCount()
-// {
-// 	return GoalGameStage->MonsterWave[NowWave].eTowerMonster; 
-// }
-//
-// int ARealGameModeBase::GetGoalBossMonsterCount()
-// {
-// 	return GoalGameStage->MonsterWave[NowWave].eBossMonster; 
-// }
 //
 // void ARealGameModeBase::CheckStage()
 // {
@@ -292,20 +188,12 @@ void ARealGameModeBase::Load()
 void ARealGameModeBase::BeginPlay()
 {
 
-	//======================DataTable안에서만 가능하게 바꿀것======================//
-	// DataTableManager.D_PlayerSkill = DataTableManageClass->FindRow<FDataTableManage>(
-	// FName(*(FString::FormatAsNumber(1))), FString(""))->D_PlayerSkill;
-	//
-	// DataTableManager.D_CommonMonsterData = DataTableManageClass->FindRow<FDataTableManage>(
-	// 	FName(*(FString::FormatAsNumber(1))), FString(""))->D_CommonMonsterData;
+	 UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
+	 		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
 	
-	// UPlayerSaveGame* LoadGameInstance = Cast<UPlayerSaveGame>(
-	// 		UGameplayStatics::CreateSaveGameObject(UPlayerSaveGame::StaticClass()));
-	//
-	// if (LoadGameInstance)
-	// 	Load();
-	// DataTableManage2.D_GameState = DataTableManage->FindRow<FDataTableManage>(
-	// FName(*(FString::FormatAsNumber(1))), FString(""))->D_GameState;
+	 if (LoadGameInstance)
+		Load();
+
 	
 	
 	if(GetWorld()->GetName() == FString("StoryLevel"))
@@ -318,48 +206,25 @@ void ARealGameModeBase::BeginPlay()
 		GameInstanceRef->isStroySaw = true;
 		Save();
 	}
+
 	
+	// 레벨에따라 설정
 	
-	// if (GetWorld()->GetName() == FString("MainLevel"))
-	// {
-	// 	//StartTime = 0.0f;
-	// 	// 총알 스폰
-	// 	
-	// 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	 if (GetWorld()->GetName() == FString("MainLevel"))
+	 {
+	 	
 	 	ObjectPooler->Spawn();
-	 	ObjectPooler->Spawn();
-		StageManageComponent->StageStart(1);
-	// 	ItemPooler->Spawn();
-	// 	PlayerSkillChooseWidget = Cast<UChooseSkillWidget>(CreateWidget(GetWorld(), PlayerSkillChooseClass));
-	// 	//FGameStateRow* GameStage = GetGameStateRowData(NowStage);
-	//
-	// 	AMainPawn* player = Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	// 	
-	// 	
-	// 	
-	// 	// 목표 스테이지 설정
-	// 	SetNowStage(GameInstanceRef->NowStage);
-	// 	GoalGameStage = GetGameStateRowData(NowStage);
-	// 	NowWave =1;
-	// 	NowMosterCount.eCommomMonster = GoalGameStage->MonsterWave[NowWave].eCommomMonster;
-	// 	NowMosterCount.eTowerMonster = GoalGameStage->MonsterWave[NowWave].eTowerMonster;
-	// 	NowMosterCount.eBossMonster = GoalGameStage->MonsterWave[NowWave].eBossMonster;
-	// 	// 몬스터 수 UI의 몬스터 수 설정
-	// 	
-	// 	int MonsterNum = NowMosterCount.eCommomMonster+NowMosterCount.eTowerMonster+NowMosterCount.eBossMonster;
-	// 	GameInstanceRef->MonsterCount= MonsterNum;
-	// 	// 
-	// 	GameInstanceRef->GoalWave = GoalGameStage->MonsterWave.Num();
-	// 	GameInstanceRef->NowWave =1; 
-	// 	
-	// 	// 스테이지의 1wave부터 시작
-	// 	UWorld* const World = GetWorld();
-	// 	player->SetScoreText();
-	// 	Save();
-	// 	
-	// 	// World->GetTimerManager().SetTimer(MonsterSpawnTimer, this, &ARealGameModeBase::MonsterSpawn,
-	// 	//                                   MonsterSpawnCoolTime);
-	// }
+	 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	 	StageManageComponent->StageStart(GameInstanceRef->NowStage);
+	 	PlayerScoreWidget = Cast<UScoreWidget>(CreateWidget(GetWorld(), ScoreWidgetClass));
+	 	if(PlayerScoreWidget!=nullptr)
+	 	{
+	 		PlayerScoreWidget->AddToViewport();
+	 		PlayerScoreWidget->SetRemainMonsterText(StageManageComponent->GetRemainMonster());
+	 		PlayerScoreWidget->SetNowWaveText(1,StageManageComponent->GoalWave);
+	 	}
+	
+	 }
 }
 
 

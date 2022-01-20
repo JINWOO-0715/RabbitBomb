@@ -40,6 +40,13 @@ public:
 	FBossMonsterData* GetBossMonsterRowData(int rowN=1) const;
 	//FWaveType* GetWaveType(int rowN) const;
 
+	// 남은 몬스터 몇마리 가져오는 함수
+	UFUNCTION(BlueprintCallable)
+	int GetRemainMonster();
+	
+	UPROPERTY(BlueprintReadWrite)
+	int RemainMonster;
+	
 	// 스테이지 시작 함수
 	UFUNCTION(BlueprintCallable)
 	void StageStart(int StageNum, int WaveNum=1);
@@ -86,13 +93,17 @@ public:
 	int NowWave;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int NowStage;			 
+	int NowStage;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int GoalWave;		
 	
 	UPROPERTY(BlueprintReadWrite)
 	FWaveType NowWaveMonsterCount;
 
 	UPROPERTY(BlueprintReadWrite)
 	FWaveType MonsterDeadCount;
+
 
 	
 	//데이터 테이블 

@@ -60,7 +60,7 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& MovieSceneBle
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), gm->DeadParticle, GetActorLocation(),FRotator(0.f,0.f,0.f),FVector(3.f,3.f,3.f));
 		
 		AMainPawn* player=Cast<AMainPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		player->PlayerScoreWidget->DereaseMonsterText();
+		//player->PlayerScoreWidget->DereaseMonsterText();
 		
 		int rand = FMath::RandRange(0, 1);
 		
@@ -82,18 +82,18 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& MovieSceneBle
 		}
 		//°æÄ¡±¸½½ È¹µæ È®·ü 40%
 		SetActive(false);
-		gm->StageManageComponent->DecreaseDeadCommonMonster();
+	
 		if(ActorHasTag(FName("CommonMonster")))
 		{
 			gm->StageManageComponent->DecreaseDeadCommonMonster();
 		}
 		else if(ActorHasTag(FName("TowerMonster")))
 		{
-			
+			gm->StageManageComponent->DecreaseDeadTowerMonster();
 		}
 		else if(ActorHasTag(FName("BossMonster")))
 		{
-			
+			gm->StageManageComponent->DecreaseDeadBossMonster();
 		}
 		//;
 	}

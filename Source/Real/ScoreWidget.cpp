@@ -18,7 +18,7 @@ void UScoreWidget::NativeConstruct()
 	
 	auto* GameInstanceRef = Cast<URabbitBombGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	SetRemainMonsterText(GameInstanceRef->MonsterCount);
-	SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
+	//SetNowWaveText(GameInstanceRef->NowWave,GameInstanceRef->GoalWave);
 }
 
 void UScoreWidget::ShowButton()
@@ -59,7 +59,7 @@ void UScoreWidget::SetRemainMonsterText(int remainMonsterNum)
 {
 	
 	remainNum=remainMonsterNum;
-	RemainMonsterTextBlock->SetText(FText::FromString( FString::Printf(TEXT("Remain Monster: %d"),remainMonsterNum)));
+	RemainMonsterTextBlock->SetText(FText::FromString( FString::Printf(TEXT("Remain Monster: %d"),remainNum)));
 }
 
 void UScoreWidget::DereaseMonsterText()

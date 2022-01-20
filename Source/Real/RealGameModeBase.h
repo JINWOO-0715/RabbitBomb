@@ -86,14 +86,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	class UParticleSystem* DeadParticle2;
 
-	// // 플레이어 오른쪽아래 위젯
-	// UPROPERTY(EditAnywhere)
-	// TSubclassOf<UUserWidget> PlayerRightWidgetClass;
-	//
-	// // 플레이어 오른쪽아래 위젯
-	// UPROPERTY(VisibleInstanceOnly)
-	// class URightWidget* PlayerRightWidget;
-
 	// 플레이어 스킬선택
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> PlayerSkillChooseClass;
@@ -111,6 +103,14 @@ public:
 	void Load();
 
 
+
+	// Score위젯
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> ScoreWidgetClass;
+
+	//
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UScoreWidget* PlayerScoreWidget;
 };
 	
 

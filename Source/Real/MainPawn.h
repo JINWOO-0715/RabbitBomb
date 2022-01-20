@@ -160,13 +160,7 @@ public:
 	class UMainInGameWidget* PlayerHPWidget;
 
 
-	// //À§Á¬
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUserWidget> ScoreWidgetClass;
-	//
-	//
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UScoreWidget* PlayerScoreWidget;
+
 
 	void SetScoreText();
 
